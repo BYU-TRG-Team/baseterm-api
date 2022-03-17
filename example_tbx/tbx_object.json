@@ -1,0 +1,792 @@
+{
+    "tbx": {
+        "$": {
+            "style": "dca",
+            "type": "TBX-Basic",
+            "xml:lang": "en-US",
+            "xmlns": "urn:iso:std:iso:30042:ed-2"
+        },
+        "tbxHeader": [
+            {
+                "fileDesc": [
+                    {
+                        "titleStmt": [
+                            {
+                                "title": [
+                                    "TBX-Basic Sample File"
+                                ],
+                                "note": [
+                                    "This document is a sample TBX-Basic document instance showing various types of\n\t\t\t\t\tterminological entries. The entries in this file are for demonstration purposes\n\t\t\t\t\tonly and do not reflect actual terminology data. Any references to real\n\t\t\t\t\tcompanies are fabricated for demonstration purposes only."
+                                ]
+                            }
+                        ],
+                        "sourceDesc": [
+                            {
+                                "p": [
+                                    "This is a sample TBX-Basic file from the LISA Terminology Special Interest Group\n\t\t\t\t\t(www.lisa.org/term). Address any enquiries to kara@ca.ibm.com."
+                                ]
+                            }
+                        ]
+                    }
+                ],
+                "encodingDesc": [
+                    {
+                        "p": [
+                            {
+                                "_": "http://www.lisa.org/fileadmin/standards/tbx_basic/TBXBasicXCSV02.xcs\n\t\t\t",
+                                "$": {
+                                    "type": "XCSURI"
+                                }
+                            }
+                        ]
+                    }
+                ]
+            }
+        ],
+        "text": [
+            {
+                "body": [
+                    {
+                        "conceptEntry": [
+                            {
+                                "$": {
+                                    "id": "c5"
+                                },
+                                "langSec": [
+                                    {
+                                        "$": {
+                                            "xml:lang": "en"
+                                        },
+                                        "termSec": [
+                                            {
+                                                "term": [
+                                                    "e-mail"
+                                                ]
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "$": {
+                                            "xml:lang": "fr"
+                                        },
+                                        "termSec": [
+                                            {
+                                                "term": [
+                                                    "courriel"
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                ]
+                            },
+                            {
+                                "$": {
+                                    "id": "c6"
+                                },
+                                "langSec": [
+                                    {
+                                        "$": {
+                                            "xml:lang": "en"
+                                        },
+                                        "termSec": [
+                                            {
+                                                "term": [
+                                                    "federated database"
+                                                ],
+                                                "termNote": [
+                                                    {
+                                                        "_": "noun",
+                                                        "$": {
+                                                            "type": "partOfSpeech"
+                                                        }
+                                                    }
+                                                ],
+                                                "descrip": [
+                                                    {
+                                                        "_": "Users and applications interface with the federated\n\t\t\t\t\t\t\tdatabase managed by the federated server. ",
+                                                        "$": {
+                                                            "type": "context"
+                                                        }
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "$": {
+                                            "xml:lang": "fr"
+                                        },
+                                        "termSec": [
+                                            {
+                                                "term": [
+                                                    "base de données fédérée"
+                                                ],
+                                                "termNote": [
+                                                    {
+                                                        "_": "noun",
+                                                        "$": {
+                                                            "type": "partOfSpeech"
+                                                        }
+                                                    }
+                                                ],
+                                                "descrip": [
+                                                    {
+                                                        "_": "Une base de données fédérée est une base de données\n\t\t\t\t\t\t\trépartie hétérogène constituée de données fédérées, et nécessite donc\n\t\t\t\t\t\t\tune architecture qui permet la communication entre les différentes\n\t\t\t\t\t\t\tsources de données. ",
+                                                        "$": {
+                                                            "type": "context"
+                                                        }
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                ]
+                            },
+                            {
+                                "$": {
+                                    "id": "c7"
+                                },
+                                "descripGrp": [
+                                    {
+                                        "descrip": [
+                                            {
+                                                "_": "corrective lenses used in eyeglasses to correct\n\t\t\t\t\t\tpresbyopia and other disorders of accommodation, characterised by a gradient\n\t\t\t\t\t\tof increasing lens power, added to the wearer's correction for the other\n\t\t\t\t\t\trefractive errors.",
+                                                "$": {
+                                                    "type": "definition"
+                                                }
+                                            }
+                                        ],
+                                        "admin": [
+                                            {
+                                                "_": "Wikipedia",
+                                                "$": {
+                                                    "type": "source"
+                                                }
+                                            }
+                                        ]
+                                    }
+                                ],
+                                "langSec": [
+                                    {
+                                        "$": {
+                                            "xml:lang": "en"
+                                        },
+                                        "termSec": [
+                                            {
+                                                "term": [
+                                                    "progressive lens"
+                                                ],
+                                                "termNote": [
+                                                    {
+                                                        "_": "noun",
+                                                        "$": {
+                                                            "type": "partOfSpeech"
+                                                        }
+                                                    },
+                                                    {
+                                                        "_": "preferredTerm-admn-sts",
+                                                        "$": {
+                                                            "type": "administrativeStatus"
+                                                        }
+                                                    }
+                                                ]
+                                            },
+                                            {
+                                                "term": [
+                                                    "progressive addition lens"
+                                                ],
+                                                "termNote": [
+                                                    {
+                                                        "_": "noun",
+                                                        "$": {
+                                                            "type": "partOfSpeech"
+                                                        }
+                                                    },
+                                                    {
+                                                        "_": "fullForm",
+                                                        "$": {
+                                                            "type": "termType"
+                                                        }
+                                                    },
+                                                    {
+                                                        "_": "admittedTerm-admn-sts",
+                                                        "$": {
+                                                            "type": "administrativeStatus"
+                                                        }
+                                                    }
+                                                ]
+                                            },
+                                            {
+                                                "term": [
+                                                    "PAL"
+                                                ],
+                                                "termNote": [
+                                                    {
+                                                        "_": "noun",
+                                                        "$": {
+                                                            "type": "partOfSpeech"
+                                                        }
+                                                    },
+                                                    {
+                                                        "_": "acronym",
+                                                        "$": {
+                                                            "type": "termType"
+                                                        }
+                                                    },
+                                                    {
+                                                        "_": "deprecatedTerm-admn-sts",
+                                                        "$": {
+                                                            "type": "administrativeStatus"
+                                                        }
+                                                    }
+                                                ]
+                                            },
+                                            {
+                                                "term": [
+                                                    "progressive power lens"
+                                                ],
+                                                "termNote": [
+                                                    {
+                                                        "_": "noun",
+                                                        "$": {
+                                                            "type": "partOfSpeech"
+                                                        }
+                                                    },
+                                                    {
+                                                        "_": "admittedTerm-admn-sts",
+                                                        "$": {
+                                                            "type": "administrativeStatus"
+                                                        }
+                                                    }
+                                                ]
+                                            },
+                                            {
+                                                "term": [
+                                                    "graduated lens"
+                                                ],
+                                                "termNote": [
+                                                    {
+                                                        "_": "noun",
+                                                        "$": {
+                                                            "type": "partOfSpeech"
+                                                        }
+                                                    },
+                                                    {
+                                                        "_": "supersededTerm-admn-sts",
+                                                        "$": {
+                                                            "type": "administrativeStatus"
+                                                        }
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "$": {
+                                            "xml:lang": "fr"
+                                        },
+                                        "termSec": [
+                                            {
+                                                "term": [
+                                                    "lentille progressive"
+                                                ],
+                                                "termNote": [
+                                                    {
+                                                        "_": "noun",
+                                                        "$": {
+                                                            "type": "partOfSpeech"
+                                                        }
+                                                    },
+                                                    {
+                                                        "_": "feminine",
+                                                        "$": {
+                                                            "type": "grammaticalGender"
+                                                        }
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "$": {
+                                            "xml:lang": "de"
+                                        },
+                                        "termSec": [
+                                            {
+                                                "term": [
+                                                    "Gleitsichtglas"
+                                                ],
+                                                "termNote": [
+                                                    {
+                                                        "_": "noun",
+                                                        "$": {
+                                                            "type": "partOfSpeech"
+                                                        }
+                                                    },
+                                                    {
+                                                        "_": "masculine",
+                                                        "$": {
+                                                            "type": "grammaticalGender"
+                                                        }
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                ]
+                            },
+                            {
+                                "$": {
+                                    "id": "c1"
+                                },
+                                "descrip": [
+                                    {
+                                        "_": "manufacturing",
+                                        "$": {
+                                            "type": "subjectField"
+                                        }
+                                    }
+                                ],
+                                "descripGrp": [
+                                    {
+                                        "descrip": [
+                                            {
+                                                "_": "This is a sample definition at the entry level.",
+                                                "$": {
+                                                    "type": "definition"
+                                                }
+                                            }
+                                        ],
+                                        "admin": [
+                                            {
+                                                "_": "Terminology SIG",
+                                                "$": {
+                                                    "type": "source"
+                                                }
+                                            }
+                                        ]
+                                    }
+                                ],
+                                "transacGrp": [
+                                    {
+                                        "transac": [
+                                            {
+                                                "_": "origination",
+                                                "$": {
+                                                    "type": "transactionType"
+                                                }
+                                            }
+                                        ],
+                                        "transacNote": [
+                                            {
+                                                "_": "Jane",
+                                                "$": {
+                                                    "target": "US5001",
+                                                    "type": "responsibility"
+                                                }
+                                            }
+                                        ],
+                                        "date": [
+                                            "2007-07-22"
+                                        ]
+                                    },
+                                    {
+                                        "transac": [
+                                            {
+                                                "_": "modification",
+                                                "$": {
+                                                    "type": "transactionType"
+                                                }
+                                            }
+                                        ],
+                                        "transacNote": [
+                                            {
+                                                "_": "John",
+                                                "$": {
+                                                    "target": "US5002",
+                                                    "type": "responsibility"
+                                                }
+                                            }
+                                        ],
+                                        "date": [
+                                            "2007-07-23"
+                                        ]
+                                    }
+                                ],
+                                "note": [
+                                    "This is a sample entry with some data categories at the entry level. "
+                                ],
+                                "ref": [
+                                    {
+                                        "_": "unscheduled operation",
+                                        "$": {
+                                            "target": "c2",
+                                            "type": "crossReference"
+                                        }
+                                    }
+                                ],
+                                "xref": [
+                                    {
+                                        "_": "LISA Web site",
+                                        "$": {
+                                            "target": "http://www.lisa.org",
+                                            "type": "externalCrossReference"
+                                        }
+                                    },
+                                    {
+                                        "_": "LISA logo",
+                                        "$": {
+                                            "target": "http://www.lisa.org/logo.gif",
+                                            "type": "xGraphic"
+                                        }
+                                    }
+                                ],
+                                "langSec": [
+                                    {
+                                        "$": {
+                                            "xml:lang": "en"
+                                        },
+                                        "termSec": [
+                                            {
+                                                "term": [
+                                                    "scheduled operation"
+                                                ],
+                                                "termNote": [
+                                                    {
+                                                        "_": "verb",
+                                                        "$": {
+                                                            "type": "partOfSpeech"
+                                                        }
+                                                    },
+                                                    {
+                                                        "_": "fullForm",
+                                                        "$": {
+                                                            "type": "termType"
+                                                        }
+                                                    },
+                                                    {
+                                                        "_": "masculine",
+                                                        "$": {
+                                                            "type": "grammaticalGender"
+                                                        }
+                                                    },
+                                                    {
+                                                        "_": "preferredTerm-admn-sts",
+                                                        "$": {
+                                                            "type": "administrativeStatus"
+                                                        }
+                                                    },
+                                                    {
+                                                        "_": "Canada",
+                                                        "$": {
+                                                            "type": "geographicalUsage"
+                                                        }
+                                                    },
+                                                    {
+                                                        "_": "menuItem",
+                                                        "$": {
+                                                            "type": "termLocation"
+                                                        }
+                                                    }
+                                                ],
+                                                "descripGrp": [
+                                                    {
+                                                        "descrip": [
+                                                            {
+                                                                "_": "One hour is required between scheduled operations.",
+                                                                "$": {
+                                                                    "type": "context"
+                                                                }
+                                                            }
+                                                        ],
+                                                        "admin": [
+                                                            {
+                                                                "_": "Tivoli Storage Manager Administrator's Guide",
+                                                                "$": {
+                                                                    "type": "source"
+                                                                }
+                                                            }
+                                                        ]
+                                                    }
+                                                ],
+                                                "admin": [
+                                                    {
+                                                        "_": "IBM",
+                                                        "$": {
+                                                            "type": "customerSubset"
+                                                        }
+                                                    },
+                                                    {
+                                                        "_": "IBM",
+                                                        "$": {
+                                                            "type": "source"
+                                                        }
+                                                    },
+                                                    {
+                                                        "_": "Tivoli Storage Manager",
+                                                        "$": {
+                                                            "type": "projectSubset"
+                                                        }
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                ]
+                            },
+                            {
+                                "$": {
+                                    "id": "c2"
+                                },
+                                "descrip": [
+                                    {
+                                        "_": "manufacturing",
+                                        "$": {
+                                            "type": "subjectField"
+                                        }
+                                    }
+                                ],
+                                "langSec": [
+                                    {
+                                        "$": {
+                                            "xml:lang": "en"
+                                        },
+                                        "descrip": [
+                                            {
+                                                "_": "This is a sample definition at the language level.\n\t\t\t\t\t\tThis one has no source information required therefore it is not embedded in\n\t\t\t\t\t\ta descripGrp.",
+                                                "$": {
+                                                    "type": "definition"
+                                                }
+                                            }
+                                        ],
+                                        "termSec": [
+                                            {
+                                                "term": [
+                                                    "unscheduled operation"
+                                                ],
+                                                "termNote": [
+                                                    {
+                                                        "_": "fullForm",
+                                                        "$": {
+                                                            "type": "termType"
+                                                        }
+                                                    },
+                                                    {
+                                                        "_": "masculine",
+                                                        "$": {
+                                                            "type": "grammaticalGender"
+                                                        }
+                                                    },
+                                                    {
+                                                        "_": "admittedTerm-admn-sts",
+                                                        "$": {
+                                                            "type": "administrativeStatus"
+                                                        }
+                                                    },
+                                                    {
+                                                        "_": "en-US",
+                                                        "$": {
+                                                            "type": "geographicalUsage"
+                                                        }
+                                                    },
+                                                    {
+                                                        "_": "noun",
+                                                        "$": {
+                                                            "type": "partOfSpeech"
+                                                        }
+                                                    },
+                                                    {
+                                                        "_": "radioButton",
+                                                        "$": {
+                                                            "type": "termLocation"
+                                                        }
+                                                    }
+                                                ],
+                                                "descrip": [
+                                                    {
+                                                        "_": "Unscheduled operations should be recorded in a log.",
+                                                        "$": {
+                                                            "type": "context"
+                                                        }
+                                                    }
+                                                ],
+                                                "admin": [
+                                                    {
+                                                        "_": "SAX Manufacturing",
+                                                        "$": {
+                                                            "type": "customerSubset"
+                                                        }
+                                                    },
+                                                    {
+                                                        "_": "Manufacturing Process Manual V2",
+                                                        "$": {
+                                                            "type": "source"
+                                                        }
+                                                    },
+                                                    {
+                                                        "_": "Service department",
+                                                        "$": {
+                                                            "type": "projectSubset"
+                                                        }
+                                                    },
+                                                    {
+                                                        "_": "SAX Manufacturing",
+                                                        "$": {
+                                                            "type": "customerSubset"
+                                                        }
+                                                    },
+                                                    {
+                                                        "_": "Manufacturing Process Manual V2",
+                                                        "$": {
+                                                            "type": "source"
+                                                        }
+                                                    },
+                                                    {
+                                                        "_": "Service department",
+                                                        "$": {
+                                                            "type": "projectSubset"
+                                                        }
+                                                    }
+                                                ],
+                                                "transacGrp": [
+                                                    {
+                                                        "transac": [
+                                                            {
+                                                                "_": "origination",
+                                                                "$": {
+                                                                    "type": "transactionType"
+                                                                }
+                                                            }
+                                                        ],
+                                                        "transacNote": [
+                                                            {
+                                                                "_": "Jane",
+                                                                "$": {
+                                                                    "target": "US5001",
+                                                                    "type": "responsibility"
+                                                                }
+                                                            }
+                                                        ],
+                                                        "date": [
+                                                            "2007-07-22"
+                                                        ]
+                                                    },
+                                                    {
+                                                        "transac": [
+                                                            {
+                                                                "_": "modification",
+                                                                "$": {
+                                                                    "type": "transactionType"
+                                                                }
+                                                            }
+                                                        ],
+                                                        "transacNote": [
+                                                            {
+                                                                "_": "John",
+                                                                "$": {
+                                                                    "target": "US5002",
+                                                                    "type": "responsibility"
+                                                                }
+                                                            }
+                                                        ],
+                                                        "date": [
+                                                            "2007-07-23"
+                                                        ]
+                                                    }
+                                                ],
+                                                "note": [
+                                                    "This is a sample entry with some data categories at the term or\n\t\t\t\t\t\t\tlanguage level"
+                                                ],
+                                                "ref": [
+                                                    {
+                                                        "_": "scheduled operation",
+                                                        "$": {
+                                                            "target": "c1",
+                                                            "type": "crossReference"
+                                                        }
+                                                    }
+                                                ],
+                                                "xref": [
+                                                    {
+                                                        "_": "LISA Web\n\t\t\t\t\t\t\tSite ",
+                                                        "$": {
+                                                            "target": "http://www.lisa.org",
+                                                            "type": "externalCrossReference"
+                                                        }
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ],
+                "back": [
+                    {
+                        "refObjectSec": [
+                            {
+                                "$": {
+                                    "type": "respPerson"
+                                },
+                                "refObject": [
+                                    {
+                                        "$": {
+                                            "id": "US5001"
+                                        },
+                                        "item": [
+                                            {
+                                                "_": "Jane Doe",
+                                                "$": {
+                                                    "type": "fn"
+                                                }
+                                            },
+                                            {
+                                                "_": "jane_doe@mymail.com",
+                                                "$": {
+                                                    "type": "email"
+                                                }
+                                            },
+                                            {
+                                                "_": "approver",
+                                                "$": {
+                                                    "type": "role"
+                                                }
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "$": {
+                                            "id": "US5002"
+                                        },
+                                        "item": [
+                                            {
+                                                "_": "John Smith",
+                                                "$": {
+                                                    "type": "fn"
+                                                }
+                                            },
+                                            {
+                                                "_": "john_smith@mymail.com",
+                                                "$": {
+                                                    "type": "email"
+                                                }
+                                            },
+                                            {
+                                                "_": "inputter",
+                                                "$": {
+                                                    "type": "role"
+                                                }
+                                            }
+                                        ]
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    }
+}
