@@ -1,0 +1,6 @@
+node_modules/
+dist/
+.env
+build/
+coverage/
+rng_validator/temp/
