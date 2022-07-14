@@ -9,7 +9,7 @@ import {
   TermPreview,
   LanguageSectionPreview,
   AuxElement,
-  PersonRefObject,
+  PersonRefObjectPreview,
   TermNotePreview
 } from "../types";
 
@@ -55,7 +55,7 @@ export interface GetTermbaseEndpointResponse extends Termbase {
     conceptIds: string[],
     approvalStatuses: string[],
     subjectFields: string[],
-    personRefs: PersonRefObject[],
+    personRefs: PersonRefObjectPreview[],
   }
 }
 

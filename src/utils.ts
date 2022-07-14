@@ -49,3 +49,27 @@ export const isValidUUID = (
   const uuidRegexExp = /^[0-9a-fA-F]{8}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{12}$/gi;
   return uuidRegexExp.test(val);
 };
+
+export class TransactionMessage {
+  private message: string;
+
+  constructor() {
+    this.message = "";
+  }
+
+  addChange(
+    message: string,
+  ) {
+    if (
+      this.message.length !== 0
+    ) {
+      this.message += ";"
+    }
+
+    this.message += message
+  }
+
+  toString() {
+    return this.message.toString();
+  }
+}

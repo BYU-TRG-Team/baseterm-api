@@ -7,6 +7,7 @@ import TermNoteService from "./services/TermNoteService";
 import LangSecService from "./services/LangSecService";
 import EntryService from "./services/EntryService";
 import RefService from "./services/RefService";
+import TransactionService from "./services/TransactionService";
 
 // Support
 import TBXValidator from "./support/TBXValidator";
@@ -114,6 +115,15 @@ const dependencyInjection = (): DIContainer => {
   const termbaseService  =new TermbaseService(
     dbClient
   );
+  const refService = new RefService(
+    dbClient,
+    helpers
+  );
+  const transacService = new TransactionService(
+    dbClient,
+    helpers,
+    refService
+  );
   const auxElementService = new AuxElementService(
     dbClient,
     helpers
@@ -127,22 +137,21 @@ const dependencyInjection = (): DIContainer => {
     helpers,
     auxElementService,
     termNoteService,
+    transacService
   );
   const langSecService = new LangSecService(
     dbClient,
     helpers,
     auxElementService,
-    termService
+    termService,
+    transacService,
   );
   const entryService = new EntryService(
     dbClient,
     helpers,
     auxElementService,
     langSecService,
-  );
-  const refService = new RefService(
-    dbClient,
-    helpers
+    transacService
   );
 
   // Support
@@ -207,7 +216,8 @@ const dependencyInjection = (): DIContainer => {
   const postEntryController = new PostEntryController(
     dbClient,
     helpers,
-    logger
+    logger,
+    entryService
   );
   const getTermController = new GetTermController(
     dbClient,
@@ -231,11 +241,12 @@ const dependencyInjection = (): DIContainer => {
     dbClient,
     helpers,
     logger,
+    transacService
   );
   const postLangSecController = new PostLangSecController(
     dbClient,
-    helpers,
     logger,
+    langSecService
   );
   const deleteEntryController = new DeleteEntryController(
     dbClient,
@@ -256,19 +267,21 @@ const dependencyInjection = (): DIContainer => {
   );
   const postTermController = new PostTermController(
     dbClient,
-    helpers,
     logger,
+    termService
   );
   const patchTermController = new PatchTermController(
     dbClient,
     helpers,
     logger,
     termService,
+    transacService
   );
   const patchLangSecController = new PatchLangSecController(
     dbClient,
     helpers,
-    logger
+    logger,
+    transacService
   );
   const postTermNoteController = new PostTermNoteController(
     dbClient,

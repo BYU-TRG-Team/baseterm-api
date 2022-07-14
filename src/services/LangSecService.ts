@@ -8,23 +8,28 @@ import { TbxEntity } from "../db/classes";
 import { UUID } from "../types";
 import AuxElementService from "./AuxElementService";
 import TermService from "./TermService";
+import { uuid } from "uuidv4";
+import TransactionService from "./TransactionService";
 
 class LangSecService {
   private dbClient: Knex<any, unknown[]>;
   private helpers: Helpers;
   private auxElementService: AuxElementService;
   private termService: TermService;
+  private transactionService: TransactionService
  
   constructor(
     dbClient: Knex<any, unknown[]>,
     helpers: Helpers,
     auxElementService: AuxElementService,
-    termService: TermService
+    termService: TermService,
+    transactionService: TransactionService,
   ) {
     this.dbClient = dbClient;
     this.helpers = helpers;
     this.auxElementService = auxElementService;
     this.termService = termService;
+    this.transactionService = transactionService;
   }
 
   public async deleteLangSec(
@@ -61,6 +66,62 @@ class LangSecService {
         uuid: langSecEntity.uuid,
       })
       .delete()
+  }
+
+  public async constructLangSec(
+    langCode: string,
+    initialTerm: string,
+    langSecEntity: TbxEntity,
+    entryEntity: TbxEntity,
+    termbaseUUID: UUID,
+    userId: UUID,
+    dbClient: types.DBClient = this.dbClient
+  ) {
+    const termEntity = new TbxEntity({
+      ...tables.termTable,
+      uuid: uuid()
+    });
+
+    // Construct Lang Sec
+    await dbClient<dbTypes.LangSec>(tables.langSecTable.fullTableName)
+      .insert({
+        uuid: langSecEntity.uuid,
+        xml_lang: langCode,
+        termbase_uuid: termbaseUUID,
+        order: await this.helpers.computeNestedNextOrder(
+          entryEntity,
+          tables.langSecTable,
+          dbClient
+        )
+      });
+
+    await this.helpers.saveChildTable(
+      entryEntity,
+      langSecEntity,
+      dbClient
+    );
+    
+    // Construct origination transaction
+    await this.transactionService.constructTransaction(
+      termbaseUUID,
+      langSecEntity,
+      {
+        transactionType: "origination",
+        userId,
+      },
+      dbClient
+    );
+
+    await this.termService.constructTerm(
+      initialTerm,
+      termEntity,
+      langSecEntity,
+      termbaseUUID,
+      userId,
+      dbClient
+    );
+
+    return langSecEntity.uuid;
   }
 }
 

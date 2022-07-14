@@ -168,8 +168,8 @@ class RefService {
   public async retrievePersonRefs(
     termbaseUUID: UUID,
     dbClient: types.DBClient = this.dbClient,
-  ): Promise<types.PersonRefObject[]> {
-    const formattedPersonRefs: types.PersonRefObject[] = []; 
+  ): Promise<types.PersonRefObjectPreview[]> {
+    const formattedPersonRefs: types.PersonRefObjectPreview[] = []; 
 
     const refObjectSec = await this.retrieveRefObjectSec(
       termbaseUUID,
@@ -226,6 +226,76 @@ class RefService {
     }
 
     return formattedPersonRefs;
+  }
+
+  public async retrievePersonRef(
+    termbaseUUID: UUID,
+    personId: string,
+    dbClient: types.DBClient = this.dbClient,
+  ): Promise<null | types.PersonRefObject> {
+    const personRef = this.helpers.pluckOne(
+      await dbClient<dbTypes.RefObject>(tables.refObjectTable.fullTableName)
+        .where({
+          termbase_uuid: termbaseUUID,
+          id: personId,
+        })
+        .select("*")
+    );
+
+    if (personRef === null) {
+      return null;
+    }
+
+    const refEntity = new TbxEntity({
+      ...tables.refObjectTable,
+      uuid: personRef.uuid,
+    });
+
+    const personRefObject: types.PersonRefObject = {
+      fullName: "",
+      email: "",
+      role: "",
+      uuid: refEntity.uuid,
+      rawId: personId,
+      id: this.convertPersonIdToUUID(
+        personId
+      ),
+      source: "External"
+    } 
+
+    const items = await this.helpers.getChildTables<dbTypes.Item>(
+      refEntity,
+      tables.itemTable,
+      dbClient      
+    );
+
+    for (const item of items) {
+      switch(item.type) {
+        case "fn":
+          personRefObject.fullName = item.value;
+          continue;
+        
+        case "email":
+          personRefObject.email = item.value;
+          continue;
+
+        case "role":
+          personRefObject.role = item.value;
+          continue;
+
+        case "source":
+          personRefObject.source = 
+            item.value === "BaseTerm" ?
+            "BaseTerm" :
+            "External"
+          continue;
+
+        default:
+          continue;
+      }
+    }
+
+    return personRefObject
   }
 }
 
