@@ -16,6 +16,9 @@ import {
 } from "../types";
 import AuxElementService from "./AuxElementService";
 import TermNoteService from "./TermNoteService";
+import { uuid } from "uuidv4";
+import TransactionService from "./TransactionService";
+import db from "node-pg-migrate/dist/db";
 
 export interface FilterOptions {
   termFilter: string,
@@ -32,17 +35,20 @@ class TermService {
   private helpers: Helpers;
   private auxElementService: AuxElementService;
   private termNoteService: TermNoteService;
- 
+  private transactionService: TransactionService;
+
   constructor(
     dbClient: Knex<any, unknown[]>,
     helpers: Helpers,
     auxElementService: AuxElementService,
     termNoteService: TermNoteService,
+    transactionService: TransactionService,
   ) {
     this.dbClient = dbClient;
     this.helpers = helpers;
     this.auxElementService = auxElementService;
     this.termNoteService = termNoteService;
+    this.transactionService = transactionService;
   }
 
   private createFilters(
@@ -289,9 +295,9 @@ class TermService {
 
     return {
       translations: 
-        await Promise.all(translations.map(term => this.constructTerm(term, "PREVIEW"))),
+        await Promise.all(translations.map(term => this.retrieveTerm(term, "PREVIEW"))),
       synonyms:
-        await Promise.all(synonyms.map(term => this.constructTerm(term, "PREVIEW"))),
+        await Promise.all(synonyms.map(term => this.retrieveTerm(term, "PREVIEW"))),
     };
   }
 
@@ -329,7 +335,7 @@ class TermService {
     ); 
   }
 
-  public async constructTerm(
+  public async retrieveTerm(
     termRow: dbTypes.Term,
     termType: "PREVIEW" | "PARTIAL" | "FULL",
   ): Promise<TermPreview | TermPartialView | TermFullView> {
@@ -562,6 +568,47 @@ class TermService {
         uuid: termEntity.uuid
       })
       .delete();
+  }
+
+  public async constructTerm(
+    value: string,
+    termEntity: TbxEntity,
+    langSecEntity: TbxEntity,
+    termbaseUUID: UUID,
+    userId: UUID,
+    dbClient: types.DBClient = this.dbClient
+  ): Promise<UUID> {
+
+    await dbClient<dbTypes.Term>(tables.termTable.fullTableName)
+      .insert({
+        uuid: termEntity.uuid,
+        value,
+        termbase_uuid: termbaseUUID,
+        order: await this.helpers.computeNestedNextOrder(
+          langSecEntity,
+          tables.termTable,
+          dbClient
+        )
+      });
+
+    await this.helpers.saveChildTable(
+      langSecEntity,
+      termEntity,
+      dbClient,
+    );
+
+    // Construct origination transaction
+    await this.transactionService.constructTransaction(
+      termbaseUUID,
+      termEntity,
+      {
+        transactionType: "origination",
+        userId: userId,
+      },
+      dbClient
+    )
+
+    return termEntity.uuid;
   }
 }
 

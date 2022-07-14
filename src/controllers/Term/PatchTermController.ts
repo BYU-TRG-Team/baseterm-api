@@ -5,30 +5,34 @@ import Helpers from "../../helpers";
 import * as dbTypes from "../../db/types";
 import * as tables from "../../db/tables";
 import { handleInvalidBody, handleInvalidXmlIdError, handleNoResourceError } from "../../responses/errors";
-import { isValidUUID } from "../../utils";
+import { isValidUUID, TransactionMessage } from "../../utils";
 import { Logger } from "winston";
 import * as yup from "yup";
 import TermService from "../../services/TermService";
 import { name as XmlNameValidator } from "xml-name-validator";
 import { TbxEntity } from "../../db/classes";
 import { PatchTermEndpointResponse } from "types/responses";
+import TransactionService from "../../services/TransactionService";
 
 class PatchTermController {
   private dbClient: Knex<any, unknown[]>;
   private helpers: Helpers;
   private logger: Logger;
   private termService: TermService;
+  private transactionService: TransactionService;
 
   constructor(
     dbClient: Knex<any, unknown[]>,
     helpers: Helpers,
     logger: Logger,
     termService: TermService,
+    transactionService: TransactionService
   ) {
     this.dbClient = dbClient;
     this.helpers = helpers;
     this.logger = logger;
     this.termService = termService;
+    this.transactionService = transactionService;
   }
 
   public async handle(
@@ -61,6 +65,7 @@ class PatchTermController {
 
       if (!isValidUUID(termUUID)) return handleNoResourceError(res);
 
+      const transactionMessage = new TransactionMessage();
       const term = 
         this.helpers.pluckOne(
           await this.dbClient<dbTypes.Term>(tables.termTable.fullTableName)
@@ -77,22 +82,53 @@ class PatchTermController {
       let updatedId = term.id;
       let updatedOrder = term.order;
 
-      if (termSecId !== undefined) {
-        if (!XmlNameValidator(req.body.termSecId)) return handleInvalidXmlIdError(res);
+      if (
+        termSecId !== undefined &&
+        termSecId !== term.term_sec_id
+      ) {
+        if (!XmlNameValidator(termSecId)) return handleInvalidXmlIdError(res);
         updatedTermSecId = termSecId;
+        transactionMessage.addChange(
+          `Updated term section ID from "${term.term_sec_id}" to "${termSecId}"`
+        );
       }
 
-      if (id !== undefined) {
-        if (!XmlNameValidator(req.body.id)) return handleInvalidXmlIdError(res);
+      if (
+        id !== undefined &&
+        id !== term.id
+      ) {
+        if (!XmlNameValidator(id)) return handleInvalidXmlIdError(res);
         updatedId = id;
+        transactionMessage.addChange(
+          `Updated term ID from "${term.id}" to "${id}"`
+        );
       }
 
-      if (value !== undefined) {
+      if (
+        value !== undefined &&
+        value !== term.value
+      ) {
         updatedValue = value;
+        transactionMessage.addChange(
+          `Updated term value from "${term.value}" to "${value}"`
+        );
       }
 
-      if (order !== undefined) {
+      if (
+        order !== undefined && 
+        order !== term.order
+      ) {
         updatedOrder = order;
+      }
+
+      if (
+        transactionMessage.toString().length === 0
+      ) {
+        return res.status(200).json(
+          await this.termService.retrieveTerm(
+            term,
+            "PREVIEW"
+          ) as PatchTermEndpointResponse);
       }
 
       const termEntity = new TbxEntity({
@@ -125,6 +161,17 @@ class PatchTermController {
           );
         }
 
+        await this.transactionService.constructTransaction(
+          termbaseUUID,
+          termEntity,
+          {
+            transactionType: "modification",
+            userId: req.userId,
+            note: transactionMessage.toString(),
+          },
+          transac
+        );
+
         return this.helpers.pluckOne<dbTypes.Term>(
           await transac<dbTypes.Term>(tables.termTable.fullTableName)
             .where("uuid", termUUID)
@@ -136,10 +183,10 @@ class PatchTermController {
             })
             .returning<dbTypes.Term[]>("*")
         ) as dbTypes.Term
-      })
+      });
 
       return res.status(200).json(
-        await this.termService.constructTerm(
+        await this.termService.retrieveTerm(
           updatedTerm,
           "PREVIEW"
         ) as PatchTermEndpointResponse);

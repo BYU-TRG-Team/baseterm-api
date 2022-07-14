@@ -6,25 +6,29 @@ import { PatchEntryEndpointResponse } from "../../types/responses";
 import * as dbTypes from "../../db/types";
 import * as tables from "../../db/tables";
 import { handleInvalidBody, handleInvalidXmlIdError, handleNoResourceError } from "../../responses/errors";
-import { isValidUUID } from "../../utils";
+import { isValidUUID, TransactionMessage } from "../../utils";
 import { Logger } from "winston";
 import * as yup from "yup";
 import { TbxEntity } from "../../db/classes";
 import { name as xmlNameValidator } from "xml-name-validator";
+import TransactionService from "../../services/TransactionService";
 
 class PatchEntryController {
   private dbClient: Knex<any, unknown[]>;
   private helpers: Helpers;
   private logger: Logger;
+  private transactionService: TransactionService;
 
   constructor(
     dbClient: Knex<any, unknown[]>,
     helpers: Helpers,
     logger: Logger,
+    transactionService: TransactionService,
   ) {
     this.dbClient = dbClient;
     this.helpers = helpers;
     this.logger = logger;
+    this.transactionService = transactionService;
   }
 
   public async handle(
@@ -50,7 +54,12 @@ class PatchEntryController {
       }
 
       if (!isValidUUID(entryUUID)) return handleNoResourceError(res);
-
+      
+      const transactionMessage = new TransactionMessage();
+      const entryEntity = new TbxEntity({
+        ...tables.conceptEntryTable,
+        uuid: entryUUID,
+      });
       const entry = 
         this.helpers.pluckOne(
           await this.dbClient<dbTypes.ConceptEntry>(tables.conceptEntryTable.fullTableName)
@@ -64,9 +73,26 @@ class PatchEntryController {
 
       let updatedId = entry.id;
 
-      if (id !== undefined) {
+      if (
+        id !== undefined &&
+        id !== entry.id  
+      ) {
         if (!xmlNameValidator(id)) return handleInvalidXmlIdError(res);
         updatedId = id;
+        transactionMessage.addChange(
+          `Updated id from "${entry.id}" to "${id}"`
+        );
+      }
+
+      if (
+        transactionMessage.toString().length === 0
+      ) {
+        return res.status(200).json(
+          {
+            ...entry,
+            termbaseUUID: entry.termbase_uuid,
+          } as PatchEntryEndpointResponse
+        );
       }
 
       const updatedEntry = await this.dbClient.transaction(async (transac) => {
@@ -85,16 +111,27 @@ class PatchEntryController {
           );
         }
 
-        return (
-          this.helpers.pluckOne<dbTypes.ConceptEntry>(
-            await transac(tables.conceptEntryTable.fullTableName)
-              .where("uuid", entryUUID)
-              .update({
-                id: updatedId
-              })
-              .returning<dbTypes.ConceptEntry[]>("*")
-          )
-        );
+        const updatedEntry = this.helpers.pluckOne<dbTypes.ConceptEntry>(
+          await transac(tables.conceptEntryTable.fullTableName)
+            .where("uuid", entryUUID)
+            .update({
+              id: updatedId
+            })
+            .returning<dbTypes.ConceptEntry[]>("*")
+          ) as dbTypes.ConceptEntry;
+
+          await this.transactionService.constructTransaction(
+            termbaseUUID,
+            entryEntity,
+            {
+              transactionType: "modification",
+              userId: req.userId,
+              note: transactionMessage.toString(),
+            },
+            transac
+          );
+
+        return updatedEntry;
       });
 
       if (updatedEntry === null) return handleNoResourceError(res);

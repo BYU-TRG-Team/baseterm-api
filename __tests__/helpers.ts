@@ -11,14 +11,35 @@ import EventSource from "eventsource";
 import jwt from "jsonwebtoken";
 import { Role } from "@byu-trg/express-user-management";
 
+export const postPersonObjectRef = async (
+  jwt: string,
+  termbaseUUID: UUID,
+  requestClient: SuperAgentTest,
+  personId: UUID,
+) => {
+  await requestClient
+    .post(
+      `/termbase/${termbaseUUID}/personRefObject`
+    )
+    .field({
+      name: "Test",
+      email: "Test",
+      role: "Test",
+      id: personId,
+    })
+    .set('Cookie', [`TRG_AUTH_TOKEN=${jwt}`])
+}
+
 export const importFile = async (
   filePath: string,
   requestClient: SuperAgentTest,
-  name: string = uuid()
+  name: string = uuid(),
+  personId = uuid(),
 ) => {
   const { url } = requestClient.get("/");
   const jwt = generateJWT(
-    Role.Staff
+    Role.Staff,
+    personId,
   );
 
   const { body: importBody } = (
@@ -57,6 +78,13 @@ export const importFile = async (
     });
   }
   )();
+
+  await postPersonObjectRef(
+    jwt,
+    importBody.termbaseUUID,
+    requestClient,
+    personId,
+  );
 
   return importBody.termbaseUUID as UUID;
 };
@@ -149,11 +177,11 @@ export const fetchMockAuxElement = async (
 
 export const generateJWT = (
   role: Role,
-  userId: UUID = uuid(),
+  personId: UUID = uuid(),
 ) => {
   return (
     jwt.sign({
-      id: userId, 
+      id: personId, 
       role, 
       verified: true, 
       username: "test",

@@ -16,6 +16,7 @@ let mockData: {
   langSecUUID: UUID,
 };
 
+const personId = uuid();
 const endpointConstructor = (
     termbaseUUID: UUID,
     langSecUUID: UUID,

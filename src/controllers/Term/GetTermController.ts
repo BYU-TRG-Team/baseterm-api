@@ -51,7 +51,7 @@ class GetTermController {
 
       if (termRow === null) return handleNoResourceError(res);
 
-      const term = await this.termService.constructTerm(
+      const term = await this.termService.retrieveTerm(
         termRow,
         "FULL"
       ) as TermFullView;

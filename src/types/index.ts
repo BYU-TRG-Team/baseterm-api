@@ -100,11 +100,18 @@ export interface Termbase {
   enforceBasicDialect: boolean;
 }
 
-export interface PersonRefObject {
+export interface PersonRefObjectPreview {
   uuid: UUID,
   id: string,
   source: "BaseTerm" | "External"
 }
+
+export interface PersonRefObject extends PersonRefObjectPreview {
+  fullName: string,
+  email: string,
+  role: string,
+  rawId: string,
+} 
 
 export interface ConceptEntryPreview {
   uuid: UUID;

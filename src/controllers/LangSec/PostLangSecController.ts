@@ -1,8 +1,6 @@
 import { Request, Response } from "express";
 import { Knex } from "knex";
 import errorMessages from "../../messages/errorMessages";
-import Helpers from "../../helpers";
-import * as dbTypes from "../../db/types";
 import * as tables from "../../db/tables";
 import { handleInvalidBody } from "../../responses/errors";
 import { Logger } from "winston";
@@ -10,20 +8,21 @@ import * as yup from "yup";
 import { TbxEntity } from "../../db/classes";
 import { uuid } from "uuidv4";
 import { PostLangSecEndpointResponse } from "../../types/responses";
+import LangSecService from "../../services/LangSecService";
 
 class PostLangSecController {
   private dbClient: Knex<any, unknown[]>;
-  private helpers: Helpers;
   private logger: Logger;
+  private langSecService: LangSecService;
 
   constructor(
     dbClient: Knex<any, unknown[]>,
-    helpers: Helpers,
     logger: Logger,
+    langSecService: LangSecService,
   ) {
     this.dbClient = dbClient;
-    this.helpers = helpers;
     this.logger = logger;
+    this.langSecService = langSecService;
   }
 
   public async handle(
@@ -51,59 +50,26 @@ class PostLangSecController {
         initialTerm: string,
       };
 
-      const entryEntity = new TbxEntity({
-        ...tables.conceptEntryTable,
-        uuid: entryUUID,
-      });
-
-      const langSecEntity = new TbxEntity({
-        ...tables.langSecTable,
-        uuid: uuid(),
-      });
-
-      const termEntity = new TbxEntity({
-        ...tables.termTable,
-        uuid: uuid()
-      })
-
       const newLangSecUUID = await this.dbClient.transaction(async (transac) => {
-        await transac<dbTypes.LangSec>(tables.langSecTable.fullTableName)
-          .insert({
-            uuid: langSecEntity.uuid,
-            xml_lang: langCode,
-            termbase_uuid: termbaseUUID,
-            order: await this.helpers.computeNestedNextOrder(
-              entryEntity,
-              tables.langSecTable,
-              transac
-            )
-          });
-
-        await transac<dbTypes.Term>(tables.termTable.fullTableName)
-          .insert({
-            uuid: termEntity.uuid,
-            value: initialTerm,
-            termbase_uuid: termbaseUUID,
-            order: await this.helpers.computeNextOrder(
-              termbaseUUID,
-              tables.termTable,
-              transac
-            )
-          });
-
-        await this.helpers.saveChildTable(
-          entryEntity,
+        const entryEntity = new TbxEntity({
+          ...tables.conceptEntryTable,
+          uuid: entryUUID,
+        });
+  
+        const langSecEntity = new TbxEntity({
+          ...tables.langSecTable,
+          uuid: uuid(),
+        });
+        
+        return await this.langSecService.constructLangSec(
+          langCode,
+          initialTerm,
           langSecEntity,
+          entryEntity,
+          termbaseUUID,
+          req.userId,
           transac
         );
-
-        await this.helpers.saveChildTable(
-          langSecEntity,
-          termEntity,
-          transac,
-        );
-
-        return langSecEntity.uuid;
       });
 
       return res.status(200).json({

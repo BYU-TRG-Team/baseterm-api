@@ -1,7 +1,6 @@
 import { Request, Response } from "express";
 import * as yup from "yup";
 import errorMessages from "../../messages/errorMessages";
-import * as dbTypes from "../../db/types";
 import * as tables from "../../db/tables";
 import { Knex } from "knex";
 import Helpers from "../../helpers";
@@ -12,20 +11,24 @@ import { isValidUUID } from "../../utils";
 import { PostEntryEndpointResponse } from "../../types/responses";
 import { uuid } from "uuidv4";
 import { name as xmlNameValidator } from "xml-name-validator";
+import EntryService from "../../services/EntryService";
 
 class PostEntryController {
   private dbClient: Knex<any, unknown[]>;
   private helpers: Helpers;
   private logger: Logger;
+  private entryService: EntryService;
 
   constructor(
     dbClient: Knex<any, unknown[]>,
     helpers: Helpers,
     logger: Logger,
+    entryService: EntryService,
   ) {
     this.dbClient = dbClient;
     this.helpers = helpers;
     this.logger = logger;
+    this.entryService = entryService;
   }
 
   public async handle(req: Request, res: Response) {
@@ -47,72 +50,22 @@ class PostEntryController {
 
       if (!xmlNameValidator(entryId)) return handleInvalidXmlIdError(res);
 
-      const conceptEntryEntity = new TbxEntity({
+      const entryEntity = new TbxEntity({
         ...tables.conceptEntryTable,
         uuid: uuid()
       });
 
-      const langSecEntity = new TbxEntity({
-        ...tables.langSecTable,
-        uuid: uuid(),
-      });
-
-      const termEntity = new TbxEntity({
-        ...tables.termTable,
-        uuid: uuid(),
-      });
-
-      const newConceptEntryUUID = 
-        await this.dbClient.transaction(async (transac) => {    
-          await this.helpers.saveId(
-            entryId,
-            termbaseUUID,
-            conceptEntryEntity,
-            transac
-          );
-          
-          await transac<dbTypes.ConceptEntry>(tables.conceptEntryTable.fullTableName)
-            .insert({ 
-              uuid: conceptEntryEntity.uuid,
-              id: entryId,
-              termbase_uuid: termbaseUUID,
-              order: await this.helpers.computeNextOrder(
-                termbaseUUID,
-                tables.conceptEntryTable,
-                transac
-              ),
-            });
-  
-          await transac<dbTypes.LangSec>(tables.langSecTable.fullTableName)
-            .insert({ 
-              uuid: langSecEntity.uuid,
-              xml_lang: initialLanguageSection,
-              termbase_uuid: termbaseUUID,
-              order: 0
-            });
-
-          await transac<dbTypes.Term>(tables.termTable.fullTableName)
-            .insert({ 
-              uuid: termEntity.uuid,
-              value: initialTerm,
-              termbase_uuid: termbaseUUID,
-              order: 0
-            });
-
-          await this.helpers.saveChildTable(
-            conceptEntryEntity,
-            langSecEntity,
-            transac,
-          );
-
-          await this.helpers.saveChildTable(
-            langSecEntity,
-            termEntity,
-            transac,
-          );
-
-          return conceptEntryEntity.uuid;
-        });
+      const newConceptEntryUUID = await this.dbClient.transaction(async (transac) => {
+        return await this.entryService.constructEntry(
+          entryId,
+          initialLanguageSection,
+          initialTerm,
+          entryEntity,
+          termbaseUUID,
+          req.userId,
+          transac
+        )
+      })
 
       res.status(200).json({
         uuid: newConceptEntryUUID,

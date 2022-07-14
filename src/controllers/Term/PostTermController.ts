@@ -1,28 +1,27 @@
 import { Request, Response } from "express";
 import * as yup from "yup";
 import errorMessages from "../../messages/errorMessages";
-import  * as dbTypes from "../../db/types";
-import * as tables from "../../db/tables";
 import { Knex } from "knex";
-import Helpers from "../../helpers";
-import { TbxEntity } from "../../db/classes";
 import { Logger } from "winston";
 import { handleInvalidBody } from "../../responses/errors";
-import { uuid } from "uuidv4";
 import { PostTermEndpointResponse } from "types/responses";
+import TermService from "../../services/TermService";
+import * as tables from "../../db/tables";
+import { TbxEntity } from "../../db/classes";
+import { uuid } from "uuidv4";
 
 class PostTermController {
   private dbClient: Knex<any, unknown[]>;
-  private helpers: Helpers;
   private logger: Logger;
+  private termService: TermService;
 
   constructor(
     dbClient: Knex<any, unknown[]>,
-    helpers: Helpers,
     logger: Logger,
+    termService: TermService,
   ) {
+    this.termService = termService;
     this.dbClient = dbClient;
-    this.helpers = helpers;
     this.logger = logger;
   }
 
@@ -43,36 +42,25 @@ class PostTermController {
         langSecUUID
       } = req.body;
 
-      const langSecEntity = new TbxEntity({
-        ...tables.langSecTable,
-        uuid: langSecUUID,
-      });
-
-      const termEntity = new TbxEntity({
-        ...tables.termTable,
-        uuid: uuid()
-      });
-
       const newTermUUID = await this.dbClient.transaction(async (transac) => {
-        await transac<dbTypes.Term>(tables.termTable.fullTableName)
-          .insert({
-            uuid: termEntity.uuid,
-            value,
-            termbase_uuid: termbaseUUID,
-            order: await this.helpers.computeNestedNextOrder(
-              langSecEntity,
-              tables.termTable,
-              transac
-            )
-          });
+        const termEntity = new TbxEntity({
+          ...tables.termTable,
+          uuid: uuid()
+        });
 
-        await this.helpers.saveChildTable(
-          langSecEntity,
+        const langSecEntity = new TbxEntity({
+          ...tables.langSecTable,
+          uuid: langSecUUID,
+        });
+        
+        return await this.termService.constructTerm(
+          value,
           termEntity,
-          transac,
+          langSecEntity,
+          termbaseUUID,
+          req.userId,
+          transac
         );
-
-        return termEntity.uuid;
       })
 
       res.status(200).json({

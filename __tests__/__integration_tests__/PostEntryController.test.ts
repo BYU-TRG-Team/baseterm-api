@@ -6,14 +6,18 @@ import { generateJWT, importFile } from "../helpers";
 import { PostEntryEndpointResponse } from "../../src/types/responses";
 import { UUID } from "../../src/types";
 import { Role } from "@byu-trg/express-user-management";
+import { uuid } from "uuidv4";
 
 let requestClient: SuperAgentTest;
 let handleShutDown: () => Promise<void>;
 let mockData: {
   termbaseUUID: UUID
 };
+
+const personId = uuid();
 const jwt = generateJWT(
-	Role.Staff
+	Role.Staff,
+  personId
 );
 
 describe("tests PostEntry controller", () => {
@@ -24,7 +28,9 @@ describe("tests PostEntry controller", () => {
 
     const termbaseUUID = await importFile(
       `${process.env.APP_DIR}/example_tbx/valid_tbx_core.tbx`,
-      requestClient
+      requestClient,
+      uuid(),
+      personId
     );
 
     mockData = {

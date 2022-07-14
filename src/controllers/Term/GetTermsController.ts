@@ -97,7 +97,7 @@ class GetTermsController {
 
       for (const termRow of termRows) {
         terms.push(
-          await this.termService.constructTerm(
+          await this.termService.retrieveTerm(
             termRow,
             "PARTIAL"
           ) as TermPartialView
