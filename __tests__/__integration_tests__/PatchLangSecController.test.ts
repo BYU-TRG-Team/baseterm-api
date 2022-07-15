@@ -8,6 +8,7 @@ import { UUID } from "../../src/types";
 import { describe } from "../../src/utils";
 import { SuperAgentResponse } from "../types";
 import { Role } from "@byu-trg/express-user-management";
+import { uuid } from "uuidv4";
 
 let requestClient: SuperAgentTest;
 let handleShutDown: () => Promise<void>;
@@ -22,7 +23,8 @@ const endpointConstructor = (
     langSecUUID: UUID,
 ) => `/termbase/${termbaseUUID}/langSec/${langSecUUID}`;
 const jwt = generateJWT(
-	Role.Staff
+	Role.Staff,
+  personId
 );
 
 describe("tests PatchLangSec controller", async () => {
@@ -32,7 +34,9 @@ describe("tests PatchLangSec controller", async () => {
     requestClient = supertest.agent(app);
     const termbaseUUID = await importFile(
       `${process.env.APP_DIR}/example_tbx/valid_tbx_core.tbx`,
-      requestClient
+      requestClient,
+      uuid(),
+      personId,
     );
 
     const {
