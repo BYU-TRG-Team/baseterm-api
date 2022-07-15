@@ -13,8 +13,8 @@ import constructTermbaseRoutes from "./routes/termbaseRoutes";
 import constructTermRoutes from "./routes/termRoutes";
 import constructEntryRoutes from "./routes/entryRoutes";
 import constructlangSecRoutes from "./routes/langSecRoutes";
-import constructTermNoteRoutes from "./routes/TermNoteRoutes";
-import constructAuxElementRoutes from "./routes/AuxElementRoutes";
+import constructTermNoteRoutes from "./routes/termNoteRoutes";
+import constructAuxElementRoutes from "./routes/auxElementRoutes";
 import constructRefObjectRoutes from "./routes/refObjectRoutes";
 import dependencyInjection from "./di";
 import cors from "cors";
@@ -38,10 +38,6 @@ const constructServer = (app: Express) => {
 
   // Depedency Injection
   const di = dependencyInjection();
-
-  app.get("/", (_req, res) => {
-    res.sendFile(path.join(__dirname, "../public", "index.html"));
-  });
 
   // routes
   constructFileRoutes(app, di, routeBase);

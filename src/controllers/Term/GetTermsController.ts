@@ -93,7 +93,7 @@ class GetTermsController {
           filterOptions
         );
 
-      const terms = [];
+      const terms: TermPartialView[] = [];
 
       for (const termRow of termRows) {
         terms.push(

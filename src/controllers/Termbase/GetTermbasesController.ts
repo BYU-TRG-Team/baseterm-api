@@ -3,7 +3,7 @@ import errorMessages from "../../messages/errorMessages";
 import  * as dbTypes from "../../db/types";
 import * as tables from "../../db/tables";
 import { Knex } from "knex";
-import { GetTermbasesEndpointResponse } from "types/responses";
+import { GetTermbasesEndpointResponse } from "../../types/responses";
 import { Logger } from "winston";
 import { handleInvalidQueryParams } from "../../responses/errors";
 

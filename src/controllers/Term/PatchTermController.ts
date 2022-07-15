@@ -11,7 +11,7 @@ import * as yup from "yup";
 import TermService from "../../services/TermService";
 import { name as XmlNameValidator } from "xml-name-validator";
 import { TbxEntity } from "../../db/classes";
-import { PatchTermEndpointResponse } from "types/responses";
+import { PatchTermEndpointResponse } from "../../types/responses";
 import TransactionService from "../../services/TransactionService";
 
 class PatchTermController {

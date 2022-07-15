@@ -8,7 +8,7 @@ import { handleInvalidBody, handleNoResourceError } from "../../responses/errors
 import { isValidUUID, TransactionMessage } from "../../utils";
 import { Logger } from "winston";
 import * as yup from "yup";
-import { PatchLangSecEndpointResponse } from "types/responses";
+import { PatchLangSecEndpointResponse } from "../../types/responses";
 import TransactionService from "../../services/TransactionService";
 import { TbxEntity } from "../../db/classes";
 
