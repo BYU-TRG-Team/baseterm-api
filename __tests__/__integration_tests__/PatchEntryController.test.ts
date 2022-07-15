@@ -14,8 +14,11 @@ let mockData: {
   termbaseUUID: UUID,
   entryUUID: UUID,
 };
+
+const personId = uuid();
 const jwt = generateJWT(
-	Role.Staff
+	Role.Staff,
+  personId,
 );
 
 describe("tests PatchEntry controller", () => {
@@ -26,7 +29,9 @@ describe("tests PatchEntry controller", () => {
 
     const termbaseUUID = await importFile(
       `${process.env.APP_DIR}/example_tbx/valid_tbx_core.tbx`,
-      requestClient
+      requestClient,
+      uuid(),
+      personId,
     );
 
     const { entryUUID } = await fetchMockTermbaseData(
