@@ -4,7 +4,7 @@ import errorMessages from "../../messages/errorMessages";
 import { Knex } from "knex";
 import { Logger } from "winston";
 import { handleInvalidBody } from "../../responses/errors";
-import { PostTermEndpointResponse } from "types/responses";
+import { PostTermEndpointResponse } from "../../types/responses";
 import TermService from "../../services/TermService";
 import * as tables from "../../db/tables";
 import { TbxEntity } from "../../db/classes";

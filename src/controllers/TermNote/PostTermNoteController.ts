@@ -9,7 +9,7 @@ import { Logger } from "winston";
 import * as yup from "yup";
 import { TbxEntity } from "../../db/classes";
 import { uuid } from "uuidv4";
-import { PostTermNoteEndpointResponse } from "types/responses";
+import { PostTermNoteEndpointResponse } from "../../types/responses";
 
 class PostTermNoteController {
   private dbClient: Knex<any, unknown[]>;

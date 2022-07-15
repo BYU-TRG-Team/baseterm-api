@@ -30,7 +30,7 @@ import GetTermController from "./controllers/Term/GetTermController";
 import GetEntryController from "./controllers/Entry/GetEntryController";
 import GetLanguageSectionController from "./controllers/LangSec/GetLangSecController";
 import PatchEntryController from "./controllers/Entry/PatchEntryController";
-import PostLangSecController from "./controllers/LangSec/PostlangSecController";
+import PostLangSecController from "./controllers/LangSec/PostLangSecController";
 import DeleteEntryController from "./controllers/Entry/DeleteEntryController";
 import DeleteLangSecController from "./controllers/LangSec/DeleteLangSecController";
 import DeleteTermController from "./controllers/Term/DeleteTermController";
@@ -63,7 +63,7 @@ import Helpers from "./helpers";
 // Logger
 import logger from "./logger";
 import { Logger } from "winston";
-import { DBClient } from "types";
+import { DBClient } from "./types";
 
 
 export type DIContainer = {

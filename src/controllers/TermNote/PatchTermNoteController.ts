@@ -10,7 +10,7 @@ import { Logger } from "winston";
 import * as yup from "yup";
 import { name as xmlNameValidator } from "xml-name-validator";
 import { TbxEntity } from "../../db/classes";
-import { PatchTermNoteEndpointResponse } from "types/responses";
+import { PatchTermNoteEndpointResponse } from "../../types/responses";
 import { TbxElement } from "../../types";
 
 class PatchTermNoteController {

@@ -5,7 +5,7 @@ import * as tables from "../../db/tables";
 import LangSecService from "../../services/LangSecService";
 import errorMessages from "../../messages/errorMessages";
 import { Logger } from "winston";
-import Helpers from "helpers";
+import Helpers from "../../helpers";
 import { TbxEntity } from "../../db/classes";
 
 class DeleteLangSecController {
