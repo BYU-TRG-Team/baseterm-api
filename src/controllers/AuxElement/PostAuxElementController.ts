@@ -50,12 +50,14 @@ class PostAuxElementController {
         elementType,
         type,
         parentUUID,
+        target
       } = req.body as {
         parentElementType: TbxElement,
         parentUUID: UUID,
         value: string,
         elementType: TbxElement,
         type?: string,
+        target?: string,
       }
 
       const parentTable = this.helpers.mapTbxElementToTable(
@@ -121,6 +123,7 @@ class PostAuxElementController {
               ),
               ...(type !== undefined && { type }),
               ...(value !== undefined && { value }),
+              ...(target !== undefined && { target }),
               ...(
                 hasGrpField &&
                 {
@@ -164,6 +167,7 @@ class PostAuxElementController {
         value: yup.string().required(),
         elementType: yup.string().required(),
         type: yup.string().notRequired(),
+        target: yup.string().notRequired(),
       }).required()
     })
   }

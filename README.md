@@ -252,7 +252,7 @@ TbxElement.TransacNote
 ```
 
 
-### PersonRefObject
+### PersonRefObjectPreview
 
 ```
 {
@@ -493,7 +493,7 @@ Parameters are required unless otherwise specified.
       conceptIds: string[],
       approvalStatuses: string[],
       subjectFields: string[],
-      personRefs: PersonRefObject[],
+      personRefs: PersonRefObjectPreview[],
     }
   } & Termbase
   ```
