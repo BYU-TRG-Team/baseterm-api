@@ -132,8 +132,8 @@ class ImportController {
       ignoreAttributes: false,
     });
     const xmlWithExplicitChildren = xmlParser.parse(tbxFile);
-    const root = xmlWithExplicitChildren.length === 2 ? xmlWithExplicitChildren[1] : xmlWithExplicitChildren[0];
-
+    const root = xmlWithExplicitChildren.filter((node: any) => Object.keys(node).includes("tbx"))[0];
+    
     const setOrderAttribute = (element: any, index: number) => {
       if (isDefined(element[":@"])) element[":@"]["@_order"] = index;
       else {
@@ -148,6 +148,7 @@ class ImportController {
           key !== ":@" && 
           typeof element[key] !== "string"
         ) {
+
           (element[key] as Array<any>).forEach((child: any, index: number) => {
             setOrderAttribute(child, index);
             recursivelyCallChildren(child);
