@@ -67,7 +67,9 @@ class ImportController {
       tbxObject.tbx?.text?.[0]?.body?.[0]?.conceptEntry?.length || 0;
     const dialect = 
       tbxObject[types.TbxElement.Tbx].$?.[types.TBXAttribute.type];
-
+    const style = 
+      tbxObject[types.TbxElement.Tbx].$?.[types.TBXAttribute.style];
+    
     try {
       this.globalStore.set(sessionId, {
         type: "import",
@@ -83,6 +85,10 @@ class ImportController {
 
       if (dialect !== "TBX-Basic") {
         throw new Error("TBX file must use the TBX-Basic dialect");
+      }
+
+      if (style !== "dca") {
+        throw new Error("TBX file must use the DCA style")
       }
 
       await this.tbxConsumer.consume({
