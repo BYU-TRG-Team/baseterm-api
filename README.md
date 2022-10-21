@@ -4,12 +4,26 @@ Express.js REST API that supports the [BaseTerm](https://github.com/BYU-TRG-Team
 
 ## Installation
 
-The API requires the following to be installed on your machine: 
+### Server Requirements
+
 - PostgreSQL 14.x
 - Node.js 16.x
 - Python 3.x
 
-### Express Server Installation
+### Third Party Requirements 
+
+- **Rollbar logging token**. Please contact the TRG team to setup one.
+
+### Environment Variables
+
+```
+APP_ENV=<dev | prod>
+DATABASE_URL=<url for the BaseTerm API database>
+ROLLBAR_API_TOKEN=<Rollbar logging token>
+AUTH_SECRET=<64-bit CSPRNG secret>
+```
+
+### Build
 
 ```
 npm ci
@@ -23,7 +37,9 @@ npm run build
 pip3 install -r requirements
 ```
 
-### PostgreSQL migrations
+### Database Configuration (PostgreSQL migrations)
+
+**This step makes used of NPM packages installed from build.**
 
 #### Migrate up
 ```
