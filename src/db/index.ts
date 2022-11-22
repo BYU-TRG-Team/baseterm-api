@@ -2,12 +2,12 @@ import knex from "knex";
 import { attachPaginate } from "knex-paginate";
 import { AppEnv } from "../types";
 
-const { DATABASE_URL, APP_ENV } = process.env;
+const { DATABASE_URL, APP_ENV, MAX_CONNECTION_POOL = 20 } = process.env;
 
 const dbClient = knex({
   client: "pg",
   version: "13.6",
-  pool: { min: 0, max: 100 },
+  pool: { min: 0, max: Number(MAX_CONNECTION_POOL) },
   connection: {
     connectionString: DATABASE_URL,
     ssl: 

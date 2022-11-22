@@ -19,8 +19,9 @@ Express.js REST API that supports the [BaseTerm](https://github.com/BYU-TRG-Team
 ```
 APP_ENV=<dev | prod>
 DATABASE_URL=<url for the BaseTerm API database>
-ROLLBAR_API_TOKEN=<Rollbar logging token>
+ROLLBAR_API_TOKEN=<Rollbar logging token> *Not required*
 AUTH_SECRET=<64-bit CSPRNG secret>
+MAX_CONNECTION_POOL=<Max connections to pool for Postgres (default is 20)> *Not required*
 ```
 
 ### Build
