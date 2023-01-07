@@ -4,22 +4,30 @@ Express.js REST API that supports the [BaseTerm](https://github.com/BYU-TRG-Team
 
 ## Installation
 
+### Contact the BYU TRG
+Before installing any instance of the BaseTerm API, please reach out to the BYU TRG at byutrg@gmail.com to establish a dialogue with the team. Please include any necessary contact info so that we can reach out to you for important version updates.
+
 ### Server Requirements
 
 - PostgreSQL 14.x
 - Node.js 16.x
 - Python 3.x
 
+### Setup NPM and a PostgreSQL instance
+
+- NPM (Node Package Manager) will be needed for the installation of the BaseTerm API application. Please reference the [NPM documentation](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm) for setup.
+- A PostgreSQL instance will be needed for the BaseTerm API application. A database will also need to be created in the PostgreSQL instance. Please reference the [PostgreSQL downloads](https://www.postgresql.org/download/) for installers for various platforms.
+
 ### Third Party Requirements 
 
-- **Rollbar logging token**. Please contact the TRG team to setup one.
+- **Rollbar logging token**.  Please contact the BYU TRG team to obtain this token.
 
 ### Environment Variables
 
 ```
 APP_ENV=<dev | prod>
 DATABASE_URL=<url for the BaseTerm API database>
-ROLLBAR_API_TOKEN=<Rollbar logging token> *Not required*
+ROLLBAR_API_TOKEN=<Rollbar logging token>
 AUTH_SECRET=<64-bit CSPRNG secret>
 MAX_CONNECTION_POOL=<Max connections to pool for Postgres (default is 20)> *Not required*
 ```
@@ -35,7 +43,7 @@ npm run build
 ```
 
 ```
-pip3 install -r requirements
+pip3 install -r requirements.txt
 ```
 
 ### Database Configuration (PostgreSQL migrations)
@@ -44,12 +52,12 @@ pip3 install -r requirements
 
 #### Migrate up
 ```
-DATABASE_URL=<postgres instance url> npm run migrate up
+DATABASE_URL=<url for the BaseTerm API database> npm run migrate up
 ```
 
 #### Migrate down
 ```
-DATABASE_URL=<postgres instance url> npm run migrate down
+DATABASE_URL=<url for the BaseTerm API database> npm run migrate down
 ```
 
 ### Launch 
