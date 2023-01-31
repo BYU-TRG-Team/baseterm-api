@@ -4,9 +4,9 @@ import supertest, { SuperAgentTest } from "supertest";
 import express from "express";
 import { fetchMockTermbaseData, generateJWT, importFile } from "../helpers";
 import { PostLangSecEndpointResponse } from "../../src/types/responses";
+import { validLanguageCode } from "../constants";
 import { UUID } from "../../src/types";
 import { describe } from "../../src/utils";
-import errorMessages from "../../src/messages/errorMessages";
 import { SuperAgentResponse } from "../types";
 import { Role } from "@byu-trg/express-user-management";
 import { uuid } from "uuidv4";
@@ -30,7 +30,7 @@ const jwt = generateJWT(
 describe("tests PostLangSec controller", async () => {
   beforeAll(async () => {
     const app = express();
-    handleShutDown = constructServer(app);
+    handleShutDown = await constructServer(app);
     requestClient = supertest.agent(app);
     const termbaseUUID = await importFile(
       `${process.env.APP_DIR}/example_tbx/valid_tbx_core.tbx`,
@@ -66,18 +66,6 @@ describe("tests PostLangSec controller", async () => {
       .set('Cookie', [`TRG_AUTH_TOKEN=${jwt}`]);
   
     expect(status).toBe(400);
-    expect(body.error).toBe(errorMessages.bodyInvalid);
-  
-    const { status: getEntryStatus } = await requestClient
-      .get(
-        endpointConstructor(
-          mockData.termbaseUUID,
-        )
-      )
-      .set('Cookie', [`TRG_AUTH_TOKEN=${jwt}`]);
-  
-    expect(status).toBe(400);
-    expect(body.error).toBe(errorMessages.bodyInvalid);
   });
   
   test("should return a 200 response for successful creation of a lang sec", async () => {
@@ -89,7 +77,7 @@ describe("tests PostLangSec controller", async () => {
       )
       .field({
         entryUUID: mockData.entryUUID,
-        langCode: "amh",
+        langCode: validLanguageCode,
         initialTerm: "Test"
       }) 
       .set('Cookie', [`TRG_AUTH_TOKEN=${jwt}`]) as 

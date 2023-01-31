@@ -432,7 +432,7 @@ Parameters are required unless otherwise specified.
   ```
 
   #### Note
-  The export endpoint launches a session. To subscribe to the session that is launched, the **sessionId** will need to be used with the **session endpoint**. 
+  The export endpoint launches a session. To subscribe to the session that is launched, the **sessionId** will need to be used with the **session endpoint** via HTTP SSE.
 </details>
 
 ---
@@ -866,9 +866,13 @@ Parameters are required unless otherwise specified.
   PATCH
 
   #### Params
-  @langCode (optional)
+  @id (optional)
   <br />
   @order (optional)
+  <br/>
+  @value (optional)
+  <br />
+  @termSecId (optional)
 
   #### Allowed Roles
   Admin
@@ -1383,11 +1387,6 @@ Parameters are required unless otherwise specified.
   <br />
   User
 
-  #### Params
-  @langCode (optional)
-  <br />
-  @order (optional)
-
   #### Responses
   
   ```
@@ -1477,8 +1476,6 @@ Parameters are required unless otherwise specified.
 
   #### Params
   @id (optional)
-  <br />
-  @order (optional)
 
   #### Responses
 
@@ -1582,6 +1579,8 @@ Parameters are required unless otherwise specified.
   @elementType
   <br />
   @type (optional)
+  <br />
+  @target (optional)
 
   #### Responses
 

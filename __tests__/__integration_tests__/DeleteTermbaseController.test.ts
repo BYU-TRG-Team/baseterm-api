@@ -12,9 +12,9 @@ const jwt = generateJWT(
 );
 
 describe("tests DeleteTermbase controller", () => {
-  beforeAll(() => {
+  beforeAll(async () => {
     const app = express();
-    handleShutDown = constructServer(app);
+    handleShutDown = await constructServer(app);
     requestClient = supertest.agent(app);
   });
 

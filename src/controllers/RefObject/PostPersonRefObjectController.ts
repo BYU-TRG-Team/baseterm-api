@@ -11,7 +11,6 @@ import {
   handleUserIdMismatch
 } from "../../responses/errors";
 import { isValidUUID } from "../../utils";
-import { name as xmlNameValidator } from "xml-name-validator";
 
 class PostRefController {
   private dbClient: Knex<any, unknown[]>;

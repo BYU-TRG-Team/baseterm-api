@@ -8,6 +8,7 @@ import LangSecService from "./services/LangSecService";
 import EntryService from "./services/EntryService";
 import RefService from "./services/RefService";
 import TransactionService from "./services/TransactionService";
+import LanguageCodeService from "@byu-trg/language-code-service";
 
 // Support
 import TBXValidator from "./support/TBXValidator";
@@ -98,9 +99,10 @@ export type DIContainer = {
   DeleteTermNoteController: DeleteTermNoteController,
   PostPersonRefObjectController: PostPersonRefObjectController,
   Logger: Logger,
+  LanguageCodeService: LanguageCodeService
 }
 
-const dependencyInjection = (): DIContainer => {
+const dependencyInjection = async (): Promise<DIContainer> => {
   // Pub Sub
   const eventEmitter = new EventEmitter();
 
@@ -153,9 +155,14 @@ const dependencyInjection = (): DIContainer => {
     langSecService,
     transacService
   );
+  const languageCodeService = new LanguageCodeService()
+  await languageCodeService.init()
 
   // Support
-  const tbxValidator = new TBXValidator(rngValidator);
+  const tbxValidator = new TBXValidator(
+    rngValidator,
+    languageCodeService
+  );
   const tbxConsumer = new TBXConsumer(
     dbClient,
     helpers,
@@ -275,7 +282,7 @@ const dependencyInjection = (): DIContainer => {
     helpers,
     logger,
     termService,
-    transacService
+    transacService,
   );
   const patchLangSecController = new PatchLangSecController(
     dbClient,
@@ -353,6 +360,7 @@ const dependencyInjection = (): DIContainer => {
     DeleteTermNoteController: deleteTermNoteController,
     PostPersonRefObjectController: postPersonRefObjectController,
     Logger: logger,
+    LanguageCodeService: languageCodeService
   };
 };
 

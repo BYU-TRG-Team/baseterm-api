@@ -38,7 +38,9 @@ class PatchAuxElementController {
     try {
       await this.getValidator().validate(req);
     } catch(err) {
-      return handleInvalidBody(res);
+      // TODO: Return yup validation errors for all controllers
+      const validationError = (err as Error).message
+      return handleInvalidBody(res, validationError);
     }
 
     try {
@@ -243,7 +245,7 @@ class PatchAuxElementController {
         grpId: yup.string().notRequired(),
         order: yup.number().notRequired(),
         target: yup.string().notRequired(),
-        langCode: yup.string().notRequired(),
+        langCode: yup.string().notRequired().isValidLangCode(),
         datatype: yup.string().notRequired(),
         type: yup.string().notRequired(),
         value: yup.string().notRequired(),

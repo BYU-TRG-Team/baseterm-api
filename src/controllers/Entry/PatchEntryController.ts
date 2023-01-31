@@ -165,8 +165,7 @@ class PatchEntryController {
   private getValidator(): yup.ObjectSchema<any> {
     return yup.object().shape({
       body: yup.object({
-        id: yup.string().notRequired(),
-        order: yup.number().notRequired(),
+        id: yup.string().notRequired()
       }).required(),
     });
   }

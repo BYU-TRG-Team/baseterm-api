@@ -13,9 +13,9 @@ export const handleInvalidQueryParams = function (res: Response) {
   }); 
 };
 
-export const handleInvalidBody = function (res: Response) {
+export const handleInvalidBody = function (res: Response, err: string = errorMessages.bodyInvalid) {
   return res.status(400).json({
-    error: errorMessages.bodyInvalid,
+    error: err
   });
 };
 

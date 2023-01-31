@@ -35,7 +35,8 @@ class PostEntryController {
     try {   
       await this.getValidator().validate(req);
     } catch(err) {
-      return handleInvalidBody(res);
+      const validationError = (err as Error).message
+      return handleInvalidBody(res, validationError);
     }
 
     try {
@@ -99,7 +100,7 @@ class PostEntryController {
     return yup.object().shape({
       body: yup.object({
         entryId: yup.string().required(),
-        initialLanguageSection: yup.string().required(),
+        initialLanguageSection: yup.string().required().isValidLangCode({ required: true }),
         initialTerm: yup.string().required(),
       }).required()
     });

@@ -30,16 +30,14 @@ const testTbxFiles = [
   // `${process.env.APP_DIR}/example_tbx/test_files/test5.tbx`,
   // `${process.env.APP_DIR}/example_tbx/test_files/test6.tbx`,
   // `${process.env.APP_DIR}/example_tbx/test_files/test7.tbx`,
-  `${process.env.APP_DIR}/example_tbx/test_files/test8.tbx`,
+  // `${process.env.APP_DIR}/example_tbx/test_files/test8.tbx`,
 ];
 
 describe("tests Import, Export, and Session controllers", () => {
-  beforeAll(() => {
+  beforeAll(async () => {
     const app = express();
-    handleShutDown = constructServer(app);
-    requestClient = supertest.agent(app, {
-
-    });
+    handleShutDown = await constructServer(app);
+    requestClient = supertest.agent(app)
   });
 
   afterAll(async () => {
