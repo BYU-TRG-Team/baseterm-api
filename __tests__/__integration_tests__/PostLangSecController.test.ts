@@ -4,7 +4,7 @@ import supertest, { SuperAgentTest } from "supertest";
 import express from "express";
 import { fetchMockTermbaseData, generateJWT, importFile } from "../helpers";
 import { PostLangSecEndpointResponse } from "../../src/types/responses";
-import { validLanguageCode } from "../constants";
+import { VALID_LANGUAGE_CODE} from "../constants";
 import { UUID } from "../../src/types";
 import { describe } from "../../src/utils";
 import { SuperAgentResponse } from "../types";
@@ -77,7 +77,7 @@ describe("tests PostLangSec controller", async () => {
       )
       .field({
         entryUUID: mockData.entryUUID,
-        langCode: validLanguageCode,
+        langCode: VALID_LANGUAGE_CODE,
         initialTerm: "Test"
       }) 
       .set('Cookie', [`TRG_AUTH_TOKEN=${jwt}`]) as 
