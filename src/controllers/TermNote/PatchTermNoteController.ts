@@ -35,7 +35,8 @@ class PatchTermNoteController {
     try {
       await this.getValidator().validate(req);
     } catch(err) {
-      return handleInvalidBody(res);
+      const validationError = (err as Error).message
+      return handleInvalidBody(res, validationError);
     }
 
     try {
@@ -214,7 +215,7 @@ class PatchTermNoteController {
         grpId: yup.string().notRequired(),
         target: yup.string().notRequired(),
         datatype: yup.string().notRequired(),
-        langCode: yup.string().notRequired(),
+        langCode: yup.string().notRequired().isValidLangCode({ required: false }),
         order: yup.number().notRequired(),
       }).required()
     })

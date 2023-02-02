@@ -4,6 +4,7 @@ import supertest, { SuperAgentTest } from "supertest";
 import express from "express";
 import { generateJWT, importFile } from "../helpers";
 import { PostEntryEndpointResponse } from "../../src/types/responses";
+import { validLanguageCode } from "../constants";
 import { UUID } from "../../src/types";
 import { Role } from "@byu-trg/express-user-management";
 import { uuid } from "uuidv4";
@@ -23,7 +24,7 @@ const jwt = generateJWT(
 describe("tests PostEntry controller", () => {
   beforeAll(async () => {
     const app = express();
-    handleShutDown = constructServer(app);
+    handleShutDown = await constructServer(app);
     requestClient = supertest.agent(app);
 
     const termbaseUUID = await importFile(
@@ -55,7 +56,7 @@ describe("tests PostEntry controller", () => {
       .post("/termbase/randommmmmmmm/entry")
       .send({
         entryId: "test",
-        initialLanguageSection: "test",
+        initialLanguageSection: validLanguageCode,
         initialTerm: "test",
       })
       .set('Cookie', [`TRG_AUTH_TOKEN=${jwt}`]);
@@ -68,7 +69,7 @@ describe("tests PostEntry controller", () => {
       .post(`/termbase/${mockData.termbaseUUID}/entry`)
       .send({
         entryId: "c5", 
-        initialLanguageSection: "test",
+        initialLanguageSection: validLanguageCode,
         initialTerm: "test",
       })
       .set('Cookie', [`TRG_AUTH_TOKEN=${jwt}`]);
@@ -81,7 +82,7 @@ describe("tests PostEntry controller", () => {
       .post(`/termbase/${mockData.termbaseUUID}/entry`)
       .send({
         entryId: "c0293409", 
-        initialLanguageSection: "test",
+        initialLanguageSection: validLanguageCode,
         initialTerm: "test",
       }) 
       .set('Cookie', [`TRG_AUTH_TOKEN=${jwt}`]) as 

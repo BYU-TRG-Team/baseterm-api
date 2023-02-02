@@ -5,6 +5,7 @@ import express from "express";
 import { fetchMockTermNote, generateJWT, importFile } from "../helpers";
 import { PatchTermNoteEndpointResponse } from "../../src/types/responses";
 import { TermNote, UUID } from "../../src/types";
+import { validLanguageCode } from "../constants";
 import { describe } from "../../src/utils";
 import { SuperAgentResponse } from "../types";
 import { Role } from "@byu-trg/express-user-management";
@@ -27,7 +28,7 @@ const jwt = generateJWT(
 describe("tests PatchTermNote controller", async () => {
   beforeAll(async () => {
     const app = express();
-    handleShutDown = constructServer(app);
+    handleShutDown = await constructServer(app);
     requestClient = supertest.agent(app);
     const termbaseUUID = await importFile(
       `${process.env.APP_DIR}/example_tbx/valid_tbx_core.tbx`,
@@ -65,13 +66,13 @@ test("should return a 200 response for successful patch of term note", async () 
       value: "Test",
       grpId: "Test1",
       datatype: "Test",
-      langCode: "Test",
+      langCode: validLanguageCode,
       order: 100,
     }) as SuperAgentResponse<PatchTermNoteEndpointResponse>;
 
   expect(status).toBe(200);
   expect(body.type).toBe("Test");
   expect(body.value).toBe("Test");
-  expect(body.xmlLang).toBe("Test");
+  expect(body.xmlLang).toBe(validLanguageCode);
   expect(body.order).toBe(100);
 });

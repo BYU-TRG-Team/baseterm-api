@@ -13,6 +13,7 @@ import { name as XmlNameValidator } from "xml-name-validator";
 import { TbxEntity } from "../../db/classes";
 import { PatchTermEndpointResponse } from "../../types/responses";
 import TransactionService from "../../services/TransactionService";
+import LanguageCodeService from "@byu-trg/language-code-service";
 
 class PatchTermController {
   private dbClient: Knex<any, unknown[]>;
@@ -26,7 +27,7 @@ class PatchTermController {
     helpers: Helpers,
     logger: Logger,
     termService: TermService,
-    transactionService: TransactionService
+    transactionService: TransactionService,
   ) {
     this.dbClient = dbClient;
     this.helpers = helpers;
@@ -42,7 +43,8 @@ class PatchTermController {
     try {
       await this.getValidator().validate(req);
     } catch(err) {
-      return handleInvalidBody(res);
+      const validationError = (err as Error).message
+      return handleInvalidBody(res, validationError);
     }
 
     try {
@@ -214,7 +216,9 @@ class PatchTermController {
   private getValidator(): yup.ObjectSchema<any> {
     return yup.object().shape({
       body: yup.object({
-        langCode: yup.string().notRequired(),
+        id: yup.string().notRequired(),
+        termSecId: yup.string().notRequired(),
+        value: yup.string().notRequired(),
         order: yup.number().notRequired(),
       }).required()
     })

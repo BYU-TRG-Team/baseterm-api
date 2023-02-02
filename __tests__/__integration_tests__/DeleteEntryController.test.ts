@@ -25,7 +25,7 @@ const jwt = generateJWT(
 describe("tests DeleteEntry controller", async () => {
   beforeAll(async () => {
     const app = express();
-    handleShutDown = constructServer(app);
+    handleShutDown = await constructServer(app);
     requestClient = supertest.agent(app);
     const termbaseUUID = await importFile(
       `${process.env.APP_DIR}/example_tbx/valid_tbx_core.tbx`,

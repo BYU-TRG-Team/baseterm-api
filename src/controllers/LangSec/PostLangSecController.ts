@@ -32,7 +32,8 @@ class PostLangSecController {
     try {
       await this.getValidator().validate(req);
     } catch(err) {
-      return handleInvalidBody(res);
+      const validationError = (err as Error).message
+      return handleInvalidBody(res, validationError);
     }
 
     try {
@@ -89,7 +90,7 @@ class PostLangSecController {
     return yup.object().shape({
       body: yup.object({
         entryUUID: yup.string().required(),
-        langCode: yup.string().required(),
+        langCode: yup.string().required().isValidLangCode({ required: true }),
         initialTerm: yup.string().required(),
       }).required()
     })

@@ -37,7 +37,8 @@ class PatchLangSecController {
     try {
       await this.getValidator().validate(req);
     } catch(err) {
-      return handleInvalidBody(res);
+      const validationError = (err as Error).message
+      return handleInvalidBody(res, validationError);
     }
 
     try {
@@ -145,7 +146,7 @@ class PatchLangSecController {
   private getValidator(): yup.ObjectSchema<any> {
     return yup.object().shape({
       body: yup.object({
-        langCode: yup.string().notRequired(),
+        langCode: yup.string().notRequired().isValidLangCode({ required: false }),
         order: yup.number().notRequired(),
       }).required()
     })
