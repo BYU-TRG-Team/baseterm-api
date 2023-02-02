@@ -6,7 +6,7 @@
     "build": "tsc",
     "start": "APP_DIR=$(pwd) nodemon .",
     "dev": "APP_DIR=$(pwd) tsc -w",
-    "test": "APP_DIR=$(pwd) jest --coverage --runInBand --forceExit",
+    "test": "AUTH_SECRET=killjoy APP_DIR=$(pwd) jest --coverage --runInBand --forceExit",
     "migrate": "node-pg-migrate -t pgmigrations_baseterm"
   },
   "repository": {
@@ -21,7 +21,7 @@
   "homepage": "https://github.com/BYU-TRG-Team/js-baseterm-api#readme",
   "dependencies": {
     "@byu-trg/express-user-management": "^1.0.1",
-    "@byu-trg/language-code-service": "^1.0.3",
+    "@byu-trg/language-code-service": "^1.1.0",
     "@datastructures-js/priority-queue": "^6.0.0",
     "body-parser": "^1.19.2",
     "cookie-parser": "^1.4.6",
