@@ -7,7 +7,6 @@ import {
 import { uuid } from "uuidv4";
 import { SuperAgentTest } from "supertest";
 import { UUID } from "../src/types/";
-import { AUTH_SECRET } from "./constants";
 import EventSource from "eventsource";
 import jwt from "jsonwebtoken";
 import { Role } from "@byu-trg/express-user-management";
@@ -186,6 +185,6 @@ export const generateJWT = (
       role, 
       verified: true, 
       username: "test",
-    }, AUTH_SECRET)
+    }, process.env.AUTH_SECRET as string)
   )
 }

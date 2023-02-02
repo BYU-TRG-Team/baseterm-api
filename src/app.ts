@@ -20,7 +20,7 @@ import dependencyInjection from "./di";
 import cors from "cors";
 import errorMessages from "./messages/errorMessages";
 
-const constructServer = async (app: Express) => {
+const constructServer = (app: Express) => {
   const routeBase = process.env.API_ROUTE_BASE || "";
 
   // Middleware
@@ -37,7 +37,7 @@ const constructServer = async (app: Express) => {
   }));
 
   // Depedency Injection
-  const di = await dependencyInjection();
+  const di = dependencyInjection();
 
   // routes
   constructFileRoutes(app, di, routeBase);

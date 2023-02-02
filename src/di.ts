@@ -102,7 +102,7 @@ export type DIContainer = {
   LanguageCodeService: LanguageCodeService
 }
 
-const dependencyInjection = async (): Promise<DIContainer> => {
+const dependencyInjection = (): DIContainer => {
   // Pub Sub
   const eventEmitter = new EventEmitter();
 
@@ -156,7 +156,6 @@ const dependencyInjection = async (): Promise<DIContainer> => {
     transacService
   );
   const languageCodeService = new LanguageCodeService()
-  await languageCodeService.init()
 
   // Support
   const tbxValidator = new TBXValidator(
