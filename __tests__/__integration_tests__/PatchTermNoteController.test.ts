@@ -5,7 +5,7 @@ import express from "express";
 import { fetchMockTermNote, generateJWT, importFile } from "../helpers";
 import { PatchTermNoteEndpointResponse } from "../../src/types/responses";
 import { TermNote, UUID } from "../../src/types";
-import { validLanguageCode } from "../constants";
+import { VALID_LANGUAGE_CODE } from "../constants";
 import { describe } from "../../src/utils";
 import { SuperAgentResponse } from "../types";
 import { Role } from "@byu-trg/express-user-management";
@@ -66,13 +66,13 @@ test("should return a 200 response for successful patch of term note", async () 
       value: "Test",
       grpId: "Test1",
       datatype: "Test",
-      langCode: validLanguageCode,
+      langCode: VALID_LANGUAGE_CODE,
       order: 100,
     }) as SuperAgentResponse<PatchTermNoteEndpointResponse>;
 
   expect(status).toBe(200);
   expect(body.type).toBe("Test");
   expect(body.value).toBe("Test");
-  expect(body.xmlLang).toBe(validLanguageCode);
+  expect(body.xmlLang).toBe(VALID_LANGUAGE_CODE);
   expect(body.order).toBe(100);
 });

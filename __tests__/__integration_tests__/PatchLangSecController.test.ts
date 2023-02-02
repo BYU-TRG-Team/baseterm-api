@@ -4,7 +4,7 @@ import supertest, { SuperAgentTest } from "supertest";
 import express from "express";
 import { fetchMockTermbaseData, generateJWT, importFile } from "../helpers";
 import { PatchLangSecEndpointResponse } from "../../src/types/responses";
-import { validLanguageCode } from "../constants";
+import { VALID_LANGUAGE_CODE } from "../constants";
 import { UUID } from "../../src/types";
 import { describe } from "../../src/utils";
 import { SuperAgentResponse } from "../types";
@@ -68,11 +68,11 @@ test("should return a 200 response for successful patch of term", async () => {
     )
     .set('Cookie', [`TRG_AUTH_TOKEN=${jwt}`])
     .field({
-      langCode: validLanguageCode,
+      langCode: VALID_LANGUAGE_CODE,
       order: 100
     }) as SuperAgentResponse<PatchLangSecEndpointResponse>;
 
     expect(status).toBe(200);
-    expect(body.xmlLang).toBe(validLanguageCode);
+    expect(body.xmlLang).toBe(VALID_LANGUAGE_CODE);
     expect(body.order).toBe(100);
 });

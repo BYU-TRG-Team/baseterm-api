@@ -6,7 +6,7 @@
     "build": "tsc",
     "start": "APP_DIR=$(pwd) nodemon .",
     "dev": "APP_DIR=$(pwd) tsc -w",
-    "test": "AUTH_SECRET=killjoy APP_DIR=$(pwd) jest --coverage --runInBand --forceExit",
+    "test": "APP_DIR=$(pwd) jest --coverage --runInBand --forceExit",
     "migrate": "node-pg-migrate -t pgmigrations_baseterm"
   },
   "repository": {
