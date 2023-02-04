@@ -1,5 +1,4 @@
 {
-  "version": "1.0.0",
   "description": "BaseTerm API is an open-source API intended to be used by BaseTerm. BaseTerm API stores all termbase (terminology database) related information used by BaseTerm. The API only supports TBX-Basic files for import/export.",
   "main": "dist/index.js",
   "scripts": {
@@ -21,7 +20,7 @@
   "homepage": "https://github.com/BYU-TRG-Team/js-baseterm-api#readme",
   "dependencies": {
     "@byu-trg/express-user-management": "^1.0.1",
-    "@byu-trg/language-code-service": "^1.1.0",
+    "@byu-trg/language-code-service": "^1.1.4",
     "@datastructures-js/priority-queue": "^6.0.0",
     "body-parser": "^1.19.2",
     "cookie-parser": "^1.4.6",
