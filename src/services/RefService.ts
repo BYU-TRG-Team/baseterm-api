@@ -39,11 +39,43 @@ class RefService {
     return personId.substring(3);
   }
 
+  private async retrieveBack(
+    termbaseUUID: UUID,
+    dbClient: types.DBClient
+  ) {
+    const back = this.helpers.pluckOne(
+      await dbClient<dbTypes.Back>(tables.backTable.fullTableName)
+        .where({
+          termbase_uuid: termbaseUUID,
+        })
+        .select("*")
+    );
+
+    if (back !== null) {
+      return back
+    }
+
+    const newBack = this.helpers.pluckOne(
+      await dbClient<dbTypes.Back>(tables.backTable.fullTableName)
+        .insert({
+          termbase_uuid: termbaseUUID,
+        })
+        .returning<dbTypes.Back[]>("*")
+    ) as dbTypes.Back
+
+    return newBack
+  }
+
   private async retrieveRefObjectSec(
     termbaseUUID: UUID,
     type: string,
     dbClient: types.DBClient
   ) {
+    await this.retrieveBack(
+      termbaseUUID,
+      dbClient
+    )
+
     const refObjectSec = this.helpers.pluckOne(
       await dbClient<dbTypes.RefObjectSec>(tables.refObjectSecTable.fullTableName)
         .where({

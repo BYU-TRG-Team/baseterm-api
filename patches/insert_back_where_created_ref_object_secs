@@ -1,0 +1,24 @@
+#!/bin/bash
+
+########################
+# Patch for missing back element for refObjectSec elements created in BaseTerm
+#
+# Arguments:
+# $1: postgresql url
+########################
+
+set -o xtrace
+
+declare -r POSTGRES_URL="$1"
+INSERT_BACK_QUERY=$(cat <<-EOF
+  INSERT INTO termbase_text.back (termbase_uuid)
+  SELECT DISTINCT(termbase_uuid) FROM termbase_text.ref_object_sec WHERE termbase_uuid NOT IN (
+    SELECT DISTINCT(termbase_UUID) FROM termbase_text.back 
+  );
+EOF
+)
+readonly INSERT_BACK_QUERY
+
+psql \
+-d "${POSTGRES_URL}" \
+-c "${INSERT_BACK_QUERY}"
