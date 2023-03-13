@@ -1,0 +1,33 @@
+#!/bin/bash
+#
+# Deploys baseterm-api via docker container
+#
+# $1 - Host port to bind to container
+# $2 - ENV file contaiing all env vars as defined in .env.example
+
+if [[ $# != 2 ]]; then
+  printf "Usage: %s <host port> <env file>" "$0"
+  exit 1
+fi
+
+
+declare -i PORT=$1
+declare ENV_FILE=$2
+declare IMAGE_NAME=baseterm_api:local_no_db
+declare CONTAINER_NAME=baseterm_api_local_no_db
+declare SCRIPT_DIR
+SCRIPT_DIR=$(dirname -- "$( readlink -f -- "$0"; )")
+
+if [ -n "$(docker images -q "${IMAGE_NAME}")" ]; then
+  docker image rm "${IMAGE_NAME}"
+  docker rm "${CONTAINER_NAME}"
+fi
+
+docker build -t "${IMAGE_NAME}" "${SCRIPT_DIR}/.."
+docker run \
+--expose ${PORT} \
+-p ${PORT}:${PORT} \
+--env-file "${ENV_FILE}" \
+-e PORT=${PORT} \
+--name "${CONTAINER_NAME}" \
+"${IMAGE_NAME}"
