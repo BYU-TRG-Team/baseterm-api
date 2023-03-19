@@ -26,6 +26,7 @@ Before installing any instance of the BaseTerm API, please reach out to the BYU 
 
 ```
 APP_ENV=<dev | prod>
+PORT=<port number>
 DATABASE_URL=<url for the BaseTerm API database>
 ROLLBAR_API_TOKEN=<Rollbar logging token>
 AUTH_SECRET=<64-bit CSPRNG secret>
