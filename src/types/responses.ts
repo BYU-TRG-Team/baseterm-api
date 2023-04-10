@@ -11,7 +11,7 @@ import {
   AuxElement,
   PersonRefObjectPreview,
   TermNotePreview
-} from "../types";
+} from ".";
 
 import { FileServiceSession } from "./sessions";
 

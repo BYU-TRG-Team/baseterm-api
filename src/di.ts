@@ -1,53 +1,53 @@
 // Services
-import RNGValidatorService from "./services/RNGValidatorService";
-import TermService from "./services/TermService";
-import TermbaseService from "./services/TermbaseService";
-import AuxElementService from "./services/AuxElementService";
-import TermNoteService from "./services/TermNoteService";
-import LangSecService from "./services/LangSecService";
-import EntryService from "./services/EntryService";
-import RefService from "./services/RefService";
-import TransactionService from "./services/TransactionService";
+import RNGValidatorService from "./services/rng-validator";
+import TermService from "./services/db/term";
+import TermbaseService from "./services/db/termbase";
+import AuxElementService from "./services/db/aux-element";
+import TermNoteService from "./services/db/term-note";
+import LangSecService from "./services/db/lang-sec";
+import EntryService from "./services/db/entry";
+import RefService from "./services/db/ref";
+import TransactionService from "./services/db/transaction";
 import LanguageCodeService from "@byu-trg/language-code-service";
 
 // Support
-import TBXValidator from "./support/TBXValidator";
-import TBXConsumer from "./support/TBXConsumer";
-import TBXConstructor from "./support/TBXConstructor";
+import TBXValidator from "./support/tbx-validator";
+import TBXConsumer from "./support/tbx-consumer";
+import TBXConstructor from "./support/tbx-constructor";
 
 // Controllers
-import ValidationController from "./controllers/FileServices/ValidationController";
-import ImportController from "./controllers/FileServices/ImportController";
-import ExportController from "./controllers/FileServices/ExportController";
-import PostTermbaseController from "./controllers/Termbase/PostTermbaseController";
-import GetTermbasesController from "./controllers/Termbase/GetTermbasesController";
-import SessionController from "./controllers/FileServices/SessionController";
-import GetTermbaseController from "./controllers/Termbase/GetTermbaseController";
-import DeleteTermbaseController from "./controllers/Termbase/DeleteTermbaseController";
-import GetTermsController from "./controllers/Term/GetTermsController";
-import PatchTermbaseController from "./controllers/Termbase/PatchTermbaseController";
-import PostEntryController from "./controllers/Entry/PostEntryController";
-import GetTermController from "./controllers/Term/GetTermController";
-import GetEntryController from "./controllers/Entry/GetEntryController";
-import GetLanguageSectionController from "./controllers/LangSec/GetLangSecController";
-import PatchEntryController from "./controllers/Entry/PatchEntryController";
-import PostLangSecController from "./controllers/LangSec/PostLangSecController";
-import DeleteEntryController from "./controllers/Entry/DeleteEntryController";
-import DeleteLangSecController from "./controllers/LangSec/DeleteLangSecController";
-import DeleteTermController from "./controllers/Term/DeleteTermController";
-import PostTermController from "./controllers/Term/PostTermController";
-import PatchTermController from "./controllers/Term/PatchTermController";
-import PatchLangSecController from "./controllers/LangSec/PatchLangSecController";
-import PostTermNoteController from "./controllers/TermNote/PostTermNoteController";
-import PatchTermNoteController from "./controllers/TermNote/PatchTermNoteController";
-import PostAuxElementController from "./controllers/AuxElement/PostAuxElementController";
-import PatchAuxElementController from "./controllers/AuxElement/PatchAuxElementController";
-import DeleteAuxElementController from "./controllers/AuxElement/DeleteAuxElementController";
-import DeleteTermNoteController from "./controllers/TermNote/DeleteTermNoteController";
-import PostPersonRefObjectController from "./controllers/RefObject/PostPersonRefObjectController";
+import ValidationController from "./controllers/file-service/validation";
+import ImportController from "./controllers/file-service/import";
+import ExportController from "./controllers/file-service/export";
+import PostTermbaseController from "./controllers/termbase/post";
+import GetTermbasesController from "./controllers/termbase/get-all";
+import SessionController from "./controllers/file-service/session";
+import GetTermbaseController from "./controllers/termbase/get";
+import DeleteTermbaseController from "./controllers/termbase/delete";
+import GetTermsController from "./controllers/term/get-all";
+import PatchTermbaseController from "./controllers/termbase/patch";
+import PostEntryController from "./controllers/entry/post";
+import GetTermController from "./controllers/term/get";
+import GetEntryController from "./controllers/entry/get";
+import GetLanguageSectionController from "./controllers/lang-sec/get";
+import PatchEntryController from "./controllers/entry/patch";
+import PostLangSecController from "./controllers/lang-sec/post";
+import DeleteEntryController from "./controllers/entry/delete";
+import DeleteLangSecController from "./controllers/lang-sec/delete";
+import DeleteTermController from "./controllers/term/delete";
+import PostTermController from "./controllers/term/post";
+import PatchTermController from "./controllers/term/patch";
+import PatchLangSecController from "./controllers/lang-sec/patch";
+import PostTermNoteController from "./controllers/term-note/post";
+import PatchTermNoteController from "./controllers/term-note/patch";
+import PostAuxElementController from "./controllers/aux-element/post";
+import PatchAuxElementController from "./controllers/aux-element/patch";
+import DeleteAuxElementController from "./controllers/aux-element/delete";
+import DeleteTermNoteController from "./controllers/term-note/delete";
+import PostPersonRefObjectController from "./controllers/ref-object/post";
 
 // Validator
-import CoreValidator from "./validators/CoreValidator";
+import CoreValidator from "./validators/core-validator";
 
 // Pub Sub
 import EventEmitter from "events";
@@ -56,7 +56,7 @@ import EventEmitter from "events";
 import dbClient from "./db";
 
 // Global Store
-import GlobalStore from "./services/GlobalStore";
+import GlobalStore from "./services/store";
 
 // Helpers
 import Helpers from "./helpers";
