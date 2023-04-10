@@ -7,18 +7,18 @@ import express, {
 import bodyParser from "body-parser";
 import fileUpload from "express-fileupload";
 import cookieParser from "cookie-parser";
-import constructFileRoutes from "./routes/fileRoutes";
-import constructTermbaseRoutes from "./routes/termbaseRoutes";
-import constructTermRoutes from "./routes/termRoutes";
-import constructEntryRoutes from "./routes/entryRoutes";
-import constructlangSecRoutes from "./routes/langSecRoutes";
-import constructTermNoteRoutes from "./routes/termNoteRoutes";
-import constructAuxElementRoutes from "./routes/auxElementRoutes";
-import constructRefObjectRoutes from "./routes/refObjectRoutes";
+import constructFileRoutes from "./routes/file-service";
+import constructTermbaseRoutes from "./routes/termbase";
+import constructTermRoutes from "./routes/term";
+import constructEntryRoutes from "./routes/entry";
+import constructlangSecRoutes from "./routes/lang-sec";
+import constructTermNoteRoutes from "./routes/term-note";
+import constructAuxElementRoutes from "./routes/aux-element";
+import constructRefObjectRoutes from "./routes/ref-object";
 import constructYupExtensions from "./extensions/yup";
 import dependencyInjection from "./di";
 import cors from "cors";
-import errorMessages from "./messages/errorMessages";
+import errorMessages from "./messages/errors";
 
 const constructServer = (app: Express) => {
   const routeBase = process.env.API_ROUTE_BASE || "";
