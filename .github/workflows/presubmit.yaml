@@ -8,18 +8,24 @@ on:
 
 jobs:
   run-unit-tests:
-    name: Run unit tests
+    name: Run integration tests
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
-    
     - uses: actions/setup-node@v3
       with:
         node-version: '16'
-
-    - name: Install dependencies
-      run: npm ci
-
-    - name: Run tests
+    - uses: actions/setup-python@v4
+      with:
+        python-version: '3.9'
+    - uses: awalsh128/cache-apt-pkgs-action@latest
+      with:
+        packages: libxml2-dev libxslt1-dev python3-dev
+        version: 1.0
+    - name: Install python requirements
+      run: pip3 install -r requirements.txt
+    - name: Install npm modules
+      run: npm ci    
+    - name: Run integration tests
       run: npm run test
 

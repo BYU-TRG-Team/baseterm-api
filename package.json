@@ -8,7 +8,7 @@
     "build": "tsc",
     "start": "APP_DIR=$(pwd) nodemon .",
     "dev": "APP_DIR=$(pwd) tsc -w",
-    "test": "AUTH_SECRET=killjoy APP_DIR=$(pwd) jest --coverage --runInBand --forceExit",
+    "test": "bin/run_integration_tests_with_dockerized_db",
     "migrate": "node-pg-migrate -t pgmigrations_baseterm"
   },
   "repository": {
