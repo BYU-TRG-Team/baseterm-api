@@ -21,17 +21,20 @@ let requestClient: SuperAgentTest;
 const jwt = generateJWT(
 	Role.Staff
 );
-const testTbxFiles = [
+const smallTbxFiles = [
   `${process.env.APP_DIR}/example_tbx/valid_tbx_core.tbx`,
   `${process.env.APP_DIR}/example_tbx/test_files/test1.tbx`,
-  // `${process.env.APP_DIR}/example_tbx/test_files/test2.tbx`,
-  // `${process.env.APP_DIR}/example_tbx/test_files/test3.tbx`,
-  // `${process.env.APP_DIR}/example_tbx/test_files/test4.tbx`,
-  // `${process.env.APP_DIR}/example_tbx/test_files/test5.tbx`,
-  // `${process.env.APP_DIR}/example_tbx/test_files/test6.tbx`,
-  // `${process.env.APP_DIR}/example_tbx/test_files/test7.tbx`,
-  // `${process.env.APP_DIR}/example_tbx/test_files/test8.tbx`,
+  `${process.env.APP_DIR}/example_tbx/test_files/test5.tbx`,
+  `${process.env.APP_DIR}/example_tbx/test_files/test6.tbx`,
+  `${process.env.APP_DIR}/example_tbx/test_files/test8.tbx`,
 ];
+
+// const largeTbxFiles = [
+//   `${process.env.APP_DIR}/example_tbx/test_files/test2.tbx`,
+//   `${process.env.APP_DIR}/example_tbx/test_files/test3.tbx`,
+//   `${process.env.APP_DIR}/example_tbx/test_files/test4.tbx`,
+//   `${process.env.APP_DIR}/example_tbx/test_files/test7.tbx`,
+// ]
 
 describe("tests Import, Export, and Session controllers", () => {
   beforeAll(async () => {
@@ -53,11 +56,10 @@ describe("tests Import, Export, and Session controllers", () => {
     async () => {
       const { url } = requestClient.get("/");
 
-      for (const testTbxFile of testTbxFiles) {
-        process.stdout.write(`Testing ${testTbxFile}\n`);
-        let iteration = 1;
+      for (const testTbxFile of smallTbxFiles) {
+        let iteration = 0;
     
-        while(iteration < 21) {
+        while(iteration < 20) {
           let importFileSession: SessionSSEEndpointResponse;
           let exportFileSession: SessionSSEEndpointResponse;
 
@@ -89,8 +91,6 @@ describe("tests Import, Export, and Session controllers", () => {
               es.onmessage = (e) => {
                 const fileSession = JSON.parse(e.data) as FileServiceSession;
                 importFileSession = fileSession;
-
-                process.stdout.write(`\rIteration ${iteration}: Imported ${importFileSession.conceptEntryNumber} of ${importFileSession.conceptEntryCount}`);
                 
                 if (fileSession.status === "completed") {
                   es.close();
@@ -126,10 +126,6 @@ describe("tests Import, Export, and Session controllers", () => {
                 const fileSession = JSON.parse(e.data) as FileServiceSession;
                 exportFileSession = fileSession;
                 
-                process.stdout.write(
-                  `\rIteration ${iteration}: Imported ${importFileSession.conceptEntryNumber} of ${importFileSession.conceptEntryCount}, Exported ${exportFileSession.conceptEntryNumber} of ${exportFileSession.conceptEntryCount}`
-                );
-                
                 if (fileSession.status === "completed") {
                   es.close();
                   resolve(fileSession.data as string);
@@ -138,8 +134,6 @@ describe("tests Import, Export, and Session controllers", () => {
             });
           }
           )();
-
-          process.stdout.write("\n");
 
           const exportedTbxFileBuffer = Buffer.from(exportedTbxFile);
           const { status: validationStatus, body: validationBody } = (

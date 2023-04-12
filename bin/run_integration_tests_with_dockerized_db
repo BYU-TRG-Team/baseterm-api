@@ -1,0 +1,67 @@
+#!/bin/bash
+
+set -e
+
+SCRIPT_DIR="$(dirname "$(readlink -f "${BASH_SOURCE[0]}")")"
+readonly SCRIPT_DIR
+PACKAGE_DIR="$(realpath "${SCRIPT_DIR}/..")"
+readonly PACKAGE_DIR
+
+declare -r POSTGRES_CONTAINER_NAME=baseterm-api-pg-test
+declare -r POSTGRES_PW=test-pw
+declare -r POSTGRES_USER=test-user
+declare -r POSTGRES_DB=baseterm
+declare -r POSTGRES_IMAGE=postgres:14
+declare -r POSTGRES_HOST=localhost
+declare -r POSTGRES_PORT=5432
+
+export DATABASE_URL=postgres://"${POSTGRES_USER}":"${POSTGRES_PW}"@"${POSTGRES_HOST}":${POSTGRES_PORT}/"${POSTGRES_DB}"
+export APP_ENV=dev
+export NODE_ENV=development
+export AUTH_SECRET=killjoy
+export APP_DIR="${PACKAGE_DIR}"
+
+function cleanup() {
+  docker rm -f "${POSTGRES_CONTAINER_NAME}"
+  printf "Deleted docker container: %s\n" "${POSTGRES_CONTAINER_NAME}"
+}
+
+function run_pg_migrations() {
+  declare -r -i MAX_RETRY=5
+  declare -i COUNTER=0
+  declare -i FAILED=0
+  
+  set +e
+  until [[ $FAILED -eq 1 ]] || npm --prefix "${PACKAGE_DIR}" run migrate up > /dev/null 2>&1  
+  do
+    sleep 1
+
+    if [[ $COUNTER -eq $MAX_RETRY ]]; then 
+      FAILED=1
+    fi
+    (( COUNTER++ ))
+  done
+  set -e
+
+  if [[ $FAILED -eq 1 ]]; then 
+    printf "PG migrations failed to run.\n"
+    exit 1
+  fi
+}
+
+trap cleanup EXIT
+
+printf "Starting docker container: %s\n" "${POSTGRES_CONTAINER_NAME}"
+docker run \
+  --detach \
+  --name "${POSTGRES_CONTAINER_NAME}" \
+  -e POSTGRES_PASSWORD="${POSTGRES_PW}" \
+  -e POSTGRES_USER="${POSTGRES_USER}" \
+  -e POSTGRES_DB="${POSTGRES_DB}" \
+  -p "${POSTGRES_PORT}":"${POSTGRES_PORT}" \
+  "${POSTGRES_IMAGE}" > /dev/null 2>&1
+
+printf "Running pg migratons\n"
+run_pg_migrations
+npm exec --prefix "${PACKAGE_DIR}" -- jest --coverage --forceExit
+
