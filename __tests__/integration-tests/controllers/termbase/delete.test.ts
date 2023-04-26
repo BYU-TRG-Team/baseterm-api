@@ -1,8 +1,8 @@
 import "dotenv/config";
-import constructServer from "../../../../src/app";
+import constructServer from "@app";
 import supertest, { SuperAgentTest } from "supertest";
 import express from "express";
-import { generateJWT, importFile } from "../../../helpers";
+import { generateJWT, importFile } from "@tests/helpers";
 import { Role } from "@byu-trg/express-user-management";
 
 let handleShutDown: () => Promise<void>;

@@ -1,6 +1,6 @@
 import knex from "knex";
 import { attachPaginate } from "knex-paginate";
-import { AppEnv } from "../types";
+import { AppEnv } from "@typings";
 
 const { DATABASE_URL, APP_ENV, MAX_CONNECTION_POOL = 20 } = process.env;
 

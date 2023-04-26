@@ -1,15 +1,15 @@
 import { Request, Response } from "express";
 import { Knex } from "knex";
-import errorMessages from "../../messages/errors";
-import Helpers from "../../helpers";
-import { handleNoResourceError } from "../../responses/errors";
-import { isValidUUID } from "../../utils";
+import errorMessages from "@messages/errors";
+import Helpers from "@helpers";
+import { handleNoResourceError } from "@responses/errors";
+import { isValidUUID } from "@utils";
 import { Logger } from "winston";
-import { handleInvalidBody } from "../../responses/errors";
-import { TbxElement } from "../../types/index";
+import { handleInvalidBody } from "@responses/errors";
+import { TbxElement } from "@typings";
 import * as yup from "yup";
-import AuxElementService from "../../services/db/aux-element";
-import { TbxEntity } from "../../db/classes";
+import AuxElementService from "@services/db/aux-element";
+import { TbxEntity } from "@db/classes";
 
 class DeleteAuxElementController {
   private dbClient: Knex<any, unknown[]>;

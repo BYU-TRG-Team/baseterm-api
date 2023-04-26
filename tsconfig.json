@@ -1,41 +1,82 @@
 {
-    "compilerOptions": {
-        "target": "ES2016", 
-        "module": "commonjs", 
-        "resolveJsonModule": true,
-        "lib": [
-            "es5",
-            "es6",
-            "dom",
-            "es2015.core",
-            "es2015.collection",
-            "es2015.generator",
-            "es2015.iterable",
-            "es2015.promise",
-            "es2015.proxy",
-            "es2015.reflect",
-            "es2015.symbol",
-            "es2015.symbol.wellknown",
-            "esnext.asynciterable",
-            "es2016",
-            "es2017.object"
-        ], 
-        "sourceMap": true, 
-        "outDir": "./dist", 
-        "strict": true, 
-        "noUnusedLocals": false,
-        "moduleResolution": "node",
-        "baseUrl": "./src",
-        "paths": {
-            "app/*": ["app/*"],
-            "di/*": ["app/di/*"],
-            "GraphTools/*": ["GraphTools/*"],
-            "Support/*": ["Support/*"],
-            "Utils/*": ["Utils/*"]
-        },
-        "esModuleInterop": true
-    },
-    "include": [
-        "src/**/*"
-    ]
-  }
+  "compilerOptions": {
+    "target": "ES6", 
+    "module": "CommonJS", 
+    "resolveJsonModule": true,
+    "sourceMap": true, 
+    "outDir": "./dist", 
+    "strict": true, 
+    "noUnusedLocals": false,
+    "moduleResolution": "node",
+    "baseUrl": ".",
+    "rootDir": ".",
+    "esModuleInterop": true,
+    "declaration": true,  
+    "paths": {
+      "@": [
+        "./src"
+      ],
+      "@app": [
+        "./src/app"
+      ],
+      "@controllers/*": [
+        "./src/controllers/*"
+      ],
+      "@db": [
+        "./src/db"
+      ],
+      "@db/*": [
+        "./src/db/*"
+      ],
+      "@di": [
+        "./src/di"
+      ],
+      "@extensions/*": [
+        "./src/extensions/*"
+      ],
+      "@helpers": [
+        "./src/helpers"
+      ],
+      "@logger": [
+        "./src/logger"
+      ],
+      "@messages/*": [
+        "./src/messages/*"
+      ],
+      "@middleware": [
+        "./src/middleware"
+      ],
+      "@responses/*": [
+        "./src/responses/*"
+      ],
+      "@routes/*": [
+        "./src/routes/*"
+      ],
+      "@services/*": [
+        "./src/services/*"
+      ],
+      "@support/*": [
+        "./src/support/*"
+      ],
+      "@typings": [
+        "./src/types"
+      ],
+      "@typings/*": [
+        "./src/types/*"
+      ],
+      "@utils": [
+        "./src/utils"
+      ],
+      "@validators/*": [
+        "./src/validators/*"
+      ],
+      "@tests/*": [
+        "./__tests__/*"
+      ]
+    }
+  },
+  "include": [
+    "src/**/*",
+    "__tests__/"
+  ]
+}

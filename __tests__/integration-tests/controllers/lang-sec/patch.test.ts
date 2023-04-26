@@ -1,13 +1,12 @@
 import "dotenv/config";
-import constructServer from "../../../../src/app";
+import constructServer from "@app";
 import supertest, { SuperAgentTest } from "supertest";
 import express from "express";
-import { fetchMockTermbaseData, generateJWT, importFile } from "../../../helpers";
-import { PatchLangSecEndpointResponse } from "../../../../src/types/responses";
-import { VALID_LANGUAGE_CODE } from "../../../constants";
-import { UUID } from "../../../../src/types";
-import { describe } from "../../../../src/utils";
-import { SuperAgentResponse } from "../../../types";
+import { fetchMockTermbaseData, generateJWT, importFile } from "@tests/helpers";
+import { PatchLangSecEndpointResponse } from "@typings/responses";
+import { VALID_LANGUAGE_CODE } from "@tests/constants";
+import { UUID } from "@typings";
+import { SuperAgentResponse } from "@tests/types";
 import { Role } from "@byu-trg/express-user-management";
 import { uuid } from "uuidv4";
 
@@ -28,7 +27,7 @@ const jwt = generateJWT(
   personId
 );
 
-describe("tests PatchLangSec controller", async () => {
+describe("tests PatchLangSec controller", () => {
   beforeAll(async () => {
     const app = express();
     handleShutDown = await constructServer(app);
@@ -56,23 +55,23 @@ describe("tests PatchLangSec controller", async () => {
   afterAll(async () => {
 		await handleShutDown();
 	});
-});
 
-test("should return a 200 response for successful patch of term", async () => {
-	const { status, body } = await requestClient
-		.patch(
-      endpointConstructor(
-        mockData.termbaseUUID,
-        mockData.langSecUUID
+  test("should return a 200 response for successful patch of term", async () => {
+    const { status, body } = await requestClient
+      .patch(
+        endpointConstructor(
+          mockData.termbaseUUID,
+          mockData.langSecUUID
+        )
       )
-    )
-    .set('Cookie', [`TRG_AUTH_TOKEN=${jwt}`])
-    .field({
-      langCode: VALID_LANGUAGE_CODE,
-      order: 100
-    }) as SuperAgentResponse<PatchLangSecEndpointResponse>;
-
-    expect(status).toBe(200);
-    expect(body.xmlLang).toBe(VALID_LANGUAGE_CODE);
-    expect(body.order).toBe(100);
+      .set('Cookie', [`TRG_AUTH_TOKEN=${jwt}`])
+      .field({
+        langCode: VALID_LANGUAGE_CODE,
+        order: 100
+      }) as SuperAgentResponse<PatchLangSecEndpointResponse>;
+  
+      expect(status).toBe(200);
+      expect(body.xmlLang).toBe(VALID_LANGUAGE_CODE);
+      expect(body.order).toBe(100);
+  });
 });

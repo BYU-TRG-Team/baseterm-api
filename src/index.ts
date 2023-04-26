@@ -1,6 +1,6 @@
 import "dotenv/config";
 import express from "express";
-import constructServer from "./app";
+import constructServer from "@app";
 
 const initialize = async () => {
   const app = express();

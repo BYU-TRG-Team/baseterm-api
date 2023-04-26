@@ -1,16 +1,16 @@
 import { Request, Response } from "express";
 import { Knex } from "knex";
-import errorMessages from "../../messages/errors";
-import Helpers from "../../helpers";
-import { PatchAuxElementEndpointResponse } from "../../types/responses";
-import { handleInvalidIDReferenceError, handleInvalidXmlIdError, handleNoResourceError } from "../../responses/errors";
-import { isValidUUID } from "../../utils";
+import errorMessages from "@messages/errors";
+import Helpers from "@helpers";
+import { PatchAuxElementEndpointResponse } from "@typings/responses";
+import { handleInvalidIDReferenceError, handleInvalidXmlIdError, handleNoResourceError } from "@responses/errors";
+import { isValidUUID } from "@utils";
 import { Logger } from "winston";
-import AuxElementService from "../../services/db/aux-element";
-import { TbxEntity } from "../../db/classes";
-import { handleInvalidBody } from "../../responses/errors";
+import AuxElementService from "@services/db/aux-element";
+import { TbxEntity } from "@db/classes";
+import { handleInvalidBody } from "@responses/errors";
 import { name as xmlNameValidator } from "xml-name-validator";
-import { AuxElement, TbxElement } from "../../types/index";
+import { AuxElement, TbxElement } from "@typings";
 import * as yup from "yup";
 
 class PatchAuxElementController {

@@ -1,6 +1,6 @@
-import { DBField } from "./db/types";
-import { TBXAttribute } from "./types";
-import { FileServiceSession } from "./types/sessions";
+import { DBField } from "@db/types";
+import { TBXAttribute } from "@typings";
+import { FileServiceSession } from "@typings/sessions";
 
 export const isDefined = (value: any) => {
   return value !== undefined;

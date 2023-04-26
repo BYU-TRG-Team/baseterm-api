@@ -1,10 +1,9 @@
 import "dotenv/config";
-import  constructServer from "../../../../src/app";
+import  constructServer from "@app";
 import supertest, { SuperAgentTest } from "supertest";
 import express from "express";
-import { fetchMockTermbaseData, generateJWT, importFile } from "../../../helpers";
-import { UUID } from "../../../../src/types";
-import { describe } from "../../../../src/utils";
+import { fetchMockTermbaseData, generateJWT, importFile } from "@tests/helpers";
+import { UUID } from "@typings";
 import { Role } from "@byu-trg/express-user-management";
 
 let requestClient: SuperAgentTest;
@@ -22,7 +21,7 @@ const jwt = generateJWT(
 	Role.Staff
 );
 
-describe("tests DeleteEntry controller", async () => {
+describe("tests DeleteEntry controller", () => {
   beforeAll(async () => {
     const app = express();
     handleShutDown = await constructServer(app);
@@ -48,28 +47,28 @@ describe("tests DeleteEntry controller", async () => {
 	afterAll(async () => {
 		await handleShutDown();
 	})
-});
 
-test("should return a successful response and produce a 404 when requesting the entry", async () => {
-	const { status: deleteEntryStatus } = await requestClient
-		.delete(
-			endpointConstructor(
-				mockData.termbaseUUID,
-				mockData.entryUUID
+	test("should return a successful response and produce a 404 when requesting the entry", async () => {
+		const { status: deleteEntryStatus } = await requestClient
+			.delete(
+				endpointConstructor(
+					mockData.termbaseUUID,
+					mockData.entryUUID
+				)
 			)
-		)
-		.set('Cookie', [`TRG_AUTH_TOKEN=${jwt}`]);
-
-	expect(deleteEntryStatus).toBe(204);
-
-	const { status: getEntryStatus } = await requestClient
-	  .get(
-			endpointConstructor(
-				mockData.termbaseUUID,
-				mockData.entryUUID
+			.set('Cookie', [`TRG_AUTH_TOKEN=${jwt}`]);
+	
+		expect(deleteEntryStatus).toBe(204);
+	
+		const { status: getEntryStatus } = await requestClient
+			.get(
+				endpointConstructor(
+					mockData.termbaseUUID,
+					mockData.entryUUID
+				)
 			)
-		)
-		.set('Cookie', [`TRG_AUTH_TOKEN=${jwt}`]);
-
-	expect(getEntryStatus).toBe(404);
+			.set('Cookie', [`TRG_AUTH_TOKEN=${jwt}`]);
+	
+		expect(getEntryStatus).toBe(404);
+	});
 });

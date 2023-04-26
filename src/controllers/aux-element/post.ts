@@ -1,14 +1,14 @@
 import { Request, Response } from "express";
 import { Knex } from "knex";
-import errorMessages from "../../messages/errors";
-import Helpers from "../../helpers";
-import { PostAuxElementEndpointResponse } from "../../types/responses";
-import { handleNoResourceError } from "../../responses/errors";
-import { isValidUUID } from "../../utils";
+import errorMessages from "@messages/errors";
+import Helpers from "@helpers";
+import { PostAuxElementEndpointResponse } from "@typings/responses";
+import { handleNoResourceError } from "@responses/errors";
+import { isValidUUID } from "@utils";
 import { Logger } from "winston";
-import { TbxEntity } from "../../db/classes";
-import { handleInvalidBody } from "../../responses/errors";
-import { TbxElement, UUID } from "../../types/index";
+import { TbxEntity } from "@db/classes";
+import { handleInvalidBody } from "@responses/errors";
+import { TbxElement, UUID } from "@typings";
 import * as yup from "yup";
 import { uuid } from "uuidv4";
 

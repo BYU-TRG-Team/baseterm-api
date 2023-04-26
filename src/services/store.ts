@@ -1,6 +1,6 @@
 import { EventEmitter } from "events";
-import { UUID } from "../types";
-import { FileServiceSession } from "../types/sessions";
+import { UUID } from "@typings";
+import { FileServiceSession } from "@typings/sessions";
 
 export class GlobalStore {
   private store: { 

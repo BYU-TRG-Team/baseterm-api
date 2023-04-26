@@ -10,10 +10,10 @@ import {
   ImportEndpointResponse,
   ExportEndpointResponse,
   ValidationEndpointResponse
-} from "../../src/types/responses";
-import { FileServiceSession } from "../../src/types/sessions";
-import { generateJWT, importFile } from "../helpers";
-import constructServer from "../../src/app";
+} from "@typings/responses";
+import { FileServiceSession } from "@typings/sessions";
+import { generateJWT, importFile } from "@tests/helpers";
+import constructServer from "@app";
 import { Role } from "@byu-trg/express-user-management";
 
 let handleShutDown: () => Promise<void>;

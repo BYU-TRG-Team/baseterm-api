@@ -1,14 +1,14 @@
 import "dotenv/config";
-import constructServer from "../../../../src/app";
+import constructServer from "@app";
 import supertest, { SuperAgentTest } from "supertest";
 import express from "express";
 import { uuid } from "uuidv4";
-import { generateJWT, importFile } from "../../../helpers";
+import { generateJWT, importFile } from "@tests/helpers";
 import {
   GetTermbaseEndpointResponse,
   PatchTermbaseEndpointResponse
-} from "../../../../src/types/responses";
-import { UUID } from "../../../../src/types";
+} from "@typings/responses";
+import { UUID } from "@typings";
 import { Role } from "@byu-trg/express-user-management";
 
 let requestClient: SuperAgentTest;

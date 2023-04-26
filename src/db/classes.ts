@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { TbxDbFieldToAttribute } from "../utils";
-import * as dbTypes from "./types";
-import * as types from "../types";
+import * as dbTypes from "@db/types";
+import * as types from "@typings";
 import xmlFormatter from "xml-formatter";
 
 interface TbxTableDependencies {

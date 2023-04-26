@@ -1,10 +1,10 @@
-import * as tables from "../../db/tables";
-import * as types from "../../types";
-import * as dbTypes from "../../db/types";
+import * as tables from "@db/tables";
+import * as types from "@typings";
+import * as dbTypes from "@db/types";
 import { Knex } from "knex";
 import { MinPriorityQueue } from "@datastructures-js/priority-queue";
-import { TbxElement, TbxEntity, TbxTable } from "../../db/classes";
-import Helpers from "../../helpers";
+import { TbxEntity, TbxTable } from "@db/classes";
+import Helpers from "@helpers";
 
 export class AuxElementService {
   private dbClient: Knex<any, unknown[]>;

@@ -1,11 +1,10 @@
 import "dotenv/config";
-import startServer from "../../../../src/app";
 import supertest, { SuperAgentTest } from "supertest";
-import { ExportEndpointResponse } from "../../../../src/types/responses";
+import { ExportEndpointResponse } from "@typings/responses";
 import express from "express";
 import { uuid } from "uuidv4";
-import { generateJWT, importFile } from "../../../helpers";
-import constructServer from "../../../../src/app";
+import { generateJWT, importFile } from "@tests/helpers";
+import constructServer from "@app";
 import { Role } from "@byu-trg/express-user-management";
 
 let handleShutDown: () => Promise<void>;

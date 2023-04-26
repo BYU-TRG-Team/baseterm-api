@@ -1,11 +1,11 @@
 import "dotenv/config";
-import constructServer from "../../../../src/app";
+import constructServer from "@app";
 import supertest, { SuperAgentTest } from "supertest";
 import express from "express";
-import { fetchMockAuxElement, generateJWT, importFile } from "../../../helpers";
-import { PatchAuxElementEndpointResponse } from "../../../../src/types/responses";
-import { AuxElement, UUID } from "../../../../src/types";
-import { SuperAgentResponse } from "../../../types";
+import { fetchMockAuxElement, generateJWT, importFile } from "@tests/helpers";
+import { PatchAuxElementEndpointResponse } from "@typings/responses";
+import { AuxElement, UUID } from "@typings";
+import { SuperAgentResponse } from "@tests/types";
 import { Role } from "@byu-trg/express-user-management";
 
 let requestClient: SuperAgentTest;

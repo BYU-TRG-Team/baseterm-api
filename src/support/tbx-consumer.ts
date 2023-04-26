@@ -1,13 +1,13 @@
 import { Knex } from "knex";
-import  * as dbTypes from "../db/types";
-import * as tables from "../db/tables";
-import * as types from "../types";
-import { TbxEntity } from "../db/classes";
+import  * as dbTypes from "@db/types";
+import * as tables from "@db/tables";
+import * as types from "@typings";
+import { TbxEntity } from "@db/classes";
 import * as xml2js from "xml2js";
-import { isDefined, describe } from "../utils";
+import { isDefined, describe } from "@utils";
 import { uuid } from "uuidv4";
-import GlobalStore from "../services/store";
-import Helpers from "../helpers";
+import GlobalStore from "@services/store";
+import Helpers from "@helpers";
 
 interface IdRef {
   entity: TbxEntity,

@@ -1,24 +1,22 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Knex } from "knex";
-import  * as dbTypes from "../../db/types";
-import * as tables from "../../db/tables";
-import * as tbxAdminTypes from "../../types/data-categories";
-import * as types from "../../types";
-import Helpers from "../../helpers";
+import  * as dbTypes from "@db/types";
+import * as tables from "@db/tables";
+import * as tbxAdminTypes from "@typings/data-categories";
+import * as types from "@typings";
+import Helpers from "@helpers";
 import { IPaginateParams } from "knex-paginate";
-import { TbxEntity } from "../../db/classes";
+import { TbxEntity } from "@db/classes";
 import { 
   UUID,
   TermPreview,
   TermPartialView,
   TermFullView,
   TermNote,
-} from "../../types";
-import AuxElementService from "./aux-element";
-import TermNoteService from "./term-note";
-import { uuid } from "uuidv4";
-import TransactionService from "./transaction";
-import db from "node-pg-migrate/dist/db";
+} from "@typings";
+import AuxElementService from "@services/db/aux-element";
+import TermNoteService from "@services/db/term-note";
+import TransactionService from "@services/db/transaction";
 
 export interface FilterOptions {
   termFilter: string,

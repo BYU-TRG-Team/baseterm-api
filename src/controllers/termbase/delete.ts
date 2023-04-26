@@ -1,8 +1,8 @@
 import { Request, Response } from "express";
 import { Knex } from "knex";
-import  * as dbTypes from "../../db/types";
-import * as tables from "../../db/tables";
-import errorMessages from "../../messages/errors";
+import  * as dbTypes from "@db/types";
+import * as tables from "@db/tables";
+import errorMessages from "@messages/errors";
 import { Logger } from "winston";
 
 class DeleteTermbaseController {

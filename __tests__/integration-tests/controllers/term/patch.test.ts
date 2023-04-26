@@ -1,12 +1,11 @@
 import "dotenv/config";
-import constructServer from "../../../../src/app";
+import constructServer from "@app";
 import supertest, { SuperAgentTest } from "supertest";
 import express from "express";
-import { fetchMockTermbaseData, generateJWT, importFile } from "../../../helpers";
-import { PatchTermEndpointResponse } from "../../../../src/types/responses";
-import { UUID } from "../../../../src/types";
-import { describe } from "../../../../src/utils";
-import { SuperAgentResponse } from "../../../types";
+import { fetchMockTermbaseData, generateJWT, importFile } from "@tests/helpers";
+import { PatchTermEndpointResponse } from "@typings/responses";
+import { UUID } from "@typings";
+import { SuperAgentResponse } from "@tests/types";
 import { Role } from "@byu-trg/express-user-management";
 import { uuid } from "uuidv4";
 
@@ -27,7 +26,7 @@ const jwt = generateJWT(
   personId,
 );
 
-describe("tests PatchTerm controller", async () => {
+describe("tests PatchTerm controller", () => {
   beforeAll(async () => {
     const app = express();
     handleShutDown = await constructServer(app);
@@ -53,27 +52,27 @@ describe("tests PatchTerm controller", async () => {
   afterAll(async () => {
 		await handleShutDown();
 	});
-});
 
-test("should return a 200 response for successful patch of term", async () => {
-	const { status, body} = await requestClient
-    .patch(
-      endpointConstructor(
-        mockData.termbaseUUID,
-        mockData.termUUID
+  test("should return a 200 response for successful patch of term", async () => {
+    const { status, body} = await requestClient
+      .patch(
+        endpointConstructor(
+          mockData.termbaseUUID,
+          mockData.termUUID
+        )
       )
-    )
-    .set('Cookie', [`TRG_AUTH_TOKEN=${jwt}`])
-    .field({
-      value: "Test",
-      id: "Test",
-      termSecId: "Test1",
-      order: 100,
-    }) as SuperAgentResponse<PatchTermEndpointResponse>;
-
-  expect(status).toBe(200);
-  expect(body.id).toBe("Test");
-  expect(body.value).toBe("Test");
-  expect(body.termSecId).toBe("Test1");
-  expect(body.order).toBe(100);
+      .set('Cookie', [`TRG_AUTH_TOKEN=${jwt}`])
+      .field({
+        value: "Test",
+        id: "Test",
+        termSecId: "Test1",
+        order: 100,
+      }) as SuperAgentResponse<PatchTermEndpointResponse>;
+  
+    expect(status).toBe(200);
+    expect(body.id).toBe("Test");
+    expect(body.value).toBe("Test");
+    expect(body.termSecId).toBe("Test1");
+    expect(body.order).toBe(100);
+  });
 });

@@ -1,17 +1,17 @@
 import { Request, Response } from "express";
 import { Knex } from "knex";
-import errorMessages from "../../messages/errors";
-import Helpers from "../../helpers";
-import * as dbTypes from "../../db/types";
-import * as tables from "../../db/tables";
-import { handleInvalidBody, handleInvalidIDReferenceError, handleInvalidXmlIdError, handleNoResourceError } from "../../responses/errors";
-import { isValidUUID } from "../../utils";
+import errorMessages from "@messages/errors";
+import Helpers from "@helpers";
+import * as dbTypes from "@db/types";
+import * as tables from "@db/tables";
+import { handleInvalidBody, handleInvalidIDReferenceError, handleInvalidXmlIdError, handleNoResourceError } from "@responses/errors";
+import { isValidUUID } from "@utils";
 import { Logger } from "winston";
 import * as yup from "yup";
 import { name as xmlNameValidator } from "xml-name-validator";
-import { TbxEntity } from "../../db/classes";
-import { PatchTermNoteEndpointResponse } from "../../types/responses";
-import { TbxElement } from "../../types";
+import { TbxEntity } from "@db/classes";
+import { PatchTermNoteEndpointResponse } from "@typings/responses";
+import { TbxElement } from "@typings";
 
 class PatchTermNoteController {
   private dbClient: Knex<any, unknown[]>;

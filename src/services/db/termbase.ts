@@ -1,6 +1,6 @@
 import { Knex } from "knex";
-import * as tables from "../../db/tables";
-import * as tbxAdminTypes from "../../types/data-categories";
+import * as tables from "@db/tables";
+import * as tbxAdminTypes from "@typings/data-categories";
 
 class TermbaseService {
   private dbClient: Knex<any, unknown[]>;

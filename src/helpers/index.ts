@@ -1,11 +1,11 @@
 import { 
   TbxTable, 
   TbxEntity 
-} from "../db/classes"; 
-import * as tables from "../db/tables";
-import * as dbTypes from "../db/types";
+} from "@db/classes"; 
+import * as tables from "@db/tables";
+import * as dbTypes from "@db/types";
 import { Knex } from "knex";
-import { TbxElement, DBClient, GenericObject, UUID } from "../types";
+import { TbxElement, DBClient, GenericObject, UUID } from "@typings";
 
 class Helpers {
   public async getChildTables<ChildType>(

@@ -1,15 +1,15 @@
 import { Request, Response } from "express";
 import { uuid } from "uuidv4";
-import GlobalStore from "../../services/store";
-import TBXConstructor from "../../support/tbx-constructor";
+import GlobalStore from "@services/store";
+import TBXConstructor from "@support/tbx-constructor";
 import { Knex } from "knex";
-import  * as dbTypes from "../../db/types";
-import * as tables from "../../db/tables";
-import { ExportEndpointResponse } from "../../types/responses";
-import { isValidUUID } from "../../utils";
+import  * as dbTypes from "@db/types";
+import * as tables from "@db/tables";
+import { ExportEndpointResponse } from "@typings/responses";
+import { isValidUUID } from "@utils";
 import { Logger } from "winston";
-import Helpers from "../../helpers";
-import { handleNoResourceError } from "../../responses/errors";
+import Helpers from "@helpers";
+import { handleNoResourceError } from "@responses/errors";
 
 class ExportController {
   private tbxConstructor: TBXConstructor;

@@ -1,14 +1,14 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Knex } from "knex";
-import  * as dbTypes from "../../db/types";
-import * as tables from "../../db/tables";
-import * as types from "../../types";
-import Helpers from "../../helpers";
-import { TbxEntity } from "../../db/classes";
-import { UUID } from "../../types";
-import AuxElementService from "./aux-element";
-import LangSecService from "./lang-sec";
-import TransactionService from "./transaction";
+import  * as dbTypes from "@db/types";
+import * as tables from "@db/tables";
+import * as types from "@typings";
+import Helpers from "@helpers";
+import { TbxEntity } from "@db/classes";
+import { UUID } from "@typings";
+import AuxElementService from "@services/db/aux-element";
+import LangSecService from "@services/db/lang-sec";
+import TransactionService from "@services/db/transaction";
 import { uuid } from "uuidv4";
 
 class EntryService {

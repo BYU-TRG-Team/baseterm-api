@@ -3,10 +3,10 @@ import {
   GetTermEndpointResponse,
   ImportEndpointResponse,
   SessionSSEEndpointResponse
-} from "../src/types/responses";
+} from "@typings/responses";
 import { uuid } from "uuidv4";
 import { SuperAgentTest } from "supertest";
-import { UUID } from "../src/types/";
+import { UUID } from "@typings";
 import EventSource from "eventsource";
 import jwt from "jsonwebtoken";
 import { Role } from "@byu-trg/express-user-management";

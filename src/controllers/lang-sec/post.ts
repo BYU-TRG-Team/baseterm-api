@@ -1,14 +1,14 @@
 import { Request, Response } from "express";
 import { Knex } from "knex";
-import errorMessages from "../../messages/errors";
-import * as tables from "../../db/tables";
-import { handleInvalidBody } from "../../responses/errors";
+import errorMessages from "@messages/errors";
+import * as tables from "@db/tables";
+import { handleInvalidBody } from "@responses/errors";
 import { Logger } from "winston";
 import * as yup from "yup";
-import { TbxEntity } from "../../db/classes";
+import { TbxEntity } from "@db/classes";
 import { uuid } from "uuidv4";
-import { PostLangSecEndpointResponse } from "../../types/responses";
-import LangSecService from "../../services/db/lang-sec";
+import { PostLangSecEndpointResponse } from "@typings/responses";
+import LangSecService from "@services/db/lang-sec";
 
 class PostLangSecController {
   private dbClient: Knex<any, unknown[]>;

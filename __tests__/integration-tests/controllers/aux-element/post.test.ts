@@ -1,12 +1,11 @@
 import "dotenv/config";
-import constructServer from "../../../../src/app";
+import constructServer from "@app";
 import supertest, { SuperAgentTest } from "supertest";
 import express from "express";
-import { fetchMockAuxElement, fetchMockTermbaseData, fetchMockTermNote, generateJWT, importFile } from "../../../helpers";
-import { PostAuxElementEndpointResponse } from "../../../../src/types/responses";
-import { UUID, TbxElement, AuxElement } from "../../../../src/types";
-import { describe } from "../../../../src/utils";
-import { SuperAgentResponse } from "../../../types";
+import { fetchMockTermbaseData, generateJWT, importFile } from "@tests/helpers";
+import { PostAuxElementEndpointResponse } from "@typings/responses";
+import { UUID, TbxElement } from "@typings";
+import { SuperAgentResponse } from "@tests/types";
 import { Role } from "@byu-trg/express-user-management";
 
 let requestClient: SuperAgentTest;
@@ -23,7 +22,7 @@ const jwt = generateJWT(
 	Role.Staff
 );
 
-describe("tests PostAuxElement controller", async () => {
+describe("tests PostAuxElement controller", () => {
   beforeAll(async () => {
     const app = express();
     handleShutDown = await constructServer(app);
@@ -49,22 +48,22 @@ describe("tests PostAuxElement controller", async () => {
   afterAll(async () => {
 		await handleShutDown();
 	});
-});
 
-test("should return a 200 response for successful post of aux element", async () => {
-	const { status } = await requestClient
-    .post(
-      endpointConstructor(
-        mockData.termbaseUUID
+  test("should return a 200 response for successful post of aux element", async () => {
+    const { status } = await requestClient
+      .post(
+        endpointConstructor(
+          mockData.termbaseUUID
+        )
       )
-    )
-    .set('Cookie', [`TRG_AUTH_TOKEN=${jwt}`])
-    .field({
-      parentUUID: mockData.termUUID,
-      parentElementType: TbxElement.Term,
-      value: "Test",
-      elementType: TbxElement.Note,
-    }) as SuperAgentResponse<PostAuxElementEndpointResponse>;
-    
-    expect(status).toBe(200);
+      .set('Cookie', [`TRG_AUTH_TOKEN=${jwt}`])
+      .field({
+        parentUUID: mockData.termUUID,
+        parentElementType: TbxElement.Term,
+        value: "Test",
+        elementType: TbxElement.Note,
+      }) as SuperAgentResponse<PostAuxElementEndpointResponse>;
+      
+      expect(status).toBe(200);
+  });
 });

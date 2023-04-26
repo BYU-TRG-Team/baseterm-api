@@ -1,15 +1,15 @@
 import { Request, Response } from "express";
 import { Knex } from "knex";
-import errorMessages from "../../messages/errors";
-import Helpers from "../../helpers";
-import * as dbTypes from "../../db/types";
-import * as tables from "../../db/tables";
-import { handleNoResourceError } from "../../responses/errors";
-import { isValidUUID } from "../../utils";
+import errorMessages from "@messages/errors";
+import Helpers from "@helpers";
+import * as dbTypes from "@db/types";
+import * as tables from "@db/tables";
+import { handleNoResourceError } from "@responses/errors";
+import { isValidUUID } from "@utils";
 import { Logger } from "winston";
-import TermService from "../../services/db/term";
-import { GetTermEndpointResponse } from "../../types/responses";
-import { TermFullView } from "../../types";
+import TermService from "@services/db/term";
+import { GetTermEndpointResponse } from "@typings/responses";
+import { TermFullView } from "@typings";
 
 class GetTermController {
   private dbClient: Knex<any, unknown[]>;

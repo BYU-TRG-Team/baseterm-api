@@ -1,10 +1,9 @@
 import "dotenv/config";
-import constructServer from "../../../../src/app";
+import constructServer from "@app";
 import supertest, { SuperAgentTest } from "supertest";
 import express from "express";
-import { fetchMockAuxElement, generateJWT, importFile } from "../../../helpers";
-import { AuxElement, UUID } from "../../../../src/types";
-import { describe } from "../../../../src/utils";
+import { fetchMockAuxElement, generateJWT, importFile } from "@tests/helpers";
+import { AuxElement, UUID } from "@typings";
 import { Role } from "@byu-trg/express-user-management";
 
 let requestClient: SuperAgentTest;
@@ -22,7 +21,7 @@ const jwt = generateJWT(
 	Role.Staff
 );
 
-describe("tests DeleteAuxElement controller", async () => {
+describe("tests DeleteAuxElement controller", () => {
   beforeAll(async () => {
     const app = express();
     handleShutDown = await constructServer(app);
@@ -43,33 +42,33 @@ describe("tests DeleteAuxElement controller", async () => {
 		};
   });
 
+	test("should return a successful response and produce a 404 when requesting the aux element", async () => {
+		const { status: deleteAuxElementStatus } = await requestClient
+			.delete(
+				endpointConstructor(
+					mockData.termbaseUUID,
+					mockData.auxElement.uuid,
+				)
+			)
+			.field({
+				elementType: mockData.auxElement.elementType,
+			})
+			.set('Cookie', [`TRG_AUTH_TOKEN=${jwt}`])
+	
+		expect(deleteAuxElementStatus).toBe(204);
+	
+		const { status: getAuxElementStatus } = await requestClient
+			.get(
+				endpointConstructor(
+					mockData.termbaseUUID,
+					mockData.auxElement.uuid
+				)
+			);
+	
+		expect(getAuxElementStatus).toBe(404);
+	});
+
   afterAll(async () => {
 		await handleShutDown();
 	});
-});
-
-test("should return a successful response and produce a 404 when requesting the aux element", async () => {
-	const { status: deleteAuxElementStatus } = await requestClient
-		.delete(
-			endpointConstructor(
-				mockData.termbaseUUID,
-				mockData.auxElement.uuid,
-			)
-		)
-    .field({
-      elementType: mockData.auxElement.elementType,
-    })
-		.set('Cookie', [`TRG_AUTH_TOKEN=${jwt}`])
-
-	expect(deleteAuxElementStatus).toBe(204);
-
-	const { status: getAuxElementStatus } = await requestClient
-	  .get(
-			endpointConstructor(
-				mockData.termbaseUUID,
-				mockData.auxElement.uuid
-			)
-		);
-
-	expect(getAuxElementStatus).toBe(404);
 });

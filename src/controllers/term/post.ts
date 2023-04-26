@@ -1,13 +1,13 @@
 import { Request, Response } from "express";
 import * as yup from "yup";
-import errorMessages from "../../messages/errors";
+import errorMessages from "@messages/errors";
 import { Knex } from "knex";
 import { Logger } from "winston";
-import { handleInvalidBody } from "../../responses/errors";
-import { PostTermEndpointResponse } from "../../types/responses";
-import TermService from "../../services/db/term";
-import * as tables from "../../db/tables";
-import { TbxEntity } from "../../db/classes";
+import { handleInvalidBody } from "@responses/errors";
+import { PostTermEndpointResponse } from "@typings/responses";
+import TermService from "@services/db/term";
+import * as tables from "@db/tables";
+import { TbxEntity } from "@db/classes";
 import { uuid } from "uuidv4";
 
 class PostTermController {

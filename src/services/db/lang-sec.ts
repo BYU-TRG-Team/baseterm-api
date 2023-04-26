@@ -1,15 +1,15 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Knex } from "knex";
-import  * as dbTypes from "../../db/types";
-import * as tables from "../../db/tables";
-import * as types from "../../types";
-import Helpers from "../../helpers";
-import { TbxEntity } from "../../db/classes";
-import { UUID } from "../../types";
-import AuxElementService from "./aux-element";
-import TermService from "./term";
+import  * as dbTypes from "@db/types";
+import * as tables from "@db/tables";
+import * as types from "@typings";
+import Helpers from "@helpers";
+import { TbxEntity } from "@db/classes";
+import { UUID } from "@typings";
+import AuxElementService from "@services/db/aux-element";
+import TermService from "@services/db/term";
 import { uuid } from "uuidv4";
-import TransactionService from "./transaction";
+import TransactionService from "@services/db/transaction";
 
 class LangSecService {
   private dbClient: Knex<any, unknown[]>;

@@ -1,6 +1,6 @@
 import { Express } from "express";
-import { DIContainer } from "../di";
-import { eventsHandler } from "../middleware";
+import { DIContainer } from "@di";
+import { eventsHandler } from "@middleware";
 import { 
   verifyToken, 
   checkVerification, 

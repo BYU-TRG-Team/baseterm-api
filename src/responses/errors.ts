@@ -1,5 +1,5 @@
 import { Response } from "express";
-import errorMessages from "../messages/errors";
+import errorMessages from "@messages/errors";
 
 export const handleNoResourceError = function (res: Response) {
   return res.status(404).json({

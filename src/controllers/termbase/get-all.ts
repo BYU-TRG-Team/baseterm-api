@@ -1,11 +1,11 @@
 import { Request, Response } from "express";
-import errorMessages from "../../messages/errors";
-import  * as dbTypes from "../../db/types";
-import * as tables from "../../db/tables";
+import errorMessages from "@messages/errors";
+import  * as dbTypes from "@db/types";
+import * as tables from "@db/tables";
 import { Knex } from "knex";
-import { GetTermbasesEndpointResponse } from "../../types/responses";
+import { GetTermbasesEndpointResponse } from "@typings/responses";
 import { Logger } from "winston";
-import { handleInvalidQueryParams } from "../../responses/errors";
+import { handleInvalidQueryParams } from "@responses/errors";
 
 class GetTermbasesController {
   private dbClient: Knex<any, unknown[]>;
