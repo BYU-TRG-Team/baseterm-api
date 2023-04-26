@@ -1,5 +1,5 @@
-import { Schema } from "./types";
-import { TbxTable } from "./classes";
+import { Schema } from "@db/types";
+import { TbxTable } from "@db/classes";
 
 export const { 
   termbaseSchema, 

@@ -1,10 +1,10 @@
 import { Request, Response } from "express";
-import { eventConstructor } from "../../utils";
+import { eventConstructor } from "@utils";
 import EventEmitter from "events";
-import GlobalStore from "../../services/store";
+import GlobalStore from "@services/store";
 import { Logger } from "winston";
-import errorMessages from "../../messages/errors";
-import { SessionSSEEndpointResponse } from "../../types/responses";
+import errorMessages from "@messages/errors";
+import { SessionSSEEndpointResponse } from "@typings/responses";
 
 class SessionController {
   private eventEmitter: EventEmitter;

@@ -1,10 +1,9 @@
 import "dotenv/config";
-import constructServer from "../../../../src/app";
+import constructServer from "@app";
 import supertest, { SuperAgentTest } from "supertest";
 import express from "express";
-import {  fetchMockTermNote, generateJWT, importFile } from "../../../helpers";
-import { UUID } from "../../../../src/types";
-import { describe } from "../../../../src/utils";
+import { fetchMockTermNote, generateJWT, importFile } from "@tests/helpers";
+import { UUID } from "@typings";
 import { Role } from "@byu-trg/express-user-management";
 
 let requestClient: SuperAgentTest;
@@ -22,7 +21,7 @@ const jwt = generateJWT(
 	Role.Staff
 );
 
-describe("tests DeleteTermNote controller", async () => {
+describe("tests DeleteTermNote controller", () => {
   beforeAll(async () => {
     const app = express();
     handleShutDown = await constructServer(app);
@@ -46,28 +45,28 @@ describe("tests DeleteTermNote controller", async () => {
   afterAll(async () => {
 		await handleShutDown();
 	});
-});
 
-test("should return a successful response and produce a 404 when requesting the term note", async () => {
-	const { status: deleteTermNoteStatus } = await requestClient
-		.delete(
-			endpointConstructor(
-				mockData.termbaseUUID,
-				mockData.termNoteUUID
+	test("should return a successful response and produce a 404 when requesting the term note", async () => {
+		const { status: deleteTermNoteStatus } = await requestClient
+			.delete(
+				endpointConstructor(
+					mockData.termbaseUUID,
+					mockData.termNoteUUID
+				)
 			)
-		)
-		.set('Cookie', [`TRG_AUTH_TOKEN=${jwt}`]);
-
-	expect(deleteTermNoteStatus).toBe(204);
-
-	const { status: getTermNoteStatus } = await requestClient
-	  .get(
-			endpointConstructor(
-				mockData.termbaseUUID,
-				mockData.termNoteUUID
+			.set('Cookie', [`TRG_AUTH_TOKEN=${jwt}`]);
+	
+		expect(deleteTermNoteStatus).toBe(204);
+	
+		const { status: getTermNoteStatus } = await requestClient
+			.get(
+				endpointConstructor(
+					mockData.termbaseUUID,
+					mockData.termNoteUUID
+				)
 			)
-		)
-		.set('Cookie', [`TRG_AUTH_TOKEN=${jwt}`]);
-
-	expect(getTermNoteStatus).toBe(404);
+			.set('Cookie', [`TRG_AUTH_TOKEN=${jwt}`]);
+	
+		expect(getTermNoteStatus).toBe(404);
+	});
 });

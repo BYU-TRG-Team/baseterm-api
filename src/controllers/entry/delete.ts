@@ -1,8 +1,8 @@
 import { Request, Response } from "express";
 import { Knex } from "knex";
-import errorMessages from "../../messages/errors";
+import errorMessages from "@messages/errors";
 import { Logger } from "winston";
-import EntryService from "../../services/db/entry";
+import EntryService from "@services/db/entry";
 
 class DeleteEntryController {
   private dbClient: Knex<any, unknown[]>;

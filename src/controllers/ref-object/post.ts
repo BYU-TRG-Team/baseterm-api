@@ -1,16 +1,16 @@
 import { Request, Response } from "express";
 import { Knex } from "knex";
-import { PostPersonRefObjectEndpointResponse } from "../../types/responses";
-import errorMessages from "../../messages/errors";
+import { PostPersonRefObjectEndpointResponse } from "@typings/responses";
+import errorMessages from "@messages/errors";
 import { Logger } from "winston";
 import * as yup from "yup";
-import RefService from "../../services/db/ref";
+import RefService from "@services/db/ref";
 import { 
   handleInvalidBody, 
   handleInvalidPersonId, 
   handleUserIdMismatch
-} from "../../responses/errors";
-import { isValidUUID } from "../../utils";
+} from "@responses/errors";
+import { isValidUUID } from "@utils";
 
 class PostRefController {
   private dbClient: Knex<any, unknown[]>;

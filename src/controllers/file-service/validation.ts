@@ -1,11 +1,11 @@
-import TBXValidator from "../../support/tbx-validator";
+import TBXValidator from "@support/tbx-validator";
 import { Request, Response } from "express";
 import * as yup from "yup";
 import { 
   handleInvalidTbxFile,
   handleInvalidBody,
-} from "../../responses/errors";
-import { ValidationEndpointResponse } from "../../types/responses";
+} from "@responses/errors";
+import { ValidationEndpointResponse } from "@typings/responses";
 
 class ValidationController {
   private tbxValidator: TBXValidator;

@@ -1,7 +1,7 @@
 import {
   NullableString,
   UUID,
-} from "../types/index";
+} from "@typings";
 
 export enum Schema {
   termbaseSchema = "termbase",

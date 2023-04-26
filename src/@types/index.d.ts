@@ -1,5 +1,5 @@
 import { Role } from "@byu-trg/express-user-management";
-import { UUID } from "../types";
+import { UUID } from "@typings";
 
 declare global{
   namespace Express {

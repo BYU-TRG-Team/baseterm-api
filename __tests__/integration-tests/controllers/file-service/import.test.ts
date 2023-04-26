@@ -1,10 +1,10 @@
 import "dotenv/config";
-import constructServer from "../../../../src/app";
+import constructServer from "@app";
 import supertest, { SuperAgentTest } from "supertest";
 import express from "express";
 import { uuid } from "uuidv4";
-import { ImportEndpointResponse } from "../../../../src/types/responses";
-import { generateJWT } from "../../../helpers";
+import { ImportEndpointResponse } from "@typings/responses";
+import { generateJWT } from "@tests/helpers";
 import { Role } from "@byu-trg/express-user-management";
 
 let requestClient: SuperAgentTest;

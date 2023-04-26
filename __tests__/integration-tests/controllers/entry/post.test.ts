@@ -1,11 +1,11 @@
 import "dotenv/config";
-import constructServer from "../../../../src/app";
+import constructServer from "@app";
 import supertest, { SuperAgentTest } from "supertest";
 import express from "express";
-import { generateJWT, importFile } from "../../../helpers";
-import { PostEntryEndpointResponse } from "../../../../src/types/responses";
-import { VALID_LANGUAGE_CODE } from "../../../constants";
-import { UUID } from "../../../../src/types";
+import { generateJWT, importFile } from "@tests/helpers";
+import { PostEntryEndpointResponse } from "@typings/responses";
+import { VALID_LANGUAGE_CODE } from "@tests/constants";
+import { UUID } from "@typings";
 import { Role } from "@byu-trg/express-user-management";
 import { uuid } from "uuidv4";
 

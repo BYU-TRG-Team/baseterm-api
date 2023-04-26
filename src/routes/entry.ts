@@ -1,5 +1,5 @@
 import { Express } from "express";
-import { DIContainer } from "../di";
+import { DIContainer } from "@di";
 import { 
   verifyToken, 
   checkVerification, 

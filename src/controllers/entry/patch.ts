@@ -1,17 +1,17 @@
 import { Request, Response } from "express";
 import { Knex } from "knex";
-import errorMessages from "../../messages/errors";
-import Helpers from "../../helpers";
-import { PatchEntryEndpointResponse } from "../../types/responses";
-import * as dbTypes from "../../db/types";
-import * as tables from "../../db/tables";
-import { handleInvalidBody, handleInvalidXmlIdError, handleNoResourceError } from "../../responses/errors";
-import { isValidUUID, TransactionMessage } from "../../utils";
+import errorMessages from "@messages/errors";
+import Helpers from "@helpers";
+import { PatchEntryEndpointResponse } from "@typings/responses";
+import * as dbTypes from "@db/types";
+import * as tables from "@db/tables";
+import { handleInvalidBody, handleInvalidXmlIdError, handleNoResourceError } from "@responses/errors";
+import { isValidUUID, TransactionMessage } from "@utils";
 import { Logger } from "winston";
 import * as yup from "yup";
-import { TbxEntity } from "../../db/classes";
+import { TbxEntity } from "@db/classes";
 import { name as xmlNameValidator } from "xml-name-validator";
-import TransactionService from "../../services/db/transaction";
+import TransactionService from "@services/db/transaction";
 
 class PatchEntryController {
   private dbClient: Knex<any, unknown[]>;

@@ -1,19 +1,18 @@
 import { Request, Response } from "express";
 import { Knex } from "knex";
-import errorMessages from "../../messages/errors";
-import Helpers from "../../helpers";
-import * as dbTypes from "../../db/types";
-import * as tables from "../../db/tables";
-import { handleInvalidBody, handleInvalidXmlIdError, handleNoResourceError } from "../../responses/errors";
-import { isValidUUID, TransactionMessage } from "../../utils";
+import errorMessages from "@messages/errors";
+import Helpers from "@helpers";
+import * as dbTypes from "@db/types";
+import * as tables from "@db/tables";
+import { handleInvalidBody, handleInvalidXmlIdError, handleNoResourceError } from "@responses/errors";
+import { isValidUUID, TransactionMessage } from "@utils";
 import { Logger } from "winston";
 import * as yup from "yup";
-import TermService from "../../services/db/term";
+import TermService from "@services/db/term";
 import { name as XmlNameValidator } from "xml-name-validator";
-import { TbxEntity } from "../../db/classes";
-import { PatchTermEndpointResponse } from "../../types/responses";
-import TransactionService from "../../services/db/transaction";
-import LanguageCodeService from "@byu-trg/language-code-service";
+import { TbxEntity } from "@db/classes";
+import { PatchTermEndpointResponse } from "@typings/responses";
+import TransactionService from "@services/db/transaction";
 
 class PatchTermController {
   private dbClient: Knex<any, unknown[]>;

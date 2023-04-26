@@ -1,17 +1,16 @@
 import { Request, Response } from "express";
-import TBXValidator from "../../support/tbx-validator";
+import TBXValidator from "@support/tbx-validator";
 import * as yup from "yup";
-import errorMessages from "../../messages/errors";
-import TBXConsumer from "../../support/tbx-consumer";
+import errorMessages from "@messages/errors";
+import TBXConsumer from "@support/tbx-consumer";
 import { parseStringPromise as xml2JsParser } from "xml2js";
 import { XMLParser, XMLBuilder } from "fast-xml-parser";
-import { isDefined } from "../../utils";
+import { isDefined } from "@utils";
 import { uuid } from "uuidv4";
-import GlobalStore from "../../services/store";
+import GlobalStore from "@services/store";
 import { Logger } from "winston";
-import { ImportEndpointResponse } from "../../types/responses";
-import { handleInvalidBody, handleInvalidTbxFile } from "../../responses/errors";
-import * as types from "../../types";
+import { ImportEndpointResponse } from "@typings/responses";
+import { handleInvalidBody, handleInvalidTbxFile } from "@responses/errors";
 
 class ImportController {
   private tbxValidator: TBXValidator;

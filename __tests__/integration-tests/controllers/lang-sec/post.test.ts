@@ -1,13 +1,12 @@
 import "dotenv/config";
-import constructServer from "../../../../src/app";
+import constructServer from "@app";
 import supertest, { SuperAgentTest } from "supertest";
 import express from "express";
-import { fetchMockTermbaseData, generateJWT, importFile } from "../../../helpers";
-import { PostLangSecEndpointResponse } from "../../../../src/types/responses";
-import { VALID_LANGUAGE_CODE} from "../../../constants";
-import { UUID } from "../../../../src/types";
-import { describe } from "../../../../src/utils";
-import { SuperAgentResponse } from "../../../types";
+import { fetchMockTermbaseData, generateJWT, importFile } from "@tests/helpers";
+import { PostLangSecEndpointResponse } from "@typings/responses";
+import { VALID_LANGUAGE_CODE} from "@tests/constants";
+import { UUID } from "@typings";
+import { SuperAgentResponse } from "@tests/types";
 import { Role } from "@byu-trg/express-user-management";
 import { uuid } from "uuidv4";
 
@@ -27,7 +26,7 @@ const jwt = generateJWT(
   personId
 );
 
-describe("tests PostLangSec controller", async () => {
+describe("tests PostLangSec controller", () => {
   beforeAll(async () => {
     const app = express();
     handleShutDown = await constructServer(app);

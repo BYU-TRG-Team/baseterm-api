@@ -1,10 +1,9 @@
 import "dotenv/config";
-import constructServer from "../../../../src/app";
+import constructServer from "@app";
 import supertest, { SuperAgentTest } from "supertest";
 import express from "express";
-import { fetchMockTermbaseData, generateJWT, importFile } from "../../../helpers";
-import { UUID } from "../../../../src/types";
-import { describe } from "../../../../src/utils";
+import { fetchMockTermbaseData, generateJWT, importFile } from "@tests/helpers";
+import { UUID } from "@typings";
 import { Role } from "@byu-trg/express-user-management";
 
 let requestClient: SuperAgentTest;
@@ -22,7 +21,7 @@ const jwt = generateJWT(
 	Role.Staff
 );
 
-describe("tests DeleteLangSec controller", async () => {
+describe("tests DeleteLangSec controller", () => {
   beforeAll(async () => {
     const app = express();
     handleShutDown = await constructServer(app);
@@ -48,28 +47,28 @@ describe("tests DeleteLangSec controller", async () => {
   afterAll(async () => {
 		await handleShutDown();
 	});
-});
 
-test("should return a successful response and produce a 404 when requesting the lang sec", async () => {
-	const { status: deleteLangSecStatus } = await requestClient
-		.delete(
-			endpointConstructor(
-				mockData.termbaseUUID,
-				mockData.langSecUUID
+	test("should return a successful response and produce a 404 when requesting the lang sec", async () => {
+		const { status: deleteLangSecStatus } = await requestClient
+			.delete(
+				endpointConstructor(
+					mockData.termbaseUUID,
+					mockData.langSecUUID
+				)
 			)
-		)
-		.set('Cookie', [`TRG_AUTH_TOKEN=${jwt}`]);
-
-	expect(deleteLangSecStatus).toBe(204);
-
-	const { status: getLangSecStatus } = await requestClient
-	  .get(
-			endpointConstructor(
-				mockData.termbaseUUID,
-				mockData.langSecUUID
+			.set('Cookie', [`TRG_AUTH_TOKEN=${jwt}`]);
+	
+		expect(deleteLangSecStatus).toBe(204);
+	
+		const { status: getLangSecStatus } = await requestClient
+			.get(
+				endpointConstructor(
+					mockData.termbaseUUID,
+					mockData.langSecUUID
+				)
 			)
-		)
-		.set('Cookie', [`TRG_AUTH_TOKEN=${jwt}`]);
-
-	expect(getLangSecStatus).toBe(404);
+			.set('Cookie', [`TRG_AUTH_TOKEN=${jwt}`]);
+	
+		expect(getLangSecStatus).toBe(404);
+	});
 });

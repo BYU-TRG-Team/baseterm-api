@@ -1,11 +1,11 @@
 import { Knex } from "knex";
-import  * as dbTypes from "../db/types";
-import * as tables from "../db/tables";
-import * as types from "../types";
-import { isDefined, describe } from "../utils";
-import { TbxTable, TbxEntity, TbxElement } from "../db/classes"; 
+import  * as dbTypes from "@db/types";
+import * as tables from "@db/tables";
+import * as types from "@typings";
+import { isDefined, describe } from "@utils";
+import { TbxTable, TbxEntity, TbxElement } from "@db/classes"; 
 import { MinPriorityQueue } from "@datastructures-js/priority-queue";
-import GlobalStore from "../services/store";
+import GlobalStore from "@services/store";
 
 interface TransactionData {
   termbaseUUID: string;

@@ -1,11 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Knex } from "knex";
-import  * as dbTypes from "../../db/types";
-import * as tables from "../../db/tables";
-import * as types from "../../types";
-import Helpers from "../../helpers";
-import { TbxEntity } from "../../db/classes";
-import { UUID } from "../../types";
+import  * as dbTypes from "@db/types";
+import * as tables from "@db/tables";
+import * as types from "@typings";
+import Helpers from "@helpers";
+import { TbxEntity } from "@db/classes";
+import { UUID } from "@typings";
 import { uuid } from "uuidv4";
 
 interface PersonRefConfig {

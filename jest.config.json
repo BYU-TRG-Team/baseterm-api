@@ -1,0 +1,42 @@
+{
+  "preset": "ts-jest",
+  "testEnvironment": "node",
+  "transform": {
+    "^.+\\.ts?$": "ts-jest"
+  },
+  "testMatch": ["**/__tests__/**/*.test.ts"],
+  "collectCoverage": true,
+  "collectCoverageFrom": ["src/**/*.ts"],
+  "coverageThreshold": {
+    "global": {
+      "branches": 0,
+      "functions": 0,
+      "lines": 0,
+      "statements": 0
+    }
+  },
+  "moduleNameMapper": {
+    "^@$": "<rootDir>/src",
+    "^@app$": "<rootDir>/src/app",
+    "^@controllers/(.*)$": "<rootDir>/src/controllers/$1",
+    "^@db$": "<rootDir>/src/db",
+    "^@db/(.*)$": "<rootDir>/src/db/$1",
+    "^@di$": "<rootDir>/src/di",
+    "^@extensions/(.*)$": "<rootDir>/src/extensions/$1",
+    "^@helpers$": "<rootDir>/src/helpers",
+    "^@logger$": "<rootDir>/src/logger",
+    "^@messages/(.*)$": "<rootDir>/src/messages/$1",
+    "^@middleware$": "<rootDir>/src/middleware",
+    "^@responses/(.*)$": "<rootDir>/src/responses/$1",
+    "^@routes/(.*)$": "<rootDir>/src/routes/$1",
+    "^@services/(.*)$": "<rootDir>/src/services/$1",
+    "^@support/(.*)$": "<rootDir>/src/support/$1",
+    "^@typings$": "<rootDir>/src/types",
+    "^@typings/(.*)$": "<rootDir>/src/types/$1",
+    "^@utils$": "<rootDir>/src/utils",
+    "^@validators/(.*)$": "<rootDir>/src/validators/$1",
+    "^@tests/(.*)$": "<rootDir>/__tests__/$1"
+  },
+  "coverageReporters": ["json", "html"],
+  "reporters": ["default"]
+}

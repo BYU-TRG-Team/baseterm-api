@@ -1,11 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Knex } from "knex";
-import  * as dbTypes from "../../db/types";
-import * as tables from "../../db/tables";
-import * as types from "../../types";
-import { TbxEntity } from "../../db/classes";
-import { UUID } from "../../types";
-import AuxElementService from "./aux-element";
+import  * as dbTypes from "@db/types";
+import * as tables from "@db/tables";
+import * as types from "@typings";
+import { TbxEntity } from "@db/classes";
+import { UUID } from "@typings";
+import AuxElementService from "@services/db/aux-element";
 
 class TermNoteService {
   private dbClient: Knex<any, unknown[]>;

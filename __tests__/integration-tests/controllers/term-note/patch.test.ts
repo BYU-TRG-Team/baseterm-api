@@ -1,13 +1,12 @@
 import "dotenv/config";
-import constructServer from "../../../../src/app";
+import constructServer from "@app";
 import supertest, { SuperAgentTest } from "supertest";
 import express from "express";
-import { fetchMockTermNote, generateJWT, importFile } from "../../../helpers";
-import { PatchTermNoteEndpointResponse } from "../../../../src/types/responses";
-import { TermNote, UUID } from "../../../../src/types";
-import { VALID_LANGUAGE_CODE } from "../../../constants";
-import { describe } from "../../../../src/utils";
-import { SuperAgentResponse } from "../../../types";
+import { fetchMockTermNote, generateJWT, importFile } from "@tests/helpers";
+import { PatchTermNoteEndpointResponse } from "@typings/responses";
+import { TermNote, UUID } from "@typings";
+import { VALID_LANGUAGE_CODE } from "@tests/constants";
+import { SuperAgentResponse } from "@tests/types";
 import { Role } from "@byu-trg/express-user-management";
 
 let requestClient: SuperAgentTest;
@@ -25,7 +24,7 @@ const jwt = generateJWT(
 	Role.Staff
 );
 
-describe("tests PatchTermNote controller", async () => {
+describe("tests PatchTermNote controller", () => {
   beforeAll(async () => {
     const app = express();
     handleShutDown = await constructServer(app);
@@ -49,30 +48,30 @@ describe("tests PatchTermNote controller", async () => {
   afterAll(async () => {
 		await handleShutDown();
 	});
-});
 
-test("should return a 200 response for successful patch of term note", async () => {
-	const { status, body} = await requestClient
-    .patch(
-      endpointConstructor(
-        mockData.termbaseUUID,
-        mockData.termNote.uuid
+  test("should return a 200 response for successful patch of term note", async () => {
+    const { status, body} = await requestClient
+      .patch(
+        endpointConstructor(
+          mockData.termbaseUUID,
+          mockData.termNote.uuid
+        )
       )
-    )
-    .set('Cookie', [`TRG_AUTH_TOKEN=${jwt}`])
-    .field({
-      id: "Test",
-      type: "Test",
-      value: "Test",
-      grpId: "Test1",
-      datatype: "Test",
-      langCode: VALID_LANGUAGE_CODE,
-      order: 100,
-    }) as SuperAgentResponse<PatchTermNoteEndpointResponse>;
-
-  expect(status).toBe(200);
-  expect(body.type).toBe("Test");
-  expect(body.value).toBe("Test");
-  expect(body.xmlLang).toBe(VALID_LANGUAGE_CODE);
-  expect(body.order).toBe(100);
+      .set('Cookie', [`TRG_AUTH_TOKEN=${jwt}`])
+      .field({
+        id: "Test",
+        type: "Test",
+        value: "Test",
+        grpId: "Test1",
+        datatype: "Test",
+        langCode: VALID_LANGUAGE_CODE,
+        order: 100,
+      }) as SuperAgentResponse<PatchTermNoteEndpointResponse>;
+  
+    expect(status).toBe(200);
+    expect(body.type).toBe("Test");
+    expect(body.value).toBe("Test");
+    expect(body.xmlLang).toBe(VALID_LANGUAGE_CODE);
+    expect(body.order).toBe(100);
+  });
 });

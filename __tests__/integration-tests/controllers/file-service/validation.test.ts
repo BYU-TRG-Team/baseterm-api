@@ -1,8 +1,8 @@
 import "dotenv/config";
-import constructServer from "../../../../src/app";
+import constructServer from "@app";
 import supertest, { SuperAgentTest } from "supertest";
 import express from "express";
-import { ValidationEndpointResponse } from "../../../../src/types/responses";
+import { ValidationEndpointResponse } from "@typings/responses";
 
 let requestClient: SuperAgentTest;
 let handleShutDown: () => Promise<void>;

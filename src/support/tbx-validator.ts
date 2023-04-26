@@ -1,7 +1,7 @@
-import RNGValidator from "../services/rng-validator.js";
+import RNGValidator from "@services/rng-validator.js";
 import { parseStringPromise as parseXML } from "xml2js";
 import LanguageCodeService from "@byu-trg/language-code-service";
-import * as types from "../types";
+import * as types from "@typings";
 
 class TBXValidator {
   private rngValidator: RNGValidator;

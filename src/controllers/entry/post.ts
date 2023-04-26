@@ -1,17 +1,17 @@
 import { Request, Response } from "express";
 import * as yup from "yup";
-import errorMessages from "../../messages/errors";
-import * as tables from "../../db/tables";
+import errorMessages from "@messages/errors";
+import * as tables from "@db/tables";
 import { Knex } from "knex";
-import Helpers from "../../helpers";
-import { TbxEntity } from "../../db/classes";
+import Helpers from "@helpers";
+import { TbxEntity } from "@db/classes";
 import { Logger } from "winston";
-import { handleInvalidBody, handleInvalidXmlIdError, handleNoResourceError } from "../../responses/errors";
-import { isValidUUID } from "../../utils";
-import { PostEntryEndpointResponse } from "../../types/responses";
+import { handleInvalidBody, handleInvalidXmlIdError, handleNoResourceError } from "@responses/errors";
+import { isValidUUID } from "@utils";
+import { PostEntryEndpointResponse } from "@typings/responses";
 import { uuid } from "uuidv4";
 import { name as xmlNameValidator } from "xml-name-validator";
-import EntryService from "../../services/db/entry";
+import EntryService from "@services/db/entry";
 
 class PostEntryController {
   private dbClient: Knex<any, unknown[]>;

@@ -1,6 +1,6 @@
 import winston from "winston";
 import RollbarTransport from "winston-transport-rollbar-3";
-import { AppEnv } from "../types";
+import { AppEnv } from "@typings";
 
 const {
   combine, errors, colorize, timestamp, prettyPrint,

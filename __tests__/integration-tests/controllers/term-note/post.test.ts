@@ -1,13 +1,12 @@
 import "dotenv/config";
-import constructServer from "../../../../src/app";
+import constructServer from "@app";
 import supertest, { SuperAgentTest } from "supertest";
 import express from "express";
-import { PostTermNoteEndpointResponse } from "../../../../src/types/responses";
-import { fetchMockTermbaseData, generateJWT, importFile } from "../../../helpers";
-import { UUID } from "../../../../src/types";
-import { describe } from "../../../../src/utils";
-import errorMessages from "../../../../src/messages/errors";
-import { SuperAgentResponse } from "../../../types";
+import { PostTermNoteEndpointResponse } from "@typings/responses";
+import { fetchMockTermbaseData, generateJWT, importFile } from "@tests/helpers";
+import { UUID } from "@typings";
+import errorMessages from "@messages/errors";
+import { SuperAgentResponse } from "@tests/types";
 import { Role } from "@byu-trg/express-user-management";
 
 let requestClient: SuperAgentTest;
@@ -24,7 +23,7 @@ const jwt = generateJWT(
 	Role.Staff
 );
 
-describe("tests PostTermNote controller", async () => {
+describe("tests PostTermNote controller", () => {
   beforeAll(async () => {
     const app = express();
     handleShutDown = await constructServer(app);

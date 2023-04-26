@@ -1,5 +1,5 @@
 import * as yup from "yup";
-import { DIContainer } from "../di";
+import { DIContainer } from "@di";
 
 const constructYupExtensions = (
   di: DIContainer
