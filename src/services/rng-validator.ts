@@ -24,7 +24,7 @@ class RNGValidatorService {
         }
 
         const options = {
-          scriptPath: `${process.env.PWD}/rng-validator`,
+          scriptPath: `${process.env.APP_DIR}/rng-validator`,
           args: [this.rawValidationFile, tempFile]
         };
   
