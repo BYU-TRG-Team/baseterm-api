@@ -42,7 +42,7 @@ class PostTermbaseController {
         lang: string;
         name: string;
         description?: string;
-      }
+      };
 
       const newTermbaseUUID = 
         await this.dbClient.transaction(async (transac) => {    
@@ -68,12 +68,12 @@ class PostTermbaseController {
           await transac<dbTypes.Body>(tables.bodyTable.fullTableName)
             .insert({
               termbase_uuid: newBase.termbase_uuid,
-            })
+            });
 
           await transac<dbTypes.Back>(tables.backTable.fullTableName)
             .insert({
               termbase_uuid: newBase.termbase_uuid,
-            })
+            });
 
           await transac<dbTypes.Header>(tables.headerTable.fullTableName)
             .insert({
@@ -93,13 +93,13 @@ class PostTermbaseController {
           const headerNoteEntity = new TbxEntity({
             ...tables.headerNoteTable,
             uuid: uuid(),
-          })
+          });
         
           await transac<dbTypes.SourceDesc>(tables.sourceDescTable.fullTableName)
             .insert({
               uuid: sourceDescEntity.uuid,
               termbase_uuid: newBase.termbase_uuid
-            })
+            });
 
           await transac<dbTypes.HeaderNote>(tables.headerNoteTable.fullTableName)
             .insert({
@@ -107,7 +107,7 @@ class PostTermbaseController {
               termbase_uuid: newBase.termbase_uuid,
               value: description,
               order: 0,
-            })
+            });
         
           await this.helpers.saveChildTable(
             sourceDescEntity,

@@ -60,7 +60,7 @@ class DeleteTermController {
       if (langSecTerms.length === 1) {
         return res.status(400).json({
           error: "Language Sections must have at least one term."
-        })
+        });
       }
 
       await this.dbClient.transaction(async (transac) => {

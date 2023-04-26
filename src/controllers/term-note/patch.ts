@@ -35,7 +35,7 @@ class PatchTermNoteController {
     try {
       await this.getValidator().validate(req);
     } catch(err) {
-      const validationError = (err as Error).message
+      const validationError = (err as Error).message;
       return handleInvalidBody(res, validationError);
     }
 
@@ -172,7 +172,7 @@ class PatchTermNoteController {
               order: updatedOrder,
             })
             .returning<dbTypes.TermNote[]>("*")
-        ) as dbTypes.TermNote
+        ) as dbTypes.TermNote;
       });
 
       return res.status(200).json({
@@ -184,7 +184,7 @@ class PatchTermNoteController {
             TbxElement.TermNoteGrp :
             TbxElement.TermNote
         )
-      } as PatchTermNoteEndpointResponse)
+      } as PatchTermNoteEndpointResponse);
     } catch(err: any) {
       const errorMessage = 
         err.code === "23505" ?
@@ -198,7 +198,7 @@ class PatchTermNoteController {
 
       res.status(errorCode).json({
         error: errorMessage,
-      })
+      });
 
       if (errorCode === 500) {
         this.logger.error(err);
@@ -218,7 +218,7 @@ class PatchTermNoteController {
         langCode: yup.string().notRequired().isValidLangCode({ required: false }),
         order: yup.number().notRequired(),
       }).required()
-    })
+    });
   }
 }
 

@@ -58,7 +58,7 @@ class TransactionService {
     );
 
     if (personRefObject === null) {
-      throw new Error("ID is not associated with a person reference")
+      throw new Error("ID is not associated with a person reference");
     }
 
     const transacEntity = new TbxEntity({

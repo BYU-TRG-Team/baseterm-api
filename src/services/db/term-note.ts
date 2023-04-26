@@ -38,7 +38,7 @@ class TermNoteService {
       .where({
         uuid: termNoteEntity.uuid
       })
-      .delete()
+      .delete();
   }
 }
 

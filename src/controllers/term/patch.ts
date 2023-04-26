@@ -43,7 +43,7 @@ class PatchTermController {
     try {
       await this.getValidator().validate(req);
     } catch(err) {
-      const validationError = (err as Error).message
+      const validationError = (err as Error).message;
       return handleInvalidBody(res, validationError);
     }
 
@@ -184,7 +184,7 @@ class PatchTermController {
               order: updatedOrder,
             })
             .returning<dbTypes.Term[]>("*")
-        ) as dbTypes.Term
+        ) as dbTypes.Term;
       });
 
       return res.status(200).json(
@@ -205,7 +205,7 @@ class PatchTermController {
 
       res.status(errorCode).json({
         error: errorMessage,
-      })
+      });
 
       if (errorCode === 500) {
         this.logger.error(err);
@@ -221,7 +221,7 @@ class PatchTermController {
         value: yup.string().notRequired(),
         order: yup.number().notRequired(),
       }).required()
-    })
+    });
   }
 }
 

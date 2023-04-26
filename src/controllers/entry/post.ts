@@ -35,7 +35,7 @@ class PostEntryController {
     try {   
       await this.getValidator().validate(req);
     } catch(err) {
-      const validationError = (err as Error).message
+      const validationError = (err as Error).message;
       return handleInvalidBody(res, validationError);
     }
 
@@ -65,8 +65,8 @@ class PostEntryController {
           termbaseUUID,
           req.userId,
           transac
-        )
-      })
+        );
+      });
 
       res.status(200).json({
         uuid: newConceptEntryUUID,

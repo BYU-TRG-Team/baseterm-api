@@ -88,7 +88,7 @@ class PatchTermbaseController {
         enforceBasicDialect !== undefined &&
         !enforceBasicDialect
       ) {
-        updatedEnforceBasicDialect = enforceBasicDialect
+        updatedEnforceBasicDialect = enforceBasicDialect;
       }
 
       const updatedTermbase = 

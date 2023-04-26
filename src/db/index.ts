@@ -12,10 +12,10 @@ const dbClient = knex({
     connectionString: DATABASE_URL,
     ssl: 
       APP_ENV === AppEnv.Prod ?
-      {
-        rejectUnauthorized: false
-      } :
-      false,
+        {
+          rejectUnauthorized: false
+        } :
+        false,
   }
 });
 

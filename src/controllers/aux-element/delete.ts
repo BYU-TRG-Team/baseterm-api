@@ -94,12 +94,12 @@ class DeleteAuxElementController {
       return res.status(204).send();
 
     } catch(err: any) {
-        res.status(500).json({
-          error: errorMessages.unexpectedError,
-        });
+      res.status(500).json({
+        error: errorMessages.unexpectedError,
+      });
 
-        this.logger.error(err);
-      }
+      this.logger.error(err);
+    }
   }
 
   private getValidator(): yup.ObjectSchema<any> {
@@ -107,7 +107,7 @@ class DeleteAuxElementController {
       body: yup.object({
         elementType: yup.string().required(),
       }).required()
-    })
+    });
   }
 }
 

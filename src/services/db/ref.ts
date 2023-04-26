@@ -52,7 +52,7 @@ class RefService {
     );
 
     if (back !== null) {
-      return back
+      return back;
     }
 
     const newBack = this.helpers.pluckOne(
@@ -61,9 +61,9 @@ class RefService {
           termbase_uuid: termbaseUUID,
         })
         .returning<dbTypes.Back[]>("*")
-    ) as dbTypes.Back
+    ) as dbTypes.Back;
 
-    return newBack
+    return newBack;
   }
 
   private async retrieveRefObjectSec(
@@ -74,7 +74,7 @@ class RefService {
     await this.retrieveBack(
       termbaseUUID,
       dbClient
-    )
+    );
 
     const refObjectSec = this.helpers.pluckOne(
       await dbClient<dbTypes.RefObjectSec>(tables.refObjectSecTable.fullTableName)
@@ -163,12 +163,12 @@ class RefService {
     );
 
     for (const item of 
-    [
-      { type: "fn", value: name },
-      { type: "email", value: email },
-      { type: "role", value: role },
-      { type: "source", value: "BaseTerm" }
-    ]) {
+      [
+        { type: "fn", value: name },
+        { type: "email", value: email },
+        { type: "role", value: role },
+        { type: "source", value: "BaseTerm" }
+      ]) {
       const itemEntity = new TbxEntity({
         ...tables.itemTable,
         uuid: uuid()
@@ -244,15 +244,15 @@ class RefService {
         uuid: personRef.uuid,
         id: (
           isExternal ?
-          personRef.id || "" :
-          this.convertPersonIdToUUID(
+            personRef.id || "" :
+            this.convertPersonIdToUUID(
             personRef.id as string
-          )
+            )
         ),
         source: (
           isExternal ?
-          "External" :
-          "BaseTerm"
+            "External" :
+            "BaseTerm"
         )
       });
     }
@@ -293,7 +293,7 @@ class RefService {
         personId
       ),
       source: "External"
-    } 
+    }; 
 
     const items = await this.helpers.getChildTables<dbTypes.Item>(
       refEntity,
@@ -303,31 +303,29 @@ class RefService {
 
     for (const item of items) {
       switch(item.type) {
-        case "fn":
-          personRefObject.fullName = item.value;
-          continue;
-        
-        case "email":
-          personRefObject.email = item.value;
-          continue;
+      case "fn":
+        personRefObject.fullName = item.value;
+        break;
+          
+      case "email":
+        personRefObject.email = item.value;
+        break;
 
-        case "role":
-          personRefObject.role = item.value;
-          continue;
+      case "role":
+        personRefObject.role = item.value;
+        break;
 
-        case "source":
-          personRefObject.source = 
-            item.value === "BaseTerm" ?
-            "BaseTerm" :
-            "External"
-          continue;
+      case "source":
+        personRefObject.source = 
+              item.value === "BaseTerm" ?
+                "BaseTerm" :
+                "External";
+        break;
 
-        default:
-          continue;
       }
     }
 
-    return personRefObject
+    return personRefObject;
   }
 }
 

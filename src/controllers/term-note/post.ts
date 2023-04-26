@@ -76,7 +76,7 @@ class PostTermNoteController {
               tables.termNoteTable,
               transac,
             )
-          })
+          });
       
         await this.helpers.saveChildTable(
           termEntity,
@@ -105,7 +105,7 @@ class PostTermNoteController {
         value: yup.string().required(),
         termUUID: yup.string().required(),
       }).required()
-    })
+    });
   }
 }
 

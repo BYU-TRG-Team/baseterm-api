@@ -41,7 +41,7 @@ export const handleInvalidIDReferenceError = function (
 ) {
   return res.status(400).json({
     error: errorMessages.invalidIdReference
-  })
+  });
 };
 
 export const handleUserIdMismatch = function (
@@ -49,13 +49,13 @@ export const handleUserIdMismatch = function (
 ) {
   return res.status(400).json({
     error: errorMessages.userIdMismatch
-  })
-}
+  });
+};
 
 export const handleInvalidPersonId = function (
   res: Response
 ) {
   return res.status(400).json({
     error: errorMessages.invalidPersonId
-  })
-}
+  });
+};

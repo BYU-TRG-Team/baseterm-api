@@ -11,6 +11,6 @@ const initialize = async () => {
   app.listen(port, () => {
     console.log(`App listening on port ${port}`);
   });
-}
+};
 
-initialize()
+initialize();

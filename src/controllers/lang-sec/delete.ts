@@ -70,7 +70,7 @@ class DeleteLangSecController {
           langSecUUID,
           transac,
         );
-      })
+      });
 
       res.status(204).send();
     } catch(err: any) {

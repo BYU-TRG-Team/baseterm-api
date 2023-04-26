@@ -155,7 +155,7 @@ const dependencyInjection = (): DIContainer => {
     langSecService,
     transacService
   );
-  const languageCodeService = new LanguageCodeService()
+  const languageCodeService = new LanguageCodeService();
 
   // Support
   const tbxValidator = new TBXValidator(

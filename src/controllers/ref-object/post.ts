@@ -51,7 +51,7 @@ class PostRefController {
             id: string,
           }
         )
-      }
+      };
     
       if (req.userId !== personConfig.id) {
         return handleUserIdMismatch(res);
@@ -67,7 +67,7 @@ class PostRefController {
           transac,
           personConfig,
         );
-      })
+      });
 
       return res.status(200).json({
         uuid: newPersonRefUUID
@@ -101,7 +101,7 @@ class PostRefController {
         role: yup.string().required(),
         id: yup.string().required(),
       }).required()
-    })
+    });
   }
 }
 
