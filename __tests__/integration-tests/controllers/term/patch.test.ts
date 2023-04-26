@@ -33,7 +33,7 @@ describe("tests PatchTerm controller", async () => {
     handleShutDown = await constructServer(app);
     requestClient = supertest.agent(app);
     const termbaseUUID = await importFile(
-      `${process.env.APP_DIR}/example_tbx/valid_tbx_core.tbx`,
+      `${process.env.APP_DIR}/example-tbx/valid-tbx-core.tbx`,
       requestClient,
       uuid(),
       personId,

@@ -22,7 +22,7 @@ describe("tests Validation controller", () => {
     const { status, body } = (
       await requestClient
         .post("/validate")
-        .attach("tbxFile", `${process.env.APP_DIR}/example_tbx/valid_tbx_core.tbx`)
+        .attach("tbxFile", `${process.env.APP_DIR}/example-tbx/valid-tbx-core.tbx`)
     ) as { status: number, body: ValidationEndpointResponse };
 
 
@@ -33,7 +33,7 @@ describe("tests Validation controller", () => {
   test("should return a response indicating an invalid tbx (no header)", async () => {
     const { status, body } = await requestClient
       .post("/validate")
-      .attach("tbxFile", `${process.env.APP_DIR}/example_tbx/tbx_core_no_header.tbx`);
+      .attach("tbxFile", `${process.env.APP_DIR}/example-tbx/tbx-core-no-header.tbx`);
 
     expect(status).toBe(400);
     expect(body.error).toBe("TBX File is invalid: \nlxml.etree.DocumentInvalid: Did not expect element text there, line 4");

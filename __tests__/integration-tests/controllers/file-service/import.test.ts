@@ -28,7 +28,7 @@ describe("tests Import controller", () => {
     const { status, body } = (
       await requestClient
         .post("/import")
-        .attach("tbxFile", `${process.env.APP_DIR}/example_tbx/valid_tbx_core.tbx`)
+        .attach("tbxFile", `${process.env.APP_DIR}/example-tbx/valid-tbx-core.tbx`)
         .set('Cookie', [`TRG_AUTH_TOKEN=${jwt}`])
         .field({ name: uuid()})
 
@@ -42,7 +42,7 @@ describe("tests Import controller", () => {
   test("should return a response indicating an invalid tbx (no header)", async () => {
     const { status, body } = await requestClient
       .post("/import")
-      .attach("tbxFile", `${process.env.APP_DIR}/example_tbx/tbx_core_no_header.tbx`)
+      .attach("tbxFile", `${process.env.APP_DIR}/example-tbx/tbx-core-no-header.tbx`)
       .set('Cookie', [`TRG_AUTH_TOKEN=${jwt}`])
       .field({ name: uuid()});
 
@@ -54,7 +54,7 @@ describe("tests Import controller", () => {
     const { status } = await requestClient
       .post("/import")
       .set('Cookie', [`TRG_AUTH_TOKEN=${jwt}`])
-      .attach("tbxFile", `${process.env.APP_DIR}/example_tbx/tbx_core_no_header.tbx`);
+      .attach("tbxFile", `${process.env.APP_DIR}/example-tbx/tbx-core-no-header.tbx`);
 
     expect(status).toBe(400);
   });

@@ -45,7 +45,7 @@ describe("tests Export controller", () => {
 
   test("should return a response indicating a successful export request", async () => {
     const termbaseUUID = await importFile(
-      `${process.env.APP_DIR}/example_tbx/valid_tbx_core.tbx`,
+      `${process.env.APP_DIR}/example-tbx/valid-tbx-core.tbx`,
       requestClient,
     );
 

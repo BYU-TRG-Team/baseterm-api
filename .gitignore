@@ -3,4 +3,4 @@ dist/
 .env
 build/
 coverage/
-rng_validator/temp/
+rng-validator/temp/

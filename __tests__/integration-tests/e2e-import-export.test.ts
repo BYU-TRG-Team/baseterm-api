@@ -22,18 +22,18 @@ const jwt = generateJWT(
 	Role.Staff
 );
 const smallTbxFiles = [
-  `${process.env.APP_DIR}/example_tbx/valid_tbx_core.tbx`,
-  `${process.env.APP_DIR}/example_tbx/test_files/test1.tbx`,
-  `${process.env.APP_DIR}/example_tbx/test_files/test5.tbx`,
-  `${process.env.APP_DIR}/example_tbx/test_files/test6.tbx`,
-  `${process.env.APP_DIR}/example_tbx/test_files/test8.tbx`,
+  `${process.env.APP_DIR}/example-tbx/valid-tbx-core.tbx`,
+  `${process.env.APP_DIR}/example-tbx/test-files/test1.tbx`,
+  `${process.env.APP_DIR}/example-tbx/test-files/test5.tbx`,
+  `${process.env.APP_DIR}/example-tbx/test-files/test6.tbx`,
+  `${process.env.APP_DIR}/example-tbx/test-files/test8.tbx`,
 ];
 
 // const largeTbxFiles = [
-//   `${process.env.APP_DIR}/example_tbx/test_files/test2.tbx`,
-//   `${process.env.APP_DIR}/example_tbx/test_files/test3.tbx`,
-//   `${process.env.APP_DIR}/example_tbx/test_files/test4.tbx`,
-//   `${process.env.APP_DIR}/example_tbx/test_files/test7.tbx`,
+//   `${process.env.APP_DIR}/example-tbx/test-files/test2.tbx`,
+//   `${process.env.APP_DIR}/example-tbx/test-files/test3.tbx`,
+//   `${process.env.APP_DIR}/example-tbx/test-files/test4.tbx`,
+//   `${process.env.APP_DIR}/example-tbx/test-files/test7.tbx`,
 // ]
 
 describe("tests Import, Export, and Session controllers", () => {
@@ -172,13 +172,13 @@ describe("tests Import, Export, and Session controllers", () => {
     const termbaseName = uuid();
 
     await importFile(
-      `${process.env.APP_DIR}/example_tbx/valid_tbx_core.tbx`,
+      `${process.env.APP_DIR}/example-tbx/valid-tbx-core.tbx`,
       requestClient,
       termbaseName
     );
 
     await expect(importFile(
-      `${process.env.APP_DIR}/example_tbx/valid_tbx_core.tbx`,
+      `${process.env.APP_DIR}/example-tbx/valid-tbx-core.tbx`,
       requestClient,
       termbaseName
     )).rejects.toEqual(409);

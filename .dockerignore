@@ -2,7 +2,7 @@ node_modules/
 .github/
 coverage/
 dist/
-example_tbx/
+example-tbx/
 migrations/
 patches/
 Dockerfile

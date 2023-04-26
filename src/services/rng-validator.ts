@@ -11,7 +11,7 @@ class RNGValidatorService {
 
   validate(rawTbxFile: string) {
     return new Promise<void>((resolve, reject) => {
-      const tempFileDirectory = `${process.env.APP_DIR}/rng_validator/temp`;
+      const tempFileDirectory = `${process.env.APP_DIR}/rng-validator/temp`;
       
       if (!fs.existsSync(tempFileDirectory)){
         fs.mkdirSync(tempFileDirectory);
@@ -24,11 +24,11 @@ class RNGValidatorService {
         }
 
         const options = {
-          scriptPath: `${process.env.PWD}/rng_validator`,
+          scriptPath: `${process.env.PWD}/rng-validator`,
           args: [this.rawValidationFile, tempFile]
         };
   
-        PythonShell.run("rng_validator.py", options, (err) => {
+        PythonShell.run("rng-validator.py", options, (err) => {
           fs.unlinkSync(tempFile);
           if (err) return reject(err);
           resolve();
