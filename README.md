@@ -338,7 +338,7 @@ Parameters are required unless otherwise specified.
   ```
   #### Note
 
-  An example of a TbxObject can be found [in the repository](https://github.com/BYU-TRG-Team/baseterm-api/blob/main/example_tbx/tbx_object.json).
+  An example of a TbxObject can be found [in the repository](https://github.com/BYU-TRG-Team/baseterm-api/blob/main/example-tbx/tbx-object.json).
 </details>
 
 ---

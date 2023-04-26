@@ -24,7 +24,7 @@ describe("tests DeleteTermbase controller", () => {
 
   test("should return a response with no content and remove termbase from DB", async () => {
     const termbaseUUID = await importFile(
-      `${process.env.APP_DIR}/example_tbx/valid_tbx_core.tbx`,
+      `${process.env.APP_DIR}/example-tbx/valid-tbx-core.tbx`,
       requestClient,
     );
 

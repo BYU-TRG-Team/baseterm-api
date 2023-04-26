@@ -27,7 +27,7 @@ describe("tests PatchTermbase controller", () => {
     requestClient = supertest.agent(app);
 
     const termbaseUUID = await importFile(
-      `${process.env.APP_DIR}/example_tbx/valid_tbx_core.tbx`,
+      `${process.env.APP_DIR}/example-tbx/valid-tbx-core.tbx`,
       requestClient
     );
 
@@ -128,7 +128,7 @@ describe("tests PatchTermbase controller", () => {
   test("should return a 409 for duplicate name", async () => {
     const firstTermbaseName = uuid();
     await importFile(
-      `${process.env.APP_DIR}/example_tbx/valid_tbx_core.tbx`,
+      `${process.env.APP_DIR}/example-tbx/valid-tbx-core.tbx`,
       requestClient,
       firstTermbaseName,
     );
