@@ -50,16 +50,16 @@ class GetTermbasesController {
 
       const termbases = 
         totalCount === 0 ?
-        [] :
-        (
-          await this.dbClient
-            .select("*")
-            .from<dbTypes.Base>(tables.baseTable.fullTableName)
-            .paginate({
-              perPage,
-              currentPage: page,
-            })
-        ).data;
+          [] :
+          (
+            await this.dbClient
+              .select("*")
+              .from<dbTypes.Base>(tables.baseTable.fullTableName)
+              .paginate({
+                perPage,
+                currentPage: page,
+              })
+          ).data;
           
       const response: GetTermbasesEndpointResponse = {
         termbases: termbases.map((termbase) => ({

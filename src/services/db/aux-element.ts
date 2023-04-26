@@ -50,7 +50,7 @@ export class AuxElementService {
 
           case "xml_lang":
             return "xmlLang";
-            
+              
           default: 
             return key;
           }(key);
@@ -249,7 +249,7 @@ export class AuxElementService {
           types.TbxElement.DescripGrp,
         );
         break;
-         
+          
       case types.TbxElement.DescripNote:
         await pushAuxNoteElement(types.TbxElement.DescripNote);
         break;
@@ -263,7 +263,7 @@ export class AuxElementService {
           }
         );
         break;
-         
+          
       case types.TbxElement.TransacGrp: 
         await pushGroupAuxElement(
           tables.transacTable,
@@ -281,7 +281,7 @@ export class AuxElementService {
       case types.TbxElement.TransacNote:
         await pushAuxNoteElement(types.TbxElement.TransacNote);
         break;
-        
+          
       case types.TbxElement.Note:
         await pushAuxNoteElement(types.TbxElement.Note);
         break;
@@ -362,224 +362,230 @@ export class AuxElementService {
   ): Promise<void> {
     for (const auxName of elements) {
       switch(auxName) {
-        case types.TbxElement.Admin:
-          await this.helpers.deleteChildTables(
-            parentEntity,
-            tables.adminTable,
-            dbClient,
-            {
-              [`${tables.adminTable.fullTableName}.is_admin_grp`]: false,
-            }
-          );
-          break;
+      case types.TbxElement.Admin: 
+        await this.helpers.deleteChildTables(
+          parentEntity,
+          tables.adminTable,
+          dbClient,
+          {
+            [`${tables.adminTable.fullTableName}.is_admin_grp`]: false,
+          }
+        );
+        break;
 
-        case types.TbxElement.AdminGrp:
-          const adminGrpRows = await this.helpers.getChildTables<dbTypes.Admin>(
-            parentEntity,
-            tables.adminTable,
-            dbClient,
-            {
-              [`${tables.adminTable.fullTableName}.is_admin_grp`]: true,
-            }
+      case types.TbxElement.AdminGrp: {
+        const adminGrpRows = await this.helpers.getChildTables<dbTypes.Admin>(
+          parentEntity,
+          tables.adminTable,
+          dbClient,
+          {
+            [`${tables.adminTable.fullTableName}.is_admin_grp`]: true,
+          }
+        );
+
+        for (const adminGrpRow of adminGrpRows) {
+          const adminGrpEntity = new TbxEntity({
+            ...tables.adminTable,
+            uuid: adminGrpRow.uuid,
+          });
+
+          await this.deleteAuxElements(
+            adminGrpEntity,
+            [
+              types.TbxElement.AdminNote,
+              types.TbxElement.Note,
+              types.TbxElement.Ref,
+              types.TbxElement.Xref,
+            ],
+            dbClient
           );
 
-          for (const adminGrpRow of adminGrpRows) {
-            const adminGrpEntity = new TbxEntity({
-              ...tables.adminTable,
+          await dbClient<dbTypes.Admin>(tables.adminTable.fullTableName)
+            .where({
               uuid: adminGrpRow.uuid,
-            });
+            })
+            .delete();
+        }
 
-            await this.deleteAuxElements(
-              adminGrpEntity,
-              [
-                types.TbxElement.AdminNote,
-                types.TbxElement.Note,
-                types.TbxElement.Ref,
-                types.TbxElement.Xref,
-              ],
-              dbClient
-            );
+        break;
+      }
 
-            await dbClient<dbTypes.Admin>(tables.adminTable.fullTableName)
-              .where({
-                uuid: adminGrpRow.uuid,
-              })
-              .delete();
+      case types.TbxElement.AdminNote: 
+        await this.helpers.deleteChildTables(
+          parentEntity,
+          tables.auxNoteTable,
+          dbClient,
+          {
+            [`${tables.auxNoteTable.fullTableName}.is_generic_note`]: false,
           }
+        );
+            
+        break;
 
-          break;
+      case types.TbxElement.Descrip:
+        await this.helpers.deleteChildTables(
+          parentEntity,
+          tables.descripTable,
+          dbClient,
+          {
+            [`${tables.descripTable.fullTableName}.is_descrip_grp`]: false,
+          }
+        );
+            
+        break;
 
-        case types.TbxElement.AdminNote:
-          await this.helpers.deleteChildTables(
-            parentEntity,
-            tables.auxNoteTable,
-            dbClient,
-            {
-              [`${tables.auxNoteTable.fullTableName}.is_generic_note`]: false,
-            }
+      case types.TbxElement.DescripGrp: {
+        const descripGrpRows = await this.helpers.getChildTables<dbTypes.Descrip>(
+          parentEntity,
+          tables.descripTable,
+          dbClient,
+          {
+            [`${tables.descripTable.fullTableName}.is_descrip_grp`]: true,
+          }
+        );
+
+        for (const descripGrpRow of descripGrpRows) {
+          const descripGrpEntity = new TbxEntity({
+            ...tables.descripTable,
+            uuid: descripGrpRow.uuid
+          });
+
+          await this.deleteAuxElements(
+            descripGrpEntity,
+            [
+              types.TbxElement.Admin,
+              types.TbxElement.AdminGrp,
+              types.TbxElement.DescripNote,
+              types.TbxElement.Note,
+              types.TbxElement.Ref,
+              types.TbxElement.TransacGrp,
+              types.TbxElement.Xref
+            ],
+            dbClient
           );
-          
-          break;
 
-        case types.TbxElement.Descrip:
-          await this.helpers.deleteChildTables(
-            parentEntity,
-            tables.descripTable,
-            dbClient,
-            {
-              [`${tables.descripTable.fullTableName}.is_descrip_grp`]: false,
-            }
-          );
-          
-          break;
-
-        case types.TbxElement.DescripGrp:
-          const descripGrpRows = await this.helpers.getChildTables<dbTypes.Descrip>(
-            parentEntity,
-            tables.descripTable,
-            dbClient,
-            {
-              [`${tables.descripTable.fullTableName}.is_descrip_grp`]: true,
-            }
-          );
-
-          for (const descripGrpRow of descripGrpRows) {
-            const descripGrpEntity = new TbxEntity({
-              ...tables.descripTable,
+          await dbClient<dbTypes.Descrip>(tables.descripTable.fullTableName)
+            .where({
               uuid: descripGrpRow.uuid
-            });
+            })
+            .delete();
+        }
 
-            await this.deleteAuxElements(
-              descripGrpEntity,
-              [
-                types.TbxElement.Admin,
-                types.TbxElement.AdminGrp,
-                types.TbxElement.DescripNote,
-                types.TbxElement.Note,
-                types.TbxElement.Ref,
-                types.TbxElement.TransacGrp,
-                types.TbxElement.Xref
-              ],
-              dbClient
-            );
+        break;
+      }
 
-            await dbClient<dbTypes.Descrip>(tables.descripTable.fullTableName)
-              .where({
-                uuid: descripGrpRow.uuid
-              })
-              .delete();
+      case types.TbxElement.DescripNote: 
+        await this.helpers.deleteChildTables(
+          parentEntity,
+          tables.auxNoteTable,
+          dbClient,
+          {
+            [`${tables.auxNoteTable.fullTableName}.is_generic_note`]: false,
           }
+        );
+        break;
 
-          break;
+      case types.TbxElement.Transac: 
+        await this.helpers.deleteChildTables(
+          parentEntity,
+          tables.transacTable,
+          dbClient,
+          {
+            [`${tables.transacTable.fullTableName}.is_transac_grp`]: false,
+          }
+        );  
 
-        case types.TbxElement.DescripNote:
-          await this.helpers.deleteChildTables(
-            parentEntity,
-            tables.auxNoteTable,
-            dbClient,
-            {
-              [`${tables.auxNoteTable.fullTableName}.is_generic_note`]: false,
-            }
+        break;
+
+      case types.TbxElement.TransacGrp: {
+        const transacGrpRows = await this.helpers.getChildTables<dbTypes.Transac>(
+          parentEntity,
+          tables.transacTable,
+          dbClient,
+          {
+            [`${tables.transacTable.fullTableName}.is_transac_grp`]: true,
+          }
+        );
+
+        for (const transacGrpRow of transacGrpRows) {
+          const transacGrpEntity = new TbxEntity({
+            ...tables.transacTable,
+            uuid: transacGrpRow.uuid,
+          });
+
+          await this.deleteAuxElements(
+            transacGrpEntity,
+            [
+              types.TbxElement.Date,
+              types.TbxElement.Note,
+              types.TbxElement.Ref,
+              types.TbxElement.TransacNote,
+              types.TbxElement.Xref
+            ],
+            dbClient
           );
-          break;
 
-        case types.TbxElement.Transac:
-          await this.helpers.deleteChildTables(
-            parentEntity,
-            tables.transacTable,
-            dbClient,
-            {
-              [`${tables.transacTable.fullTableName}.is_transac_grp`]: false,
-            }
-          );
-
-        case types.TbxElement.TransacGrp:
-          const transacGrpRows = await this.helpers.getChildTables<dbTypes.Transac>(
-            parentEntity,
-            tables.transacTable,
-            dbClient,
-            {
-              [`${tables.transacTable.fullTableName}.is_transac_grp`]: true,
-            }
-          );
-
-          for (const transacGrpRow of transacGrpRows) {
-            const transacGrpEntity = new TbxEntity({
-              ...tables.transacTable,
+          await dbClient<dbTypes.Transac>(tables.transacTable.fullTableName)
+            .where({
               uuid: transacGrpRow.uuid,
-            });
+            })
+            .delete();
+        }
 
-            await this.deleteAuxElements(
-              transacGrpEntity,
-              [
-                types.TbxElement.Date,
-                types.TbxElement.Note,
-                types.TbxElement.Ref,
-                types.TbxElement.TransacNote,
-                types.TbxElement.Xref
-              ],
-              dbClient
-            );
+        break;
+      }
 
-            await dbClient<dbTypes.Transac>(tables.transacTable.fullTableName)
-              .where({
-                uuid: transacGrpRow.uuid,
-              })
-              .delete();
+      case types.TbxElement.TransacNote:
+        await this.helpers.deleteChildTables(
+          parentEntity,
+          tables.auxNoteTable,
+          dbClient,
+          {
+            [`${tables.auxNoteTable.fullTableName}.is_generic_note`]: false,
           }
+        );
 
-          break;
+        break;
 
-        case types.TbxElement.TransacNote:
-          await this.helpers.deleteChildTables(
-            parentEntity,
-            tables.auxNoteTable,
-            dbClient,
-            {
-              [`${tables.auxNoteTable.fullTableName}.is_generic_note`]: false,
-            }
-          );
+      case types.TbxElement.Note:
+        await this.helpers.deleteChildTables(
+          parentEntity,
+          tables.auxNoteTable,
+          dbClient,
+          {
+            [`${tables.auxNoteTable.fullTableName}.is_generic_note`]: true,
+          }
+        );
+            
+        break;
 
-          break;
+      case types.TbxElement.Ref:
+        await this.helpers.deleteChildTables(
+          parentEntity,
+          tables.refTable,
+          dbClient
+        );
 
-        case types.TbxElement.Note:
-          await this.helpers.deleteChildTables(
-            parentEntity,
-            tables.auxNoteTable,
-            dbClient,
-            {
-              [`${tables.auxNoteTable.fullTableName}.is_generic_note`]: true,
-            }
-          );
-          
-          break;
+        break;
 
-        case types.TbxElement.Ref:
-          await this.helpers.deleteChildTables(
-            parentEntity,
-            tables.refTable,
-            dbClient
-          );
+      case types.TbxElement.Xref: 
+        await this.helpers.deleteChildTables(
+          parentEntity,
+          tables.xrefTable,
+          dbClient
+        );
 
-          break;
+        break;
 
-        case types.TbxElement.Xref:
-          await this.helpers.deleteChildTables(
-            parentEntity,
-            tables.xrefTable,
-            dbClient
-          );
+      case types.TbxElement.Date: 
+        await this.helpers.deleteChildTables(
+          parentEntity,
+          tables.dateTable,
+          dbClient
+        );
 
-          break;
-
-        case types.TbxElement.Date:
-          await this.helpers.deleteChildTables(
-            parentEntity,
-            tables.dateTable,
-            dbClient
-          );
-
-          break;
+        break;
+        
       }
     }
   }
@@ -601,7 +607,7 @@ export class AuxElementService {
         types.TbxElement.Xref,
       ],
       dbClient
-    )
+    );
   }
 
   public async deleteAuxNoteLinkInfo(

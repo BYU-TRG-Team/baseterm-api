@@ -226,7 +226,6 @@ class TBXConstructor {
 
     for (const auxName of elements) {
       switch(auxName) {
-
       case types.TbxElement.Admin:
         await pushGenericAuxElement(
           types.TbxElement.Admin, 
@@ -285,7 +284,7 @@ class TBXConstructor {
           ]
         );
         break;
-         
+          
       case types.TbxElement.DescripNote:
         await pushAuxNoteElement(types.TbxElement.DescripNote);
         break;
@@ -299,7 +298,7 @@ class TBXConstructor {
           }
         );
         break;
-         
+          
       case types.TbxElement.TransacGrp: 
         await pushGroupAuxElement(
           {
@@ -320,7 +319,7 @@ class TBXConstructor {
       case types.TbxElement.TransacNote:
         await pushAuxNoteElement(types.TbxElement.TransacNote);
         break;
-        
+          
       case types.TbxElement.Note:
         await pushAuxNoteElement(types.TbxElement.Note);
         break;
@@ -345,6 +344,7 @@ class TBXConstructor {
           tables.dateTable
         );
         break;      
+        
       }
     }
 

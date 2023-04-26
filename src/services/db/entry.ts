@@ -29,7 +29,7 @@ class EntryService {
     this.helpers = helpers;
     this.auxElementService = auxElementService;
     this.langSecService = langSecService;
-    this.transactionService = transactionService
+    this.transactionService = transactionService;
   }
 
   public async deleteEntry(

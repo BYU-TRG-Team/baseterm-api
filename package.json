@@ -1,15 +1,19 @@
 {
-  "description": "BaseTerm API is an open-source API intended to be used by BaseTerm. BaseTerm API stores all termbase (terminology database) related information used by BaseTerm. The API only supports TBX-Basic files for import/export.",
+  "name": "@byu-trg/language-code-service",
+  "version": "1.3.3",
+  "description": "HTTP REST API for TermBase eXchange V3 data.",
   "main": "dist/index.js",
-  "engines": {
-    "node": "16.x"
-  },
   "scripts": {
     "build": "tsc",
     "start": "APP_DIR=$(pwd) nodemon .",
     "dev": "APP_DIR=$(pwd) tsc -w",
     "test": "bin/run_integration_tests_with_dockerized_db",
-    "migrate": "node-pg-migrate -t pgmigrations_baseterm"
+    "migrate": "node-pg-migrate -t pgmigrations_baseterm",
+    "lint": "eslint src --ext .ts",
+    "lint:fix": "eslint src --ext .ts --fix"
+  },
+  "engines": {
+    "node": "16.x"
   },
   "repository": {
     "type": "git",
@@ -73,10 +77,8 @@
     "@typescript-eslint/eslint-plugin": "^5.13.0",
     "@typescript-eslint/parser": "^5.13.0",
     "eslint": "^8.10.0",
-    "eslint-config-prettier": "^8.5.0",
     "jest": "^27.5.1",
     "jsonwebtoken": "^8.5.1",
-    "prettier": "^2.6.2",
     "supertest": "^6.2.2",
     "ts-jest": "^27.1.3",
     "typescript": "^4.6.2"

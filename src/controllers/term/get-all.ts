@@ -83,15 +83,15 @@ class GetTermsController {
 
       const termRows = 
         totalCount === 0 ?
-        [] :
-        await this.termService.getAllTerms(
-          termbaseUUID,
-          {
-            perPage,
-            currentPage: page,
-          },
-          filterOptions
-        );
+          [] :
+          await this.termService.getAllTerms(
+            termbaseUUID,
+            {
+              perPage,
+              currentPage: page,
+            },
+            filterOptions
+          );
 
       const terms: TermPartialView[] = [];
 

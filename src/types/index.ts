@@ -3,7 +3,7 @@ import { Knex } from "knex";
 export enum AppEnv {
   Dev = "dev",
   Prod = "prod"
-};
+}
 
 export type NullableString = string | null;
 export type UUID = string;

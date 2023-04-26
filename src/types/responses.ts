@@ -93,28 +93,28 @@ export interface PostPersonRefObjectEndpointResponse {
 }
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
-export interface PatchTermNoteEndpointResponse extends TermNotePreview {};
+export interface PatchTermNoteEndpointResponse extends TermNotePreview {}
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
-export interface GetTermEndpointResponse extends TermFullView {};
+export interface GetTermEndpointResponse extends TermFullView {}
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
-export interface PatchTermbaseEndpointResponse extends Termbase {};
+export interface PatchTermbaseEndpointResponse extends Termbase {}
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
-export interface PatchTermEndpointResponse extends TermPreview {}; 
+export interface PatchTermEndpointResponse extends TermPreview {} 
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
-export interface GetEntryEndpointResponse extends ConceptEntry {};
+export interface GetEntryEndpointResponse extends ConceptEntry {}
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
-export interface GetLanguageSectionEndpointResponse extends LanguageSection {};
+export interface GetLanguageSectionEndpointResponse extends LanguageSection {}
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
-export interface PatchEntryEndpointResponse extends ConceptEntryPreview {};
+export interface PatchEntryEndpointResponse extends ConceptEntryPreview {}
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
-export interface PatchLangSecEndpointResponse extends LanguageSectionPreview {};
+export interface PatchLangSecEndpointResponse extends LanguageSectionPreview {}
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
-export interface PatchAuxElementEndpointResponse extends AuxElement {};
+export interface PatchAuxElementEndpointResponse extends AuxElement {}

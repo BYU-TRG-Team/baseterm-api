@@ -15,25 +15,24 @@ export const TbxDbFieldToAttribute = (attribute: DBField) => {
   switch(attribute) {
   case DBField.datatype:
     return TBXAttribute.datatype;
-    break;
+
   case DBField.id:
     return TBXAttribute.id;
-    break;
+
   case DBField.style:
     return TBXAttribute.style;
-    break;
+
   case DBField.target:
     return TBXAttribute.target;
-    break;
+
   case DBField.type:
     return TBXAttribute.type;
-    break;
+
   case DBField.xmlLang:
     return TBXAttribute.xmlLang;
-    break;
+
   case DBField.xmlns:
-    return TBXAttribute.xmlns;
-    break;
+    return TBXAttribute.xmlns;   
   }
 };
 
@@ -63,10 +62,10 @@ export class TransactionMessage {
     if (
       this.message.length !== 0
     ) {
-      this.message += ";"
+      this.message += ";";
     }
 
-    this.message += message
+    this.message += message;
   }
 
   toString() {

@@ -51,7 +51,7 @@ class PatchEntryController {
         id
       } = req.body as {
         id?: string,
-      }
+      };
 
       if (!isValidUUID(entryUUID)) return handleNoResourceError(res);
       
@@ -118,18 +118,18 @@ class PatchEntryController {
               id: updatedId
             })
             .returning<dbTypes.ConceptEntry[]>("*")
-          ) as dbTypes.ConceptEntry;
+        ) as dbTypes.ConceptEntry;
 
-          await this.transactionService.constructTransaction(
-            termbaseUUID,
-            entryEntity,
-            {
-              transactionType: "modification",
-              userId: req.userId,
-              note: transactionMessage.toString(),
-            },
-            transac
-          );
+        await this.transactionService.constructTransaction(
+          termbaseUUID,
+          entryEntity,
+          {
+            transactionType: "modification",
+            userId: req.userId,
+            note: transactionMessage.toString(),
+          },
+          transac
+        );
 
         return updatedEntry;
       });

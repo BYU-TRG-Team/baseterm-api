@@ -39,5 +39,5 @@ export default (app: Express, di: DIContainer, routeBase: string) => {
       Role.Staff,
     ]),
     di.DeleteAuxElementController.handle.bind(di.DeleteAuxElementController),
-  )
+  );
 };

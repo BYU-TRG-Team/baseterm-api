@@ -58,7 +58,7 @@ class PostAuxElementController {
         elementType: TbxElement,
         type?: string,
         target?: string,
-      }
+      };
 
       const parentTable = this.helpers.mapTbxElementToTable(
         parentElementType
@@ -94,14 +94,14 @@ class PostAuxElementController {
           TbxElement.DescripGrp,
           TbxElement.Transac,
           TbxElement.TransacGrp
-        ].includes(elementType)
+        ].includes(elementType);
 
       const isGrp = 
         [
           TbxElement.AdminGrp,
           TbxElement.DescripGrp,
           TbxElement.TransacGrp
-        ].includes(elementType)
+        ].includes(elementType);
 
       const isNote = 
         [
@@ -111,52 +111,52 @@ class PostAuxElementController {
           TbxElement.Note,
         ].includes(elementType);
 
-        const newConceptEntryUUID = await this.dbClient.transaction(async (transac) => {
-          await transac(table.fullTableName)
-            .insert({
-              uuid: entity.uuid,
-              termbase_uuid: termbaseUUID,
-              order: await this.helpers.computeNestedNextOrder(
-                parentEntity,
-                table,
-                transac
-              ),
-              ...(type !== undefined && { type }),
-              ...(value !== undefined && { value }),
-              ...(target !== undefined && { target }),
-              ...(
-                hasGrpField &&
+      const newConceptEntryUUID = await this.dbClient.transaction(async (transac) => {
+        await transac(table.fullTableName)
+          .insert({
+            uuid: entity.uuid,
+            termbase_uuid: termbaseUUID,
+            order: await this.helpers.computeNestedNextOrder(
+              parentEntity,
+              table,
+              transac
+            ),
+            ...(type !== undefined && { type }),
+            ...(value !== undefined && { value }),
+            ...(target !== undefined && { target }),
+            ...(
+              hasGrpField &&
                 {
                   [`is_${table.tableName}_grp`]: isGrp,
                 }
-              ),
-              ...(
-                isNote &&
+            ),
+            ...(
+              isNote &&
                 {
                   ["is_generic_note"]: elementType === TbxElement.Note
                 }
-              )
-            });
+            )
+          });
 
-          await this.helpers.saveChildTable(
-            parentEntity,
-            entity,
-            transac
-          );
+        await this.helpers.saveChildTable(
+          parentEntity,
+          entity,
+          transac
+        );
 
-          return entity.uuid;
-        });
+        return entity.uuid;
+      });
 
-        return res.status(200).json({
-          uuid: newConceptEntryUUID,
-        } as PostAuxElementEndpointResponse)
-      } catch(err: any) {
-        res.status(500).json({
-          error: errorMessages.unexpectedError,
-        });
+      return res.status(200).json({
+        uuid: newConceptEntryUUID,
+      } as PostAuxElementEndpointResponse);
+    } catch(err: any) {
+      res.status(500).json({
+        error: errorMessages.unexpectedError,
+      });
   
-        this.logger.error(err);
-      }
+      this.logger.error(err);
+    }
   }
 
   private getValidator(): yup.ObjectSchema<any> {
@@ -169,7 +169,7 @@ class PostAuxElementController {
         type: yup.string().notRequired(),
         target: yup.string().notRequired(),
       }).required()
-    })
+    });
   }
 }
 

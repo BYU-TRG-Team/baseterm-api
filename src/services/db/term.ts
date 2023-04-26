@@ -606,7 +606,7 @@ class TermService {
         userId: userId,
       },
       dbClient
-    )
+    );
 
     return termEntity.uuid;
   }

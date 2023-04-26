@@ -570,11 +570,11 @@ class TBXConsumer {
       case types.TbxElement.Admin:
         for (const childElement of element[auxElement]) await this.consumeAdmin(childElement, entity, transacClient);
         break;
-        
+          
       case types.TbxElement.AdminGrp:
         for (const childElement of element[auxElement]) await this.consumeAdminGrp(childElement, entity, transacClient);  
         break;  
-        
+          
       case types.TbxElement.AdminNote:
         for (const childElement of element[auxElement]) await this.consumeAuxNote(childElement, entity, transacClient);
         break;
@@ -615,7 +615,6 @@ class TBXConsumer {
         for (const childElement of element[auxElement]) await this.consumeXref(childElement, entity, transacClient);
         break;
 
-      default:
       }
     }
   }

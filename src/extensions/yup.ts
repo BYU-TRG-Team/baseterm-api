@@ -1,5 +1,5 @@
-import * as yup from "yup"
-import { DIContainer } from "../di"
+import * as yup from "yup";
+import { DIContainer } from "../di";
 
 const constructYupExtensions = (
   di: DIContainer
@@ -11,18 +11,18 @@ const constructYupExtensions = (
       const { path, createError } = this;
       
       if (value === undefined && !options.required) {
-        return true
+        return true;
       }
 
-      const validationResponse = di.LanguageCodeService.validateLangCode(value || String(value))
+      const validationResponse = di.LanguageCodeService.validateLangCode(value || String(value));
 
       if (!validationResponse.OK) {
         return createError({ path, message: validationResponse.error });
       }
 
-      return true
+      return true;
     });
   });
-}
+};
 
-export default constructYupExtensions
+export default constructYupExtensions;

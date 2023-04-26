@@ -5,11 +5,11 @@ import * as types from "../types";
 
 class TBXValidator {
   private rngValidator: RNGValidator;
-  private languageCodeService: LanguageCodeService
+  private languageCodeService: LanguageCodeService;
 
   constructor(rngValidator: RNGValidator, languageCodeService: LanguageCodeService) {
     this.rngValidator = rngValidator;
-    this.languageCodeService = languageCodeService
+    this.languageCodeService = languageCodeService;
   }
 
   public async validate(rawTbxFile: string) {    
@@ -20,7 +20,7 @@ class TBXValidator {
     await this.rngValidator.validate(rawTbxFile);
 
     // Assert BaseTerm specific validation
-    this.assertBaseTermValidation(tbxObject)
+    this.assertBaseTermValidation(tbxObject);
 
     return tbxObject;
   }
@@ -36,28 +36,28 @@ class TBXValidator {
     }
 
     if (style !== "dca") {
-      throw new Error("TBX file must use the DCA style")
+      throw new Error("TBX file must use the DCA style");
     }
   
-    this.validateXmlLang(tbxObject)
+    this.validateXmlLang(tbxObject);
   }
 
   private validateXmlLang(tbxObject: any) {
     Object.keys(tbxObject).forEach(key => {
-      const val = tbxObject[key]
+      const val = tbxObject[key];
 
       if (key === types.TBXAttribute.xmlLang) {
-        const validationResponse = this.languageCodeService.validateLangCode(val)
+        const validationResponse = this.languageCodeService.validateLangCode(val);
 
         if (!validationResponse.OK) {
-          throw new Error(validationResponse.error)
+          throw new Error(validationResponse.error);
         }
       } else if (Array.isArray(val)) {
-        val.forEach(obj => this.validateXmlLang(obj))
+        val.forEach(obj => this.validateXmlLang(obj));
       } else if (typeof val === "object") {
-        this.validateXmlLang(val)
+        this.validateXmlLang(val);
       }
-    })
+    });
   }
 }
 

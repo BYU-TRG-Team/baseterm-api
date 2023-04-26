@@ -61,7 +61,7 @@ class PostTermController {
           req.userId,
           transac
         );
-      })
+      });
 
       res.status(200).json({
         uuid: newTermUUID,

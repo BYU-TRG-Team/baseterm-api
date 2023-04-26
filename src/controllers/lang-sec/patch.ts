@@ -37,7 +37,7 @@ class PatchLangSecController {
     try {
       await this.getValidator().validate(req);
     } catch(err) {
-      const validationError = (err as Error).message
+      const validationError = (err as Error).message;
       return handleInvalidBody(res, validationError);
     }
 
@@ -133,7 +133,7 @@ class PatchLangSecController {
           termbaseUUID: updatedLangSec.termbase_uuid,
           xmlLang: updatedLangSec.xml_lang,
         } as PatchLangSecEndpointResponse
-      )
+      );
     } catch(err: any) {
       res.status(500).json({
         error: errorMessages.unexpectedError,
@@ -149,7 +149,7 @@ class PatchLangSecController {
         langCode: yup.string().notRequired().isValidLangCode({ required: false }),
         order: yup.number().notRequired(),
       }).required()
-    })
+    });
   }
 }
 

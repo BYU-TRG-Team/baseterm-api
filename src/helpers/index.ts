@@ -17,21 +17,21 @@ class Helpers {
     const associatedTable = `${parentEntity.fullTableName}_${childTable.tableName}`;
     return (
       await dbClient(associatedTable)
-      .join(
-        childTable.fullTableName, 
-        `${childTable.fullTableName}.uuid`, 
-        "=", 
-        `${associatedTable}.${childTable.tableName}_uuid`)
-      .where({
-        [`${associatedTable}.${parentEntity.tableName}_uuid`]: parentEntity.uuid,
-        ...whereFilters,
-      })
-      .orderBy(
-        "order",
-        "asc",
-      )
-      .select<ChildType[]>("*")
-    ) as ChildType[]
+        .join(
+          childTable.fullTableName, 
+          `${childTable.fullTableName}.uuid`, 
+          "=", 
+          `${associatedTable}.${childTable.tableName}_uuid`)
+        .where({
+          [`${associatedTable}.${parentEntity.tableName}_uuid`]: parentEntity.uuid,
+          ...whereFilters,
+        })
+        .orderBy(
+          "order",
+          "asc",
+        )
+        .select<ChildType[]>("*")
+    ) as ChildType[];
   }
 
   public saveChildTable(
@@ -62,7 +62,7 @@ class Helpers {
           .where({
             uuid: childRow.uuid
           })
-          .delete()
+          .delete();
       }
     } = options;
 
@@ -129,7 +129,7 @@ class Helpers {
     return firstRow !== undefined ?
       firstRow.value :
       "";
-  };
+  }
 
   public pluckOne<DBRowList>(list: DBRowList[]){
     const firstRow = list[0];
@@ -137,7 +137,7 @@ class Helpers {
     return firstRow !== undefined ?
       firstRow :
       null;
-  };
+  }
 
   public async saveId(
     id: string, 
@@ -167,7 +167,7 @@ class Helpers {
             id,
           })
           .select("*")
-      )
+      );
 
     return idRow !== null;
   }
@@ -219,62 +219,62 @@ class Helpers {
     tbxElement: TbxElement
   ) {
     switch (tbxElement) {
-      case (TbxElement.Admin):
-        return tables.adminTable;
+    case (TbxElement.Admin):
+      return tables.adminTable;
 
-      case (TbxElement.AdminGrp):
-        return tables.adminTable;
+    case (TbxElement.AdminGrp):
+      return tables.adminTable;
 
-      case (TbxElement.Descrip):
-        return tables.descripTable;
+    case (TbxElement.Descrip):
+      return tables.descripTable;
 
-      case (TbxElement.DescripGrp):
-        return tables.descripTable;
+    case (TbxElement.DescripGrp):
+      return tables.descripTable;
 
-      case (TbxElement.Transac):
-        return tables.transacTable;
+    case (TbxElement.Transac):
+      return tables.transacTable;
 
-      case (TbxElement.TransacGrp):
-        return tables.transacTable;
+    case (TbxElement.TransacGrp):
+      return tables.transacTable;
+        
+    case (TbxElement.Note):
+      return tables.auxNoteTable;
+
+    case (TbxElement.Ref):
+      return tables.refTable;
+
+    case (TbxElement.Xref):
+      return tables.xrefTable;
+
+    case (TbxElement.Date):
+      return tables.dateTable;
+
+    case (TbxElement.AdminNote):
+      return tables.auxNoteTable;
+        
+    case (TbxElement.DescripNote):
+      return tables.auxNoteTable;
+
+    case (TbxElement.TransacNote):
+      return tables.auxNoteTable;
+
+    case (TbxElement.Term):
+      return tables.termTable;
+
+    case (TbxElement.LangSec):
+      return tables.langSecTable;
+
+    case (TbxElement.ConceptEntry):
+      return tables.conceptEntryTable;
+
+    case (TbxElement.TermNote):
+      return tables.termNoteTable;
       
-      case (TbxElement.Note):
-        return tables.auxNoteTable;
+    case (TbxElement.TermNoteGrp):
+      return tables.termNoteTable;
 
-      case (TbxElement.Ref):
-        return tables.refTable;
-
-      case (TbxElement.Xref):
-        return tables.xrefTable;
-
-      case (TbxElement.Date):
-        return tables.dateTable;
-
-      case (TbxElement.AdminNote):
-        return tables.auxNoteTable;
-      
-      case (TbxElement.DescripNote):
-        return tables.auxNoteTable;
-
-      case (TbxElement.TransacNote):
-        return tables.auxNoteTable;
-
-      case (TbxElement.Term):
-        return tables.termTable;
-
-      case (TbxElement.LangSec):
-        return tables.langSecTable;
-
-      case (TbxElement.ConceptEntry):
-        return tables.conceptEntryTable;
-
-      case (TbxElement.TermNote):
-        return tables.termNoteTable;
-    
-      case (TbxElement.TermNoteGrp):
-        return tables.termNoteTable;
-
-      default:
-        return null;
+    default:
+      return null;
     }
   }
 }

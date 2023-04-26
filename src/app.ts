@@ -50,7 +50,7 @@ const constructServer = (app: Express) => {
   constructRefObjectRoutes(app, di, routeBase);
 
   // extensions
-  constructYupExtensions(di)
+  constructYupExtensions(di);
 
   // Default error handler
   app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
@@ -63,7 +63,7 @@ const constructServer = (app: Express) => {
 
   return async () => {
     await di.DBClient.destroy();
-  }
+  };
 };
 
 export default constructServer;

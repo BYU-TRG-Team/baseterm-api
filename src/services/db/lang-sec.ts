@@ -16,7 +16,7 @@ class LangSecService {
   private helpers: Helpers;
   private auxElementService: AuxElementService;
   private termService: TermService;
-  private transactionService: TransactionService
+  private transactionService: TransactionService;
  
   constructor(
     dbClient: Knex<any, unknown[]>,
@@ -65,7 +65,7 @@ class LangSecService {
       .where({
         uuid: langSecEntity.uuid,
       })
-      .delete()
+      .delete();
   }
 
   public async constructLangSec(

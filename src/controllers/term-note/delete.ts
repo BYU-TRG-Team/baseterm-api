@@ -9,7 +9,7 @@ import TermNoteService from "../../services/db/term-note";
 class DeleteTermNoteController {
   private dbClient: Knex<any, unknown[]>;
   private logger: Logger;
-  private termNoteService: TermNoteService
+  private termNoteService: TermNoteService;
 
   constructor(
     dbClient: Knex<any, unknown[]>,
@@ -43,12 +43,12 @@ class DeleteTermNoteController {
       return res.status(204).send();
 
     } catch(err: any) {
-        res.status(500).json({
-          error: errorMessages.unexpectedError,
-        });
+      res.status(500).json({
+        error: errorMessages.unexpectedError,
+      });
 
-        this.logger.error(err);
-      }
+      this.logger.error(err);
+    }
   }
 }
 
