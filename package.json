@@ -10,7 +10,8 @@
     "test": "bin/run_integration_tests_with_dockerized_db",
     "migrate": "node-pg-migrate -t pgmigrations_baseterm",
     "lint": "eslint src --ext .ts",
-    "lint:fix": "eslint src --ext .ts --fix"
+    "lint:fix": "eslint src --ext .ts --fix",
+    "prepare": "husky install"
   },
   "engines": {
     "node": "16.x"
@@ -77,6 +78,7 @@
     "@typescript-eslint/eslint-plugin": "^5.13.0",
     "@typescript-eslint/parser": "^5.13.0",
     "eslint": "^8.10.0",
+    "husky": "^8.0.3",
     "jest": "^27.5.1",
     "jsonwebtoken": "^8.5.1",
     "supertest": "^6.2.2",
