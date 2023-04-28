@@ -4,10 +4,10 @@ coverage/
 dist/
 example-tbx/
 migrations/
-patches/
+db_patches/
 Dockerfile
 .env
 .env.example
 .gitignore
 Procfile
-.eslintrc.js
+.eslintrc
