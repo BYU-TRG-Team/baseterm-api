@@ -1,10 +1,12 @@
 #!/bin/bash
 
 ########################
-# Patch for missing back element for refObjectSec elements created in BaseTerm
+# DB patch for v1.4.0
+#
+# - Adds missing back element for created refObjectSec elements 
 #
 # Arguments:
-# $1: postgresql url
+# $1: PostgreSQL connection string 
 ########################
 
 set -o xtrace
