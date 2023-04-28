@@ -1,10 +1,12 @@
-FROM node:16
+FROM node:16-bullseye-slim
 WORKDIR /usr/src/app
 COPY . .
 
-# install python3
-# install node modules
-# build app
-# install python dependencies
-RUN apt-get update && apt-get install -y python3 python3-pip && npm ci && npm run build && pip3 install -r requirements.txt && npm prune --production
+RUN apt update && \ 
+    apt upgrade -y && \
+    apt install -y python3.9 python3-pip && \
+    pip3 install -r requirements.txt && \
+    npm ci && \
+    npm run build && \ 
+    npm prune --production
 CMD npm run start

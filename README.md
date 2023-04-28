@@ -1,10 +1,11 @@
 # BaseTerm API
 
-Express.js HTTP REST API and PostgreSQL schemas built for [TBX](https://www.tbxinfo.net) v3. The API currently supports only the TBX-Basic dialect. The API and PostgreSQL schemas are part of the [BaseTerm](https://github.com/BYU-TRG-Team/baseterm) web application.
+Express.js HTTP REST API and PostgreSQL schemas built for [TBX](https://www.tbxinfo.net) v3. The API currently supports the TBX-Basic dialect. The API and PostgreSQL schemas are part of the [BaseTerm](https://github.com/BYU-TRG-Team/baseterm) web application.
 
 ## Installation
 
 ### Contact the BYU TRG
+
 Before installing any instance of the BaseTerm API, please reach out to the BYU TRG at byutrg@gmail.com to establish a dialogue with the team. Please include any necessary contact info so that we can reach out to you for important version updates.
 
 ### Server Requirements
@@ -13,27 +14,87 @@ Before installing any instance of the BaseTerm API, please reach out to the BYU 
 - Node.js 16.x
 - Python 3.9.x
 
-### Setup NPM and a PostgreSQL instance
+### Install NPM
 
-- NPM (Node Package Manager) will be needed for the installation of the BaseTerm API application. Please reference the [NPM documentation](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm) for setup.
-- A PostgreSQL instance will be needed for the BaseTerm API application. A database will also need to be created in the PostgreSQL instance. Please reference the [PostgreSQL downloads](https://www.postgresql.org/download/) for installers for various platforms.
+Install NPM on the host machine. Please reference the [NPM documentation](https://docs.npmjs.com) for setup.
 
-### Third Party Requirements 
+### Setup PostgreSQL instance
+
+A PostgreSQL (postgres) instance will be needed for the BaseTerm API application. A database will also need to be created in the postgres instance. 
+
+#### Install
+
+Please reference the [postgres downloads](https://www.postgresql.org/download/) for installers for various platforms.
+
+#### Setup database schemas
+
+The postgres database will need to be setup with proper schemas using the [node-pg-migrate](https://www.npmjs.com/package/node-pg-migrate) postgres migration tool. The tool first needs to be installed using NPM. Once installed, the tool is run with a connection string for the postgres database.
+
+```
+npm ci
+```
+
+```
+DATABASE_URL=<postgres database connection string> npm run migrate up
+```
+
+Please reference the [node-pg-migrate](https://www.npmjs.com/package/node-pg-migrate) docs for further use of this migration tool.
+
+
+### Build and deploy API
+
+#### Third Party Requirements 
 
 - **Rollbar logging token**.  Please contact the BYU TRG team to obtain this token.
 
-### Environment Variables
+#### Environment Variables
 
 ```
 APP_ENV=<dev | prod>
 PORT=<port number>
-DATABASE_URL=<url for the BaseTerm API database>
+DATABASE_URL=<postgres database connection string>
 ROLLBAR_API_TOKEN=<Rollbar logging token>
 AUTH_SECRET=<64-bit CSPRNG secret>
-MAX_CONNECTION_POOL=<Max connections to pool for Postgres (default is 20)> *Not required*
+MAX_CONNECTION_POOL=<Max connections to pool for postgres database (default is 20)> *Not required*
 ```
 
-### Build
+#### Build and deploy with Docker
+
+##### Install Docker 
+
+[Install the Docker Engine](https://docs.docker.com/engine/install) on the host machine. Docker Engine is currently available on a variety of **Linux distros, macOS, and Windows 10 through Docker Desktop, and as a static binary installation**.
+
+##### Create a Docker image
+
+*Example*
+
+```
+docker build --tag baseterm-api .
+```
+
+##### Run the docker container
+
+*Example*
+
+```
+docker run \
+  -d \
+  --expose 3000 \
+  -p 3000:3000 \
+  --env-file ".env" \
+  --name "baseterm-api" \
+  baseterm-api
+```
+
+#### Build and deploy directly from host machine
+
+**Currently works on Linux, macOS, and Windows.**
+
+##### Install Python
+
+Install Python 3.9.x on the host machine. Please reference the [Python documentation](https://www.python.org/doc) for setup.
+
+##### Build
 
 ```
 npm ci
@@ -47,31 +108,40 @@ npm run build
 pip3 install -r requirements.txt
 ```
 
-### Database Configuration (PostgreSQL migrations)
+##### Prune extraneous dependencies
 
-**This step makes used of NPM packages installed from build.**
+If you are deploying in a production environment, node modules only needed for building and testing (i.e. dev dependencies) can be safely removed at this point. 
 
-#### Migrate up
-```
-DATABASE_URL=<url for the BaseTerm API database> npm run migrate up
-```
+**Dev dependencies will need to be installed to utilize development mode.**
 
-#### Migrate down
 ```
-DATABASE_URL=<url for the BaseTerm API database> npm run migrate down
+npm prune --production
 ```
 
-### Launch 
+##### Launch 
 
 ```
 npm run start
 ```
 
-### Development Mode
-The launch script above will automatically restart the server on a rebuild. To trigger a rebuild everytime an edit is made, the following command can be run in a separate shell: 
+This launches a background process using [pm2](https://www.npmjs.com/package/pm2) and opens up the pm2 monitor. This monitor need not be kept open. Please reference the [pm2](https://www.npmjs.com/package/pm2) docs for interacting with the process. 
+
+## API Development Mode
+
+Development mode triggers a rebuild and redeployment whenever an edit in `src/` is made. 
+
+The steps in [Build and deploy API](#build-and-deploy-api) (without Docker) are prerequisites for development mode. 
+
+**Dev dependencies will need to be installed to utilize development mode.**
+
+To run the API in development mode, the following commands need to be run alongside each other: 
 
 ```
-npm run dev
+npm run start:dev
+```
+
+```
+npm run hot-reload
 ```
 
 ## Schemas

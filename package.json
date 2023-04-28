@@ -4,10 +4,10 @@
   "description": "HTTP REST API for TermBase eXchange V3 data.",
   "main": "dist/src/index.js",
   "scripts": {
-    "build": "rm -rf dist/ && tsc",
+    "build": "rm -rf dist/ && tsc && resolve-tspaths",
     "dev": "APP_DIR=$(pwd) tsc -w",
     "start:dev": "APP_DIR=$(pwd) nodemon .",
-    "start:prod": "pm2 start dist/index.js -n baseterm-api && pm2 monit",
+    "start:prod": "pm2 start dist/src/index.js -n baseterm-api && pm2 monit",
     "start": "npm run start:prod",
     "hot-reload": "APP_DIR=$(pwd) tsc -w",
     "test": "bin/run_integration_tests_with_dockerized_db",
@@ -85,6 +85,7 @@
     "jest": "^27.5.1",
     "jsonwebtoken": "^8.5.1",
     "nodemon": "^2.0.22",
+    "resolve-tspaths": "^0.8.13",
     "supertest": "^6.2.2",
     "ts-jest": "^27.1.3",
     "typescript": "^4.6.2"
