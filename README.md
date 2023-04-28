@@ -1,6 +1,6 @@
 # BaseTerm API
 
-Express.js REST API that supports the [BaseTerm](https://github.com/BYU-TRG-Team/baseterm) application. The API is compatible with any TBX dialect since the underlying logic and PostgreSQL schemas follow the Core dialect. However, in order to support the BaseTerm application (which currently only supports TBX-Basic), the import endpoint currently rejects any TBX files that are not TBX-Basic. 
+Express.js HTTP REST API and PostgreSQL schemas built for [TBX](www.tbxinfo.net) v3. The API currently supports only the TBX-Basic dialect. The API and PostgreSQL schemas are part of the [BaseTerm](https://github.com/BYU-TRG-Team/baseterm) web application.
 
 ## Installation
 
@@ -11,7 +11,7 @@ Before installing any instance of the BaseTerm API, please reach out to the BYU 
 
 - PostgreSQL 14.x
 - Node.js 16.x
-- Python 3.x
+- Python 3.9.x
 
 ### Setup NPM and a PostgreSQL instance
 
