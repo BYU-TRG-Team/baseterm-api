@@ -21,7 +21,7 @@ import cors from "cors";
 import errorMessages from "@messages/errors";
 
 const constructServer = (app: Express) => {
-  const routeBase = process.env.API_ROUTE_BASE || "";
+  const routeBase = process.env.API_ROUTE_BASE ? `/${process.env.API_ROUTE_BASE}` : "";
 
   // Middleware
   app.use(bodyParser.json());
