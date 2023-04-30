@@ -55,7 +55,8 @@ PORT=<port number>
 DATABASE_URL=<postgres database connection string>
 AUTH_SECRET=<64-bit CSPRNG secret>
 ROLLBAR_API_TOKEN=<Rollbar logging token> *Not required*
-MAX_CONNECTION_POOL=<Max connections to pool for postgres database (default is 20)> *Not required*
+MAX_CONNECTION_POOL=<Max connections to pool for postgres database. Default is 20.> *Not required*
+API_ROUTE_BASE=<API endpoint route base. Should not end with a forward slash (ex. baseterm/api). Default is an empty string.> *Not required*
 ```
 
 #### Build and deploy with Docker

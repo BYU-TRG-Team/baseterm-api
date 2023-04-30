@@ -1,4 +1,3 @@
-import "dotenv/config";
 import  constructServer from "@app";
 import supertest, { SuperAgentTest } from "supertest";
 import express from "express";
