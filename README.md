@@ -45,7 +45,7 @@ Please reference the [node-pg-migrate](https://www.npmjs.com/package/node-pg-mig
 
 #### Third Party Requirements 
 
-- **Rollbar logging token**.  Please contact the BYU TRG team to obtain this token.
+- **Rollbar logging token** (optional).  Please contact the BYU TRG team to obtain this token. This is used to capture error logs.
 
 #### Environment Variables
 
@@ -53,8 +53,8 @@ Please reference the [node-pg-migrate](https://www.npmjs.com/package/node-pg-mig
 APP_ENV=<dev | prod>
 PORT=<port number>
 DATABASE_URL=<postgres database connection string>
-ROLLBAR_API_TOKEN=<Rollbar logging token>
 AUTH_SECRET=<64-bit CSPRNG secret>
+ROLLBAR_API_TOKEN=<Rollbar logging token> *Not required*
 MAX_CONNECTION_POOL=<Max connections to pool for postgres database (default is 20)> *Not required*
 ```
 
