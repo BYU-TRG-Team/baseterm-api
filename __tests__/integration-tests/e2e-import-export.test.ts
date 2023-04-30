@@ -1,4 +1,3 @@
-import "dotenv/config";
 import supertest, { SuperAgentTest } from "supertest";
 import express from "express";
 import { diffAsXml} from "diff-js-xml";

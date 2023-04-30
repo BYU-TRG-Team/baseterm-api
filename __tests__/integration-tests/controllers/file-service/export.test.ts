@@ -1,4 +1,3 @@
-import "dotenv/config";
 import supertest, { SuperAgentTest } from "supertest";
 import { ExportEndpointResponse } from "@typings/responses";
 import express from "express";
