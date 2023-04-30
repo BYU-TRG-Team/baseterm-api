@@ -110,9 +110,7 @@ pip3 install -r requirements.txt
 
 ##### Prune extraneous dependencies
 
-If you are deploying in a production environment, node modules only needed for building and testing (i.e. dev dependencies) can be safely removed at this point. 
-
-**Dev dependencies will need to be installed to utilize development mode.**
+If you are deploying in a production environment, node modules used for building and testing (i.e. dev dependencies) can be safely removed at this point. 
 
 ```
 npm prune --production
@@ -126,23 +124,6 @@ npm run start
 
 This launches a background process using [pm2](https://www.npmjs.com/package/pm2) and opens up the pm2 monitor. This monitor need not be kept open. Please reference the [pm2](https://www.npmjs.com/package/pm2) docs for interacting with the process. 
 
-## API Development Mode
-
-Development mode triggers a rebuild and redeployment whenever an edit in `src/` is made. 
-
-The steps in [Build and deploy API](#build-and-deploy-api) (without Docker) are prerequisites for development mode. 
-
-**Dev dependencies will need to be installed to utilize development mode.**
-
-To run the API in development mode, the following commands need to be run alongside each other: 
-
-```
-npm run start:dev
-```
-
-```
-npm run hot-reload
-```
 
 ## Schemas
 
