@@ -19,7 +19,6 @@ export DATABASE_URL=postgres://"${POSTGRES_USER}":"${POSTGRES_PW}"@"${POSTGRES_H
 export APP_ENV=dev
 export NODE_ENV=development
 export AUTH_SECRET=killjoy
-export APP_DIR="${PACKAGE_DIR}"
 
 function cleanup() {
   docker rm -f "${POSTGRES_CONTAINER_NAME}"

@@ -6,6 +6,7 @@ import { uuid } from "uuidv4";
 import { generateJWT, importFile } from "@tests/helpers";
 import constructServer from "@app";
 import { Role } from "@byu-trg/express-user-management";
+import { APP_ROOT } from "@constants";
 
 let handleShutDown: () => Promise<void>;
 let requestClient: SuperAgentTest;
@@ -44,7 +45,7 @@ describe("tests Export controller", () => {
 
   test("should return a response indicating a successful export request", async () => {
     const termbaseUUID = await importFile(
-      `${process.env.APP_DIR}/example-tbx/valid-tbx-core.tbx`,
+      `${APP_ROOT}/example-tbx/valid-tbx-core.tbx`,
       requestClient,
     );
 

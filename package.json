@@ -29,6 +29,7 @@
     "@byu-trg/express-user-management": "^1.0.1",
     "@byu-trg/language-code-service": "^1.1.4",
     "@datastructures-js/priority-queue": "^6.0.0",
+    "app-root-path": "^3.1.0",
     "body-parser": "^1.19.2",
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",

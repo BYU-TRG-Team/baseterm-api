@@ -8,6 +8,7 @@ import { TermNote, UUID } from "@typings";
 import { VALID_LANGUAGE_CODE } from "@tests/constants";
 import { SuperAgentResponse } from "@tests/types";
 import { Role } from "@byu-trg/express-user-management";
+import { APP_ROOT } from "@constants";
 
 let requestClient: SuperAgentTest;
 let handleShutDown: () => Promise<void>;
@@ -30,7 +31,7 @@ describe("tests PatchTermNote controller", () => {
     handleShutDown = await constructServer(app);
     requestClient = supertest.agent(app);
     const termbaseUUID = await importFile(
-      `${process.env.APP_DIR}/example-tbx/valid-tbx-core.tbx`,
+      `${APP_ROOT}/example-tbx/valid-tbx-core.tbx`,
       requestClient
     );
 

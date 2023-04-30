@@ -18,6 +18,7 @@
   "moduleNameMapper": {
     "^@$": "<rootDir>/src",
     "^@app$": "<rootDir>/src/app",
+    "^@constants$": "<rootDir>/src/constants",
     "^@controllers/(.*)$": "<rootDir>/src/controllers/$1",
     "^@db$": "<rootDir>/src/db",
     "^@db/(.*)$": "<rootDir>/src/db/$1",

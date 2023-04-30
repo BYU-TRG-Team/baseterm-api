@@ -4,6 +4,7 @@ import supertest, { SuperAgentTest } from "supertest";
 import express from "express";
 import { generateJWT, importFile } from "@tests/helpers";
 import { Role } from "@byu-trg/express-user-management";
+import { APP_ROOT } from "@constants";
 
 let handleShutDown: () => Promise<void>;
 let requestClient: SuperAgentTest;
@@ -24,7 +25,7 @@ describe("tests DeleteTermbase controller", () => {
 
   test("should return a response with no content and remove termbase from DB", async () => {
     const termbaseUUID = await importFile(
-      `${process.env.APP_DIR}/example-tbx/valid-tbx-core.tbx`,
+      `${APP_ROOT}/example-tbx/valid-tbx-core.tbx`,
       requestClient,
     );
 

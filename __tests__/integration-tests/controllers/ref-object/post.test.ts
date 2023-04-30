@@ -12,6 +12,7 @@ import errorMessages from "@messages/errors";
 import { SuperAgentResponse } from "@tests/types";
 import { Role } from "@byu-trg/express-user-management";
 import { uuid } from "uuidv4";
+import { APP_ROOT } from "@constants";
 
 let requestClient: SuperAgentTest;
 let handleShutDown: () => Promise<void>;
@@ -34,7 +35,7 @@ describe("tests PostPersonRefObject controller", () => {
     handleShutDown = await constructServer(app);
     requestClient = supertest.agent(app);
     const termbaseUUID = await importFile(
-      `${process.env.APP_DIR}/example-tbx/valid-tbx-core.tbx`,
+      `${APP_ROOT}/example-tbx/valid-tbx-core.tbx`,
       requestClient
     );
 
