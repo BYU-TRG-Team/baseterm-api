@@ -60,7 +60,7 @@ docker run \
   -p "${POSTGRES_PORT}":"${POSTGRES_PORT}" \
   "${POSTGRES_IMAGE}" > /dev/null 2>&1
 
-printf "Running pg migratons\n"
+printf "Running pg migrations\n"
 run_pg_migrations
 npm exec --prefix "${PACKAGE_DIR}" -- jest --coverage --forceExit
 
