@@ -19,6 +19,9 @@
       "@app": [
         "./src/app"
       ],
+      "@constants": [
+        "./src/constants"
+      ],
       "@controllers/*": [
         "./src/controllers/*"
       ],

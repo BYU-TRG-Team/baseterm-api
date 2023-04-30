@@ -8,6 +8,7 @@ import { VALID_LANGUAGE_CODE } from "@tests/constants";
 import { UUID } from "@typings";
 import { Role } from "@byu-trg/express-user-management";
 import { uuid } from "uuidv4";
+import { APP_ROOT } from "@constants";
 
 let requestClient: SuperAgentTest;
 let handleShutDown: () => Promise<void>;
@@ -28,7 +29,7 @@ describe("tests PostEntry controller", () => {
     requestClient = supertest.agent(app);
 
     const termbaseUUID = await importFile(
-      `${process.env.APP_DIR}/example-tbx/valid-tbx-core.tbx`,
+      `${APP_ROOT}/example-tbx/valid-tbx-core.tbx`,
       requestClient,
       uuid(),
       personId

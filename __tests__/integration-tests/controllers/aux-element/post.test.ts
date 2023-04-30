@@ -7,6 +7,7 @@ import { PostAuxElementEndpointResponse } from "@typings/responses";
 import { UUID, TbxElement } from "@typings";
 import { SuperAgentResponse } from "@tests/types";
 import { Role } from "@byu-trg/express-user-management";
+import { APP_ROOT } from "@constants";
 
 let requestClient: SuperAgentTest;
 let handleShutDown: () => Promise<void>;
@@ -28,7 +29,7 @@ describe("tests PostAuxElement controller", () => {
     handleShutDown = await constructServer(app);
     requestClient = supertest.agent(app);
     const termbaseUUID = await importFile(
-      `${process.env.APP_DIR}/example-tbx/valid-tbx-core.tbx`,
+      `${APP_ROOT}/example-tbx/valid-tbx-core.tbx`,
       requestClient
     );
 

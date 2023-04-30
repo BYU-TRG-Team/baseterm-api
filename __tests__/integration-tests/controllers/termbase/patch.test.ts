@@ -10,6 +10,7 @@ import {
 } from "@typings/responses";
 import { UUID } from "@typings";
 import { Role } from "@byu-trg/express-user-management";
+import { APP_ROOT } from "@constants";
 
 let requestClient: SuperAgentTest;
 let handleShutDown: () => Promise<void>;
@@ -27,7 +28,7 @@ describe("tests PatchTermbase controller", () => {
     requestClient = supertest.agent(app);
 
     const termbaseUUID = await importFile(
-      `${process.env.APP_DIR}/example-tbx/valid-tbx-core.tbx`,
+      `${APP_ROOT}/example-tbx/valid-tbx-core.tbx`,
       requestClient
     );
 
@@ -128,7 +129,7 @@ describe("tests PatchTermbase controller", () => {
   test("should return a 409 for duplicate name", async () => {
     const firstTermbaseName = uuid();
     await importFile(
-      `${process.env.APP_DIR}/example-tbx/valid-tbx-core.tbx`,
+      `${APP_ROOT}/example-tbx/valid-tbx-core.tbx`,
       requestClient,
       firstTermbaseName,
     );

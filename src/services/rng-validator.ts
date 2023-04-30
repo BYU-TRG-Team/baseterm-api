@@ -1,6 +1,7 @@
 import { PythonShell } from "python-shell";
 import fs from "fs";
 import { uuid } from "uuidv4";
+import { APP_ROOT } from "@constants";
 
 class RNGValidatorService {
   private rawValidationFile: string;
@@ -11,7 +12,7 @@ class RNGValidatorService {
 
   validate(rawTbxFile: string) {
     return new Promise<void>((resolve, reject) => {
-      const tempFileDirectory = `${process.env.APP_DIR}/rng-validator/temp`;
+      const tempFileDirectory = `${APP_ROOT}/rng-validator/temp`;
       
       if (!fs.existsSync(tempFileDirectory)){
         fs.mkdirSync(tempFileDirectory);
@@ -24,7 +25,7 @@ class RNGValidatorService {
         }
 
         const options = {
-          scriptPath: `${process.env.APP_DIR}/rng-validator`,
+          scriptPath: `${APP_ROOT}/rng-validator`,
           args: [this.rawValidationFile, tempFile]
         };
   

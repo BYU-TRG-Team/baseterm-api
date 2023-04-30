@@ -6,6 +6,7 @@ import { uuid } from "uuidv4";
 import { ImportEndpointResponse } from "@typings/responses";
 import { generateJWT } from "@tests/helpers";
 import { Role } from "@byu-trg/express-user-management";
+import { APP_ROOT } from "@constants";
 
 let requestClient: SuperAgentTest;
 let handleShutDown: () => Promise<void>;
@@ -28,7 +29,7 @@ describe("tests Import controller", () => {
     const { status, body } = (
       await requestClient
         .post("/import")
-        .attach("tbxFile", `${process.env.APP_DIR}/example-tbx/valid-tbx-core.tbx`)
+        .attach("tbxFile", `${APP_ROOT}/example-tbx/valid-tbx-core.tbx`)
         .set('Cookie', [`TRG_AUTH_TOKEN=${jwt}`])
         .field({ name: uuid()})
 
@@ -42,7 +43,7 @@ describe("tests Import controller", () => {
   test("should return a response indicating an invalid tbx (no header)", async () => {
     const { status, body } = await requestClient
       .post("/import")
-      .attach("tbxFile", `${process.env.APP_DIR}/example-tbx/tbx-core-no-header.tbx`)
+      .attach("tbxFile", `${APP_ROOT}/example-tbx/tbx-core-no-header.tbx`)
       .set('Cookie', [`TRG_AUTH_TOKEN=${jwt}`])
       .field({ name: uuid()});
 
@@ -54,7 +55,7 @@ describe("tests Import controller", () => {
     const { status } = await requestClient
       .post("/import")
       .set('Cookie', [`TRG_AUTH_TOKEN=${jwt}`])
-      .attach("tbxFile", `${process.env.APP_DIR}/example-tbx/tbx-core-no-header.tbx`);
+      .attach("tbxFile", `${APP_ROOT}/example-tbx/tbx-core-no-header.tbx`);
 
     expect(status).toBe(400);
   });

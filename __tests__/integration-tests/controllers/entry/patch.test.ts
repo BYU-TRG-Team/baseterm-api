@@ -7,6 +7,7 @@ import { fetchMockTermbaseData, generateJWT, importFile } from "@tests/helpers";
 import { PatchEntryEndpointResponse } from "@typings/responses";
 import { Role } from "@byu-trg/express-user-management";
 import { UUID } from "@typings";
+import { APP_ROOT } from "@constants";
 
 let requestClient: SuperAgentTest;
 let handleShutDown: () => Promise<void>;
@@ -28,7 +29,7 @@ describe("tests PatchEntry controller", () => {
     requestClient = supertest.agent(app);
 
     const termbaseUUID = await importFile(
-      `${process.env.APP_DIR}/example-tbx/valid-tbx-core.tbx`,
+      `${APP_ROOT}/example-tbx/valid-tbx-core.tbx`,
       requestClient,
       uuid(),
       personId,

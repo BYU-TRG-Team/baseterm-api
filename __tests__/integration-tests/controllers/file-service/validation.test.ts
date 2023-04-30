@@ -3,6 +3,7 @@ import constructServer from "@app";
 import supertest, { SuperAgentTest } from "supertest";
 import express from "express";
 import { ValidationEndpointResponse } from "@typings/responses";
+import { APP_ROOT } from "@constants";
 
 let requestClient: SuperAgentTest;
 let handleShutDown: () => Promise<void>;
@@ -22,7 +23,7 @@ describe("tests Validation controller", () => {
     const { status, body } = (
       await requestClient
         .post("/validate")
-        .attach("tbxFile", `${process.env.APP_DIR}/example-tbx/valid-tbx-core.tbx`)
+        .attach("tbxFile", `${APP_ROOT}/example-tbx/valid-tbx-core.tbx`)
     ) as { status: number, body: ValidationEndpointResponse };
 
 
@@ -33,7 +34,7 @@ describe("tests Validation controller", () => {
   test("should return a response indicating an invalid tbx (no header)", async () => {
     const { status, body } = await requestClient
       .post("/validate")
-      .attach("tbxFile", `${process.env.APP_DIR}/example-tbx/tbx-core-no-header.tbx`);
+      .attach("tbxFile", `${APP_ROOT}/example-tbx/tbx-core-no-header.tbx`);
 
     expect(status).toBe(400);
     expect(body.error).toBe("TBX File is invalid: \nlxml.etree.DocumentInvalid: Did not expect element text there, line 4");
