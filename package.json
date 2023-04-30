@@ -1,6 +1,6 @@
 {
   "name": "@byu-trg/language-code-service",
-  "version": "1.4.0",
+  "version": "1.4.1",
   "description": "HTTP REST API for TermBase eXchange V3 data.",
   "main": "dist/src/index.js",
   "scripts": {
