@@ -1,0 +1,33 @@
+version: "3.9"
+services:
+  db:
+    image: postgres:14
+    environment:
+      POSTGRES_PASSWORD: test-pw
+      POSTGRES_USER: test-user
+      POSTGRES_DB: baseterm
+    hostname: baseterm-pg-instance
+    networks:
+      - baseterm-integration-tests-net
+  migrations:
+    image: baseterm-api:dev
+    depends_on:
+    - db
+    environment:
+    - DATABASE_URL=postgres://test-user:test-pw@baseterm-pg-instance:5432/baseterm
+    entrypoint: [
+      "./wait-for-it/wait-for-it.sh",
+      "baseterm-pg-instance:5432", 
+      "--", 
+      "npm", 
+      "run", 
+      "migrate", 
+      "up"
+    ]
+    networks:
+      - baseterm-integration-tests-net
+networks:
+  baseterm-integration-tests-net:
+    driver: bridge
+    name: baseterm-integration-tests-net
+

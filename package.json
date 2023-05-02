@@ -6,7 +6,7 @@
   "scripts": {
     "build": "rm -rf dist/ && tsc && resolve-tspaths",
     "start": "pm2 start dist/src/index.js -n baseterm-api && pm2 monit",
-    "test": "bin/run_integration_tests_with_dockerized_db",
+    "integration-tests": "bin/run_integration_tests_with_dockerized_db",
     "migrate": "node-pg-migrate -t pgmigrations_baseterm",
     "lint": "eslint src --ext .ts",
     "lint:fix": "eslint src --ext .ts --fix",

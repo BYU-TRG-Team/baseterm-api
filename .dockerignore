@@ -3,7 +3,6 @@
 coverage/
 db_patches/
 dist/
-migrations/
 node_modules/
 .dockerignore
 .env

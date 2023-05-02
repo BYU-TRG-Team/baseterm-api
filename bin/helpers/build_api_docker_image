@@ -1,0 +1,48 @@
+#!/bin/bash
+
+
+SCRIPT_DIR="$(dirname "${BASH_SOURCE[0]}")"
+readonly SCRIPT_DIR
+PACKAGE_DIR="$(realpath "${SCRIPT_DIR}"/../..)"
+readonly PACKAGE_DIR
+ENV=production
+
+function usage() {
+  declare -r -i exitval=${1-1}
+  cat &>/dev/stderr <<USAGE
+usage:
+  $0 <options>
+    --tag          Tag for docker image (ex. baseterm-api)
+    --development  Builds docker image with ENV variable set to "development"
+    --force        Rebuilds docker image even if the image already exists
+
+USAGE
+  exit ${exitval}
+}
+
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    --tag)
+      TAG="$2"
+      shift 2
+      ;;
+    --development)
+      ENV=development
+      shift 1
+      ;;
+    -h | --help) usage 0 ;;
+    *)
+      printf "Unrecognized arg: %s\n" "$2"
+      usage
+      ;;
+  esac
+done
+
+: "${TAG:?"--tag for docker image must be supplied"}"
+
+docker rm --force "${TAG}" > /dev/null 2>&1
+printf "Building API docker image with tag \"%s\"\n" "${TAG}"
+docker build \
+  --tag "${TAG}" \
+  --build-arg ENV="${ENV}" \
+  "${PACKAGE_DIR}"
