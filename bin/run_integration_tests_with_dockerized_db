@@ -2,65 +2,24 @@
 
 set -e
 
-SCRIPT_DIR="$(dirname "$(readlink -f "${BASH_SOURCE[0]}")")"
+SCRIPT_DIR="$(dirname "${BASH_SOURCE[0]}")"
 readonly SCRIPT_DIR
-PACKAGE_DIR="$(realpath "${SCRIPT_DIR}/..")"
-readonly PACKAGE_DIR
-
-declare -r POSTGRES_CONTAINER_NAME=baseterm-api-pg-test
-declare -r POSTGRES_PW=test-pw
-declare -r POSTGRES_USER=test-user
-declare -r POSTGRES_DB=baseterm
-declare -r POSTGRES_IMAGE=postgres:14
-declare -r POSTGRES_HOST=localhost
-declare -r POSTGRES_PORT=5432
-
-export DATABASE_URL=postgres://"${POSTGRES_USER}":"${POSTGRES_PW}"@"${POSTGRES_HOST}":${POSTGRES_PORT}/"${POSTGRES_DB}"
-export APP_ENV=dev
-export NODE_ENV=development
-export AUTH_SECRET=killjoy
-
-function cleanup() {
-  docker rm -f "${POSTGRES_CONTAINER_NAME}"
-  printf "Deleted docker container: %s\n" "${POSTGRES_CONTAINER_NAME}"
-}
-
-function run_pg_migrations() {
-  declare -r -i MAX_RETRY=5
-  declare -i COUNTER=0
-  declare -i FAILED=0
-  
-  set +e
-  until [[ $FAILED -eq 1 ]] || npm --prefix "${PACKAGE_DIR}" run migrate up > /dev/null 2>&1  
-  do
-    sleep 1
-
-    if [[ $COUNTER -eq $MAX_RETRY ]]; then 
-      FAILED=1
-    fi
-    (( COUNTER++ ))
-  done
-  set -e
-
-  if [[ $FAILED -eq 1 ]]; then 
-    printf "PG migrations failed to run.\n"
-    exit 1
-  fi
-}
+declare -r DOCKER_COMPOSE_CONFIG_FILE="${SCRIPT_DIR}"/configs/integration-tests.yaml
+declare -r DATABASE_URL=postgres://test-user:test-pw@baseterm-pg-instance:5432/baseterm
 
 trap cleanup EXIT
+function cleanup() {
+  docker compose -f "${DOCKER_COMPOSE_CONFIG_FILE}" down
+}
 
-printf "Starting docker container: %s\n" "${POSTGRES_CONTAINER_NAME}"
+"${SCRIPT_DIR}"/helpers/build_api_docker_image --development --tag baseterm-api:dev
+docker compose -f "${DOCKER_COMPOSE_CONFIG_FILE}" up --detach
 docker run \
-  --detach \
-  --name "${POSTGRES_CONTAINER_NAME}" \
-  -e POSTGRES_PASSWORD="${POSTGRES_PW}" \
-  -e POSTGRES_USER="${POSTGRES_USER}" \
-  -e POSTGRES_DB="${POSTGRES_DB}" \
-  -p "${POSTGRES_PORT}":"${POSTGRES_PORT}" \
-  "${POSTGRES_IMAGE}" > /dev/null 2>&1
-
-printf "Running pg migrations\n"
-run_pg_migrations
-npm exec --prefix "${PACKAGE_DIR}" -- jest --coverage --forceExit
+  --rm \
+  --network baseterm-integration-tests-net \
+  -e APP_ENV=dev \
+  -e AUTH_SECRET=killjoy \
+  -e DATABASE_URL="${DATABASE_URL}" \
+  baseterm-api:dev \
+  npm exec -- jest --coverage --forceExit
 
