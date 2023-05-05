@@ -19,13 +19,6 @@ jobs:
       run: npm ci
     - name: Run build
       run: npm run build
-  run-unit-tests:
-    name: Run integration tests
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v3
-    - name: Run integration tests
-      run: npm run integration-tests
   lint:
     name: Lint
     runs-on: ubuntu-latest
@@ -38,4 +31,18 @@ jobs:
       run: npm ci
     - name: Run lint
       run: npm run lint
+  run-smoke-tests:
+    name: Run smoke tests
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: Run smoke tests
+      run: npm run smoke-tests  
+  run-integrations-tests:
+    name: Run integration tests
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: Run integration tests
+      run: npm run integration-tests
 

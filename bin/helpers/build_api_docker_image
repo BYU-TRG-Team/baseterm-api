@@ -1,7 +1,7 @@
 #!/bin/bash
 
 
-SCRIPT_DIR="$(dirname "${BASH_SOURCE[0]}")"
+SCRIPT_DIR="$(dirname "$(realpath "${BASH_SOURCE[0]}")")"
 readonly SCRIPT_DIR
 PACKAGE_DIR="$(realpath "${SCRIPT_DIR}"/../..)"
 readonly PACKAGE_DIR
@@ -14,7 +14,6 @@ usage:
   $0 <options>
     --tag          Tag for docker image (ex. baseterm-api)
     --development  Builds docker image with ENV variable set to "development"
-    --force        Rebuilds docker image even if the image already exists
 
 USAGE
   exit ${exitval}
@@ -38,7 +37,7 @@ while [[ $# -gt 0 ]]; do
   esac
 done
 
-: "${TAG:?"--tag for docker image must be supplied"}"
+: "${TAG:?"--tag flag must be supplied"}"
 
 docker rm --force "${TAG}" > /dev/null 2>&1
 printf "Building API docker image with tag \"%s\"\n" "${TAG}"

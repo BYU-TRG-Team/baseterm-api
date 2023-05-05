@@ -29,12 +29,12 @@ const smallTbxFiles = [
   `${APP_ROOT}/example-tbx/test-files/test8.tbx`,
 ];
 
-// const largeTbxFiles = [
-//   `${APP_ROOT}/example-tbx/test-files/test2.tbx`,
-//   `${APP_ROOT}/example-tbx/test-files/test3.tbx`,
-//   `${APP_ROOT}/example-tbx/test-files/test4.tbx`,
-//   `${APP_ROOT}/example-tbx/test-files/test7.tbx`,
-// ]
+const largeTbxFiles = [
+  `${APP_ROOT}/example-tbx/test-files/test2.tbx`,
+  `${APP_ROOT}/example-tbx/test-files/test3.tbx`,
+  `${APP_ROOT}/example-tbx/test-files/test4.tbx`,
+  `${APP_ROOT}/example-tbx/test-files/test7.tbx`,
+]
 
 describe("tests Import, Export, and Session controllers", () => {
   beforeAll(async () => {
