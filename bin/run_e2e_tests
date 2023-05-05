@@ -1,0 +1,15 @@
+#!/bin/bash
+
+set -e
+
+SCRIPT_DIR="$(dirname "$(realpath "${BASH_SOURCE[0]}")")"
+readonly SCRIPT_DIR
+declare -r DOCKER_COMPOSE_CONFIG_FILE="${SCRIPT_DIR}"/configs/e2e-tests.yaml
+
+trap cleanup EXIT
+function cleanup() {
+  docker compose -f "${DOCKER_COMPOSE_CONFIG_FILE}" down
+}
+
+"${SCRIPT_DIR}"/helpers/build_api_docker_image --development --tag baseterm-api:dev
+docker compose -f "${DOCKER_COMPOSE_CONFIG_FILE}" up --abort-on-container-exit test-runner

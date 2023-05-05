@@ -6,8 +6,9 @@
   "scripts": {
     "build": "rm -rf dist/ && tsc && resolve-tspaths",
     "start": "pm2 start dist/src/index.js -n baseterm-api && pm2 monit",
-    "integration-tests": "bin/run_integration_tests",
     "smoke-tests": "bin/run_smoke_tests",
+    "integration-tests": "bin/run_integration_tests",
+    "e2e-tests": "bin/run_e2e_tests",
     "migrate": "node-pg-migrate -t pgmigrations_baseterm",
     "lint": "eslint src --ext .ts",
     "lint:fix": "eslint src --ext .ts --fix",

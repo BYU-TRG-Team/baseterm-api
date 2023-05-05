@@ -74,12 +74,12 @@
         "./src/validators/*"
       ],
       "@tests/*": [
-        "./__tests__/*"
+        "./tests/*"
       ]
     }
   },
   "include": [
     "src/**/*",
-    "__tests__/"
+    "tests/"
   ]
 }

@@ -4,7 +4,6 @@
   "transform": {
     "^.+\\.ts?$": "ts-jest"
   },
-  "testMatch": ["**/__tests__/**/*.test.ts"],
   "collectCoverage": true,
   "collectCoverageFrom": ["src/**/*.ts"],
   "coverageThreshold": {
@@ -36,7 +35,7 @@
     "^@typings/(.*)$": "<rootDir>/src/types/$1",
     "^@utils$": "<rootDir>/src/utils",
     "^@validators/(.*)$": "<rootDir>/src/validators/$1",
-    "^@tests/(.*)$": "<rootDir>/__tests__/$1"
+    "^@tests/(.*)$": "<rootDir>/tests/$1"
   },
   "coverageReporters": ["json", "html"],
   "reporters": ["default"]

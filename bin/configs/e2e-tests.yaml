@@ -40,7 +40,7 @@ services:
       AUTH_SECRET: killjoy
     networks:
       - baseterm-integration-tests-net
-    command: "npm exec -- jest --coverage --forceExit --testMatch=**/tests/integration-tests/**/*.test.ts"
+    command: "npm exec -- jest --coverage --forceExit --testMatch=**/tests/e2e-tests/**/*.test.ts --verbose false"
     
 networks:
   baseterm-integration-tests-net:
