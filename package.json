@@ -10,8 +10,8 @@
     "integration-tests": "bin/run_integration_tests",
     "e2e-tests": "bin/run_e2e_tests",
     "migrate": "node-pg-migrate -t pgmigrations_baseterm",
-    "lint": "eslint src --ext .ts",
-    "lint:fix": "eslint src --ext .ts --fix",
+    "lint": "eslint src tests --ext .ts",
+    "lint:fix": "eslint src tests --ext .ts --fix",
     "prepare": "husky install"
   },
   "engines": {

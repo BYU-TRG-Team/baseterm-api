@@ -1,74 +1,71 @@
-import constructServer from "@app";
-import supertest, { SuperAgentTest } from "supertest";
-import express from "express";
-import { fetchMockAuxElement, generateJWT, importFile } from "@tests/helpers";
+import { fetchMockAuxElement, generateJWT, getTestAPIClient, importFile } from "@tests/helpers";
 import { AuxElement, UUID } from "@typings";
 import { Role } from "@byu-trg/express-user-management";
 import { APP_ROOT } from "@constants";
+import { TestAPIClient } from "@tests/types";
 
-let requestClient: SuperAgentTest;
-let handleShutDown: () => Promise<void>;
+const endpointConstructor = (
+  termbaseUUID: UUID,
+  auxElementUUID: UUID,
+) => `/termbase/${termbaseUUID}/auxElement/${auxElementUUID}`;
+const jwt = generateJWT(
+  Role.Staff
+);
+let testApiClient: TestAPIClient;
 let mockData: {
   termbaseUUID: UUID,
   auxElement: AuxElement,
 };
 
-const endpointConstructor = (
-    termbaseUUID: UUID,
-    auxElementUUID: UUID,
-) => `/termbase/${termbaseUUID}/auxElement/${auxElementUUID}`;
-const jwt = generateJWT(
-	Role.Staff
-);
-
 describe("tests DeleteAuxElement controller", () => {
   beforeAll(async () => {
-    const app = express();
-    handleShutDown = await constructServer(app);
-    requestClient = supertest.agent(app);
+    testApiClient = await getTestAPIClient();
+  });
+
+  afterAll(async () => {
+    await testApiClient.tearDown();
+  });
+
+  beforeEach(async () => {
     const termbaseUUID = await importFile(
       `${APP_ROOT}/example-tbx/valid-tbx-core.tbx`,
-      requestClient
+      testApiClient.requestClient
     );
 
     const auxElement = await fetchMockAuxElement(
-			termbaseUUID,
-			requestClient,
-		);
+      termbaseUUID,
+      testApiClient.requestClient,
+    );
 
-		mockData = {
-			termbaseUUID,
-			auxElement,
-		};
+    mockData = {
+      termbaseUUID,
+      auxElement,
+    };
   });
 
-	test("should return a successful response and produce a 404 when requesting the aux element", async () => {
-		const { status: deleteAuxElementStatus } = await requestClient
-			.delete(
-				endpointConstructor(
-					mockData.termbaseUUID,
-					mockData.auxElement.uuid,
-				)
-			)
-			.field({
-				elementType: mockData.auxElement.elementType,
-			})
-			.set('Cookie', [`TRG_AUTH_TOKEN=${jwt}`])
+  test("should return a successful response and produce a 404 when requesting the aux element", async () => {
+    const { status: deleteAuxElementStatus } = await testApiClient.requestClient
+      .delete(
+        endpointConstructor(
+          mockData.termbaseUUID,
+          mockData.auxElement.uuid,
+        )
+      )
+      .field({
+        elementType: mockData.auxElement.elementType,
+      })
+      .set("Cookie", [`TRG_AUTH_TOKEN=${jwt}`]);
 	
-		expect(deleteAuxElementStatus).toBe(204);
+    expect(deleteAuxElementStatus).toBe(204);
 	
-		const { status: getAuxElementStatus } = await requestClient
-			.get(
-				endpointConstructor(
-					mockData.termbaseUUID,
-					mockData.auxElement.uuid
-				)
-			);
+    const { status: getAuxElementStatus } = await testApiClient.requestClient
+      .get(
+        endpointConstructor(
+          mockData.termbaseUUID,
+          mockData.auxElement.uuid
+        )
+      );
 	
-		expect(getAuxElementStatus).toBe(404);
-	});
-
-  afterAll(async () => {
-		await handleShutDown();
-	});
+    expect(getAuxElementStatus).toBe(404);
+  });
 });

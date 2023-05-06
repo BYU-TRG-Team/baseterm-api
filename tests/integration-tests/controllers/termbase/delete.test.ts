@@ -1,51 +1,46 @@
-import constructServer from "@app";
-import supertest, { SuperAgentTest } from "supertest";
-import express from "express";
-import { generateJWT, importFile } from "@tests/helpers";
+import { generateJWT, getTestAPIClient, importFile } from "@tests/helpers";
 import { Role } from "@byu-trg/express-user-management";
 import { APP_ROOT } from "@constants";
+import { TestAPIClient } from "@tests/types";
 
-let handleShutDown: () => Promise<void>;
-let requestClient: SuperAgentTest;
 const jwt = generateJWT(
-	Role.Admin
+  Role.Admin
 );
+let testApiClient: TestAPIClient;
 
 describe("tests DeleteTermbase controller", () => {
   beforeAll(async () => {
-    const app = express();
-    handleShutDown = await constructServer(app);
-    requestClient = supertest.agent(app);
+    testApiClient = await getTestAPIClient();
   });
 
   afterAll(async () => {
-		await handleShutDown();
-	})
+    await testApiClient.tearDown();
+  });
 
   test("should return a response with no content and remove termbase from DB", async () => {
     const termbaseUUID = await importFile(
       `${APP_ROOT}/example-tbx/valid-tbx-core.tbx`,
-      requestClient,
+      testApiClient.requestClient,
     );
 
     // ensure that termbase exists
-    const termbaseRetrievalResponse = await requestClient
+    const termbaseRetrievalResponse = await testApiClient.requestClient
       .get(`/termbase/${termbaseUUID}`)
-      .set('Cookie', [`TRG_AUTH_TOKEN=${jwt}`]);
+      .set("Cookie", [`TRG_AUTH_TOKEN=${jwt}`]);
     
     expect(termbaseRetrievalResponse.status).toBe(200);
     expect(termbaseRetrievalResponse.body.termbaseUUID).toBeDefined();
 
-    const deleteTermbaseResponse = await requestClient
+    const deleteTermbaseResponse = await testApiClient.requestClient
       .delete(`/termbase/${termbaseUUID}`)
-      .set('Cookie', [`TRG_AUTH_TOKEN=${jwt}`]);
+      .set("Cookie", [`TRG_AUTH_TOKEN=${jwt}`]);
 
     expect(deleteTermbaseResponse.status).toBe(204);
 
     // ensure that termbase is deleted
-    const termbasePostDeletionRetrievalResponse = await requestClient
+    const termbasePostDeletionRetrievalResponse = await testApiClient.requestClient
       .get(`/termbase/${termbaseUUID}`)
-      .set('Cookie', [`TRG_AUTH_TOKEN=${jwt}`]);
+      .set("Cookie", [`TRG_AUTH_TOKEN=${jwt}`]);
     
     expect(termbasePostDeletionRetrievalResponse.status).toBe(404);
 

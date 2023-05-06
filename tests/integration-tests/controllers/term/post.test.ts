@@ -1,75 +1,68 @@
-import constructServer from "@app";
-import supertest, { SuperAgentTest } from "supertest";
-import express from "express";
-import { fetchMockTermbaseData, generateJWT, importFile } from "@tests/helpers";
+import { fetchMockTermbaseData, generateJWT, getTestAPIClient, importFile } from "@tests/helpers";
 import { PostLangSecEndpointResponse } from "@typings/responses";
 import { UUID } from "@typings";
 import errorMessages from "@messages/errors";
-import { SuperAgentResponse } from "@tests/types";
+import { SuperAgentResponse, TestAPIClient } from "@tests/types";
 import { Role } from "@byu-trg/express-user-management";
 import { v4 as uuid } from "uuid";
 import { APP_ROOT } from "@constants";
 
-let requestClient: SuperAgentTest;
-let handleShutDown: () => Promise<void>;
+const personId = uuid();
+const endpointConstructor = (
+  termbaseUUID: UUID,
+) => `/termbase/${termbaseUUID}/term`;
+const jwt = generateJWT(
+  Role.Staff,
+  personId,
+);
+let testApiClient: TestAPIClient;
 let mockData: {
   termbaseUUID: UUID,
   langSecUUID: UUID,
 };
 
-const personId = uuid();
-const endpointConstructor = (
-    termbaseUUID: UUID,
-) => `/termbase/${termbaseUUID}/term`;
-const jwt = generateJWT(
-	Role.Staff,
-  personId,
-);
-
 describe("tests PostTerm controller", () => {
   beforeAll(async () => {
-    const app = express();
-    handleShutDown = await constructServer(app);
-    requestClient = supertest.agent(app);
+    testApiClient = await getTestAPIClient();
     const termbaseUUID = await importFile(
       `${APP_ROOT}/example-tbx/valid-tbx-core.tbx`,
-      requestClient,
+      testApiClient.requestClient,
       uuid(),
       personId,
     );
 
     const {
-    	langSecUUID
+      langSecUUID
     } = await fetchMockTermbaseData(
-			termbaseUUID,
-			requestClient,
-		);
+      termbaseUUID,
+      testApiClient.requestClient,
+    );
 
-		mockData = {
-			termbaseUUID,
-			langSecUUID,
-		};
+    mockData = {
+      termbaseUUID,
+      langSecUUID,
+    };
   });
 
   afterAll(async () => {
-		await handleShutDown();
-	});
+    await testApiClient.tearDown();
+  });
 
   test("should return a 400 response for invalid body", async () => {
-    const { status, body } = await requestClient
+    const { status, body } = await testApiClient.requestClient
       .post(
         endpointConstructor(
           mockData.termbaseUUID
         )
       )
-      .set('Cookie', [`TRG_AUTH_TOKEN=${jwt}`]);
+      .set("Cookie", [`TRG_AUTH_TOKEN=${jwt}`]);
   
     expect(status).toBe(400);
     expect(body.error).toBe(errorMessages.bodyInvalid);
   });
   
   test("should return a 200 response for successful creation of a term", async () => {
-    const { status, body } = await requestClient
+    const { status, body } = await testApiClient.requestClient
       .post(
         endpointConstructor(
           mockData.termbaseUUID
@@ -79,8 +72,8 @@ describe("tests PostTerm controller", () => {
         langSecUUID: mockData.langSecUUID,
         value: "Test"
       }) 
-      .set('Cookie', [`TRG_AUTH_TOKEN=${jwt}`]) as 
-      SuperAgentResponse<PostLangSecEndpointResponse>
+      .set("Cookie", [`TRG_AUTH_TOKEN=${jwt}`]) as 
+      SuperAgentResponse<PostLangSecEndpointResponse>;
 
     expect(status).toBe(200);
     expect(body.uuid).toBeDefined();

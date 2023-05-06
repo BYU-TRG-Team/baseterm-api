@@ -1,31 +1,26 @@
-import constructServer from "@app";
-import supertest, { SuperAgentTest } from "supertest";
-import express from "express";
 import { v4 as uuid } from "uuid";
 import { SessionSSEEndpointResponse } from "@typings/responses";
 import EventSource from "eventsource";
-import { generateJWT } from "@tests/helpers";
+import { generateJWT, getTestAPIClient } from "@tests/helpers";
 import { Role } from "@byu-trg/express-user-management";
+import { TestAPIClient } from "@tests/types";
 
-let requestClient: SuperAgentTest;
-let handleShutDown: () => Promise<void>;
+let testApiClient: TestAPIClient;
 const jwt = generateJWT(
-	Role.Staff
+  Role.Staff
 );
 
 describe("tests Session controller", () => {
   beforeAll(async () => {
-    const app = express();
-    handleShutDown = await constructServer(app);
-    requestClient = supertest.agent(app);
+    testApiClient = await getTestAPIClient();
   });
 
   afterAll(async () => {
-		await handleShutDown();
-	});
+    await testApiClient.tearDown();
+  });
 
   test("should return a response indicating an undefined session", async () => {
-    const { url } = requestClient.get("/");
+    const { url } = testApiClient.requestClient.get("/");
 
     await (async function(){
       await new Promise((resolve) => {

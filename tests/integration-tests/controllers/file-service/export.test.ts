@@ -1,42 +1,37 @@
-import supertest, { SuperAgentTest } from "supertest";
 import { ExportEndpointResponse } from "@typings/responses";
-import express from "express";
 import { v4 as uuid } from "uuid";
-import { generateJWT, importFile } from "@tests/helpers";
-import constructServer from "@app";
+import { generateJWT, getTestAPIClient, importFile } from "@tests/helpers";
 import { Role } from "@byu-trg/express-user-management";
 import { APP_ROOT } from "@constants";
+import { TestAPIClient } from "@tests/types";
 
-let handleShutDown: () => Promise<void>;
-let requestClient: SuperAgentTest;
 const jwt = generateJWT(
-	Role.Staff
+  Role.Staff
 );
+let testApiClient: TestAPIClient;
 
 describe("tests Export controller", () => {
   beforeAll(async () => {
-    const app = express();
-    handleShutDown = await constructServer(app);
-    requestClient = supertest.agent(app);
+    testApiClient = await getTestAPIClient();
   });
 
   afterAll(async () => {
-		await handleShutDown();
-	});
+    await testApiClient.tearDown();
+  });
 
   test("should return a response indicating no termbase resource (supplying unknown uuid)", async () => {
-    const { status, body } = await requestClient
+    const { status, body } = await testApiClient.requestClient
       .get(`/export/${uuid()}`)
-      .set('Cookie', [`TRG_AUTH_TOKEN=${jwt}`]);
+      .set("Cookie", [`TRG_AUTH_TOKEN=${jwt}`]);
 
     expect(status).toBe(404);
     expect(body.error).toBeDefined();
   });
 
   test("should return a response indicating no termbase resource (supplying malformed UUID)", async () => {
-    const { status, body } = await requestClient
+    const { status, body } = await testApiClient.requestClient
       .get("/export/randommmmmmmm")
-      .set('Cookie', [`TRG_AUTH_TOKEN=${jwt}`]);
+      .set("Cookie", [`TRG_AUTH_TOKEN=${jwt}`]);
 
     expect(status).toBe(404);
     expect(body.error).toBeDefined();
@@ -45,13 +40,13 @@ describe("tests Export controller", () => {
   test("should return a response indicating a successful export request", async () => {
     const termbaseUUID = await importFile(
       `${APP_ROOT}/example-tbx/valid-tbx-core.tbx`,
-      requestClient,
+      testApiClient.requestClient,
     );
 
     const { status: exportStatus, body: exportBody } = (
-      await requestClient
+      await testApiClient.requestClient
         .get(`/export/${termbaseUUID}`) 
-        .set('Cookie', [`TRG_AUTH_TOKEN=${jwt}`])
+        .set("Cookie", [`TRG_AUTH_TOKEN=${jwt}`])
     ) as { status: number, body: ExportEndpointResponse };
 
     expect(exportStatus).toBe(202);
