@@ -1,27 +1,26 @@
-import constructServer from "@app";
-import supertest, { SuperAgentTest } from "supertest";
-import express from "express";
 import { GetTermbasesEndpointResponse } from "@typings/responses";
-import { generateJWT } from "@tests/helpers";
+import { generateJWT, getTestAPIClient } from "@tests/helpers";
 import { Role } from "@byu-trg/express-user-management";
+import { TestAPIClient } from "@tests/types";
 
-let requestClient: SuperAgentTest;
-let handleShutDown: () => Promise<void>;
 const jwt = generateJWT(
-	Role.User
+  Role.User
 );
+let testApiClient: TestAPIClient;
 
 describe("tests GetTermbases controller", () => {
   beforeAll(async () => {
-    const app = express();
-    handleShutDown = await constructServer(app);
-    requestClient = supertest.agent(app);
+    testApiClient = await getTestAPIClient();
+  });
+
+  afterAll(async () => {
+    await testApiClient.tearDown();
   });
 
   test("should return a 400 for invalid query params", async () => {
-    const { status, body } = await requestClient
+    const { status, body } = await testApiClient.requestClient
       .get("/termbases")
-      .set('Cookie', [`TRG_AUTH_TOKEN=${jwt}`]);
+      .set("Cookie", [`TRG_AUTH_TOKEN=${jwt}`]);
 
     expect(status).toBe(400);
     expect(body.error).toBeDefined();
@@ -29,9 +28,9 @@ describe("tests GetTermbases controller", () => {
 
   test("should return a response with an array of termbases", async () => {
     const { status, body } = (
-      await requestClient
+      await testApiClient.requestClient
         .get("/termbases?page=1")
-        .set('Cookie', [`TRG_AUTH_TOKEN=${jwt}`])
+        .set("Cookie", [`TRG_AUTH_TOKEN=${jwt}`])
     ) as { status: number, body: GetTermbasesEndpointResponse };
 
     expect(status).toBe(200);

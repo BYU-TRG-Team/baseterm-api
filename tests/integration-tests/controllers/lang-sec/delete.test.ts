@@ -1,74 +1,68 @@
-import constructServer from "@app";
-import supertest, { SuperAgentTest } from "supertest";
-import express from "express";
-import { fetchMockTermbaseData, generateJWT, importFile } from "@tests/helpers";
+import { fetchMockTermbaseData, generateJWT, getTestAPIClient, importFile } from "@tests/helpers";
 import { UUID } from "@typings";
 import { Role } from "@byu-trg/express-user-management";
 import { APP_ROOT } from "@constants";
+import { TestAPIClient } from "@tests/types";
 
-let requestClient: SuperAgentTest;
-let handleShutDown: () => Promise<void>;
+const endpointConstructor = (
+  termbaseUUID: UUID,
+  langSecUUID: UUID,
+) => `/termbase/${termbaseUUID}/langSec/${langSecUUID}`;
+const jwt = generateJWT(
+  Role.Staff
+);
+let testApiClient: TestAPIClient;
 let mockData: {
   termbaseUUID: UUID,
   langSecUUID: UUID,
 };
 
-const endpointConstructor = (
-    termbaseUUID: UUID,
-    langSecUUID: UUID,
-) => `/termbase/${termbaseUUID}/langSec/${langSecUUID}`;
-const jwt = generateJWT(
-	Role.Staff
-);
-
 describe("tests DeleteLangSec controller", () => {
   beforeAll(async () => {
-    const app = express();
-    handleShutDown = await constructServer(app);
-    requestClient = supertest.agent(app);
+    testApiClient = await getTestAPIClient();
     const termbaseUUID = await importFile(
       `${APP_ROOT}/example-tbx/valid-tbx-core.tbx`,
-      requestClient
+      testApiClient.requestClient
     );
 
     const {
-    	langSecUUID
+      langSecUUID
     } = await fetchMockTermbaseData(
-			termbaseUUID,
-			requestClient,
-		);
+      termbaseUUID,
+      testApiClient.requestClient,
+    );
 
-		mockData = {
-			termbaseUUID,
-			langSecUUID,
-		};
+    mockData = {
+      termbaseUUID,
+      langSecUUID,
+    };
   });
 
   afterAll(async () => {
-		await handleShutDown();
-	});
+    await testApiClient.tearDown();
+  });
 
-	test("should return a successful response and produce a 404 when requesting the lang sec", async () => {
-		const { status: deleteLangSecStatus } = await requestClient
-			.delete(
-				endpointConstructor(
-					mockData.termbaseUUID,
-					mockData.langSecUUID
-				)
-			)
-			.set('Cookie', [`TRG_AUTH_TOKEN=${jwt}`]);
+  test("should return a successful response and produce a 404 when requesting the lang sec", async () => {
+    const { status: deleteLangSecStatus } = await testApiClient.requestClient
+      .delete(
+        endpointConstructor(
+          mockData.termbaseUUID,
+          mockData.langSecUUID
+        )
+      )
+      .set("Cookie", [`TRG_AUTH_TOKEN=${jwt}`]);
 	
-		expect(deleteLangSecStatus).toBe(204);
+    expect(deleteLangSecStatus).toBe(204);
 	
-		const { status: getLangSecStatus } = await requestClient
-			.get(
-				endpointConstructor(
-					mockData.termbaseUUID,
-					mockData.langSecUUID
-				)
-			)
-			.set('Cookie', [`TRG_AUTH_TOKEN=${jwt}`]);
+    const { status: getLangSecStatus } = await testApiClient.requestClient
+      .get(
+        endpointConstructor(
+          mockData.termbaseUUID,
+          mockData.langSecUUID
+        )
+      )
+      .set("Cookie", [`TRG_AUTH_TOKEN=${jwt}`]);
 	
-		expect(getLangSecStatus).toBe(404);
-	});
+    expect(getLangSecStatus).toBe(404);
+  });
 });

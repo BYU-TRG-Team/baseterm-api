@@ -1,67 +1,60 @@
-import constructServer from "@app";
-import supertest, { SuperAgentTest } from "supertest";
-import express from "express";
-import { fetchMockTermbaseData, generateJWT, importFile } from "@tests/helpers";
+import { fetchMockTermbaseData, generateJWT, getTestAPIClient, importFile } from "@tests/helpers";
 import { PatchTermEndpointResponse } from "@typings/responses";
 import { UUID } from "@typings";
-import { SuperAgentResponse } from "@tests/types";
+import { SuperAgentResponse, TestAPIClient } from "@tests/types";
 import { Role } from "@byu-trg/express-user-management";
 import { v4 as uuid } from "uuid";
 import { APP_ROOT } from "@constants";
 
-let requestClient: SuperAgentTest;
-let handleShutDown: () => Promise<void>;
+const personId = uuid();
+const endpointConstructor = (
+  termbaseUUID: UUID,
+  termUUID: UUID,
+) => `/termbase/${termbaseUUID}/term/${termUUID}`;
+const jwt = generateJWT(
+  Role.Staff,
+  personId,
+);
+let testApiClient: TestAPIClient;
 let mockData: {
   termbaseUUID: UUID,
   termUUID: UUID,
 };
 
-const personId = uuid();
-const endpointConstructor = (
-    termbaseUUID: UUID,
-    termUUID: UUID,
-) => `/termbase/${termbaseUUID}/term/${termUUID}`;
-const jwt = generateJWT(
-	Role.Staff,
-  personId,
-);
-
 describe("tests PatchTerm controller", () => {
   beforeAll(async () => {
-    const app = express();
-    handleShutDown = await constructServer(app);
-    requestClient = supertest.agent(app);
+    testApiClient = await getTestAPIClient();
     const termbaseUUID = await importFile(
       `${APP_ROOT}/example-tbx/valid-tbx-core.tbx`,
-      requestClient,
+      testApiClient.requestClient,
       uuid(),
       personId,
     );
 
     const { termUUID } = await fetchMockTermbaseData(
-			termbaseUUID,
-			requestClient,
-		);
+      termbaseUUID,
+      testApiClient.requestClient,
+    );
 
-		mockData = {
-			termbaseUUID,
-			termUUID
-		};
+    mockData = {
+      termbaseUUID,
+      termUUID
+    };
   });
 
   afterAll(async () => {
-		await handleShutDown();
-	});
+    await testApiClient.tearDown();
+  });
 
   test("should return a 200 response for successful patch of term", async () => {
-    const { status, body} = await requestClient
+    const { status, body} = await testApiClient.requestClient
       .patch(
         endpointConstructor(
           mockData.termbaseUUID,
           mockData.termUUID
         )
       )
-      .set('Cookie', [`TRG_AUTH_TOKEN=${jwt}`])
+      .set("Cookie", [`TRG_AUTH_TOKEN=${jwt}`])
       .field({
         value: "Test",
         id: "Test",

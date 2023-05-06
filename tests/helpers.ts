@@ -5,11 +5,14 @@ import {
   SessionSSEEndpointResponse
 } from "@typings/responses";
 import { v4 as uuid } from "uuid";
-import { SuperAgentTest } from "supertest";
+import supertest, { SuperAgentTest } from "supertest";
 import { UUID } from "@typings";
 import EventSource from "eventsource";
 import jwt from "jsonwebtoken";
 import { Role } from "@byu-trg/express-user-management";
+import express from "express";
+import constructServer from "@app";
+import { TestAPIClient } from "@tests/types";
 
 export const postPersonObjectRef = async (
   jwt: string,
@@ -27,8 +30,8 @@ export const postPersonObjectRef = async (
       role: "Test",
       id: personId,
     })
-    .set('Cookie', [`TRG_AUTH_TOKEN=${jwt}`])
-}
+    .set("Cookie", [`TRG_AUTH_TOKEN=${jwt}`]);
+};
 
 export const importFile = async (
   filePath: string,
@@ -47,7 +50,7 @@ export const importFile = async (
         .post("/import")
         .attach("tbxFile", filePath)
         .field({ name }) 
-        .set('Cookie', [`TRG_AUTH_TOKEN=${jwt}`])
+        .set("Cookie", [`TRG_AUTH_TOKEN=${jwt}`])
     ) as { body: ImportEndpointResponse };
 
   await (async function(){
@@ -99,13 +102,13 @@ export const fetchMockTermbaseData = async (
 
   const { body: termbaseCreationResponse } = await requestClient
     .get(`/termbase/${termbaseUUID}/terms?page=1`)
-    .set('Cookie', [`TRG_AUTH_TOKEN=${jwt}`]) as
-    { body: GetTermbaseTermsEndpointResponse }
+    .set("Cookie", [`TRG_AUTH_TOKEN=${jwt}`]) as
+    { body: GetTermbaseTermsEndpointResponse };
 
   for (const term of termbaseCreationResponse.terms) {
     const { body: termResponse } = await requestClient
       .get(`/termbase/${termbaseUUID}/term/${term.uuid}`)
-      .set('Cookie', [`TRG_AUTH_TOKEN=${jwt}`]) as 
+      .set("Cookie", [`TRG_AUTH_TOKEN=${jwt}`]) as 
         { body: GetTermEndpointResponse };
 
     if (termResponse.synonyms.length !== 0) {
@@ -114,12 +117,12 @@ export const fetchMockTermbaseData = async (
         langSecUUID: termResponse.languageSection.uuid,
         termUUID: termResponse.uuid,
         termbaseUUID,
-      }
+      };
     }
   }
 
-  throw new Error("Failed to find an appropriate term")
-}
+  throw new Error("Failed to find an appropriate term");
+};
 
 export const fetchMockTermNote = async (
   termbaseUUID: UUID,
@@ -131,13 +134,13 @@ export const fetchMockTermNote = async (
   
   const { body: termbaseCreationResponse } = await requestClient
     .get(`/termbase/${termbaseUUID}/terms?page=1`) 
-    .set('Cookie', [`TRG_AUTH_TOKEN=${jwt}`]) as 
+    .set("Cookie", [`TRG_AUTH_TOKEN=${jwt}`]) as 
       { body: GetTermbaseTermsEndpointResponse };
 
   for (const term of termbaseCreationResponse.terms) {
     const { body: termResponse } = await requestClient
       .get(`/termbase/${termbaseUUID}/term/${term.uuid}`)
-      .set('Cookie', [`TRG_AUTH_TOKEN=${jwt}`]) as 
+      .set("Cookie", [`TRG_AUTH_TOKEN=${jwt}`]) as 
         { body: GetTermEndpointResponse };
 
     if (termResponse.termNotes.length !== 0) {
@@ -145,8 +148,8 @@ export const fetchMockTermNote = async (
     }
   }
 
-  throw new Error("Failed to fetch term note")
-}
+  throw new Error("Failed to fetch term note");
+};
 
 export const fetchMockAuxElement = async (
   termbaseUUID: UUID,
@@ -158,13 +161,13 @@ export const fetchMockAuxElement = async (
 
   const { body: termbaseCreationResponse } = await requestClient
     .get(`/termbase/${termbaseUUID}/terms?page=1`)
-    .set('Cookie', [`TRG_AUTH_TOKEN=${jwt}`]) as 
+    .set("Cookie", [`TRG_AUTH_TOKEN=${jwt}`]) as 
       { body: GetTermbaseTermsEndpointResponse };
 
   for (const term of termbaseCreationResponse.terms) {
     const { body: termReponse } = await requestClient
       .get(`/termbase/${termbaseUUID}/term/${term.uuid}`)
-      .set('Cookie', [`TRG_AUTH_TOKEN=${jwt}`]) as 
+      .set("Cookie", [`TRG_AUTH_TOKEN=${jwt}`]) as 
         { body: GetTermEndpointResponse };
 
     if (termReponse.auxElements.length !== 0) {
@@ -173,7 +176,7 @@ export const fetchMockAuxElement = async (
   }
 
   throw new Error("Failed to fetch aux element");
-}
+};
 
 export const generateJWT = (
   role: Role,
@@ -186,5 +189,15 @@ export const generateJWT = (
       verified: true, 
       username: "test",
     }, process.env.AUTH_SECRET as string)
-  )
-}
+  );
+};
+
+export const getTestAPIClient = async (): Promise<TestAPIClient> => {
+  const app = express();
+  const tearDown = await constructServer(app);
+  const requestClient = supertest.agent(app);
+  return {
+    tearDown,
+    requestClient,
+  };
+};

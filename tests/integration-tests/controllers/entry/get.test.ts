@@ -1,61 +1,55 @@
-import constructServer from "@app";
-import supertest, { SuperAgentTest } from "supertest";
-import express from "express";
-import { fetchMockTermbaseData, generateJWT, importFile } from "@tests/helpers";
+import { fetchMockTermbaseData, generateJWT, getTestAPIClient, importFile } from "@tests/helpers";
 import { GetEntryEndpointResponse, } from "@typings/responses";
 import { Role } from "@byu-trg/express-user-management";
 import { UUID } from "@typings";
 import { APP_ROOT } from "@constants";
+import { TestAPIClient } from "@tests/types";
 
-let handleShutDown: () => Promise<void>;
-let requestClient: SuperAgentTest;
 const jwt = generateJWT(
-	Role.User
+  Role.User
 );
+let testApiClient: TestAPIClient;
 let mockData: {
   termbaseUUID: UUID,
   entryUUID: UUID,
 };
 
-
 describe("tests GetEntry controller", () => {
   beforeAll(async () => {
-    const app = express();
-    handleShutDown = await constructServer(app);
-    requestClient = supertest.agent(app);
+    testApiClient = await getTestAPIClient();
 
     const termbaseUUID = await importFile(
       `${APP_ROOT}/example-tbx/valid-tbx-core.tbx`,
-      requestClient
+      testApiClient.requestClient
     );
 
     const { entryUUID } = await fetchMockTermbaseData(
-			termbaseUUID,
-			requestClient,
-		);
+      termbaseUUID,
+      testApiClient.requestClient,
+    );
 
-		mockData = {
-			termbaseUUID,
-			entryUUID,
-		};
+    mockData = {
+      termbaseUUID,
+      entryUUID,
+    };
   });
 
   afterAll(async () => {
-		await handleShutDown();
-	});
+    await testApiClient.tearDown();
+  });
 
   test("should return a 404 response for malformed entryUUID", async () => {      
-    const { status } = await requestClient
+    const { status } = await testApiClient.requestClient
       .get(`/termbase/${mockData.termbaseUUID}/entry/randommmm`)
-      .set('Cookie', [`TRG_AUTH_TOKEN=${jwt}`]);
+      .set("Cookie", [`TRG_AUTH_TOKEN=${jwt}`]);
 
     expect(status).toBe(404);
   });
 
   test("should return a successful response", async () => {  
-    const { status, body } = await requestClient
+    const { status, body } = await testApiClient.requestClient
       .get(`/termbase/${mockData.termbaseUUID}/entry/${mockData.entryUUID}`) 
-      .set('Cookie', [`TRG_AUTH_TOKEN=${jwt}`]) as 
+      .set("Cookie", [`TRG_AUTH_TOKEN=${jwt}`]) as 
       { body: GetEntryEndpointResponse, status: number };
 
     expect(status).toBe(200);

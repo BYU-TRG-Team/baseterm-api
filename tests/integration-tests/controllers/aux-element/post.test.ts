@@ -1,42 +1,35 @@
-import constructServer from "@app";
-import supertest, { SuperAgentTest } from "supertest";
-import express from "express";
-import { fetchMockTermbaseData, generateJWT, importFile } from "@tests/helpers";
+import { fetchMockTermbaseData, generateJWT, getTestAPIClient, importFile } from "@tests/helpers";
 import { PostAuxElementEndpointResponse } from "@typings/responses";
 import { UUID, TbxElement } from "@typings";
-import { SuperAgentResponse } from "@tests/types";
+import { SuperAgentResponse, TestAPIClient } from "@tests/types";
 import { Role } from "@byu-trg/express-user-management";
 import { APP_ROOT } from "@constants";
 
-let requestClient: SuperAgentTest;
-let handleShutDown: () => Promise<void>;
+const endpointConstructor = (
+  termbaseUUID: UUID
+) => `/termbase/${termbaseUUID}/auxElement`;
+const jwt = generateJWT(
+  Role.Staff
+);
+let testApiClient: TestAPIClient;
 let mockData: {
   termbaseUUID: UUID,
   termUUID: UUID,
 };
 
-const endpointConstructor = (
-    termbaseUUID: UUID
-) => `/termbase/${termbaseUUID}/auxElement`;
-const jwt = generateJWT(
-	Role.Staff
-);
-
 describe("tests PostAuxElement controller", () => {
   beforeAll(async () => {
-    const app = express();
-    handleShutDown = await constructServer(app);
-    requestClient = supertest.agent(app);
+    testApiClient = await getTestAPIClient();
     const termbaseUUID = await importFile(
       `${APP_ROOT}/example-tbx/valid-tbx-core.tbx`,
-      requestClient
+      testApiClient.requestClient
     );
 
     const {
       termUUID,
     } = await fetchMockTermbaseData(
       termbaseUUID,
-      requestClient
+      testApiClient.requestClient
     );
 
     mockData = {
@@ -46,17 +39,17 @@ describe("tests PostAuxElement controller", () => {
   });
 
   afterAll(async () => {
-		await handleShutDown();
-	});
+    await testApiClient.tearDown();
+  });
 
   test("should return a 200 response for successful post of aux element", async () => {
-    const { status } = await requestClient
+    const { status } = await testApiClient.requestClient
       .post(
         endpointConstructor(
           mockData.termbaseUUID
         )
       )
-      .set('Cookie', [`TRG_AUTH_TOKEN=${jwt}`])
+      .set("Cookie", [`TRG_AUTH_TOKEN=${jwt}`])
       .field({
         parentUUID: mockData.termUUID,
         parentElementType: TbxElement.Term,
@@ -64,6 +57,6 @@ describe("tests PostAuxElement controller", () => {
         elementType: TbxElement.Note,
       }) as SuperAgentResponse<PostAuxElementEndpointResponse>;
       
-      expect(status).toBe(200);
+    expect(status).toBe(200);
   });
 });

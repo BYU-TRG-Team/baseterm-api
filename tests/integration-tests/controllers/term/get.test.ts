@@ -1,54 +1,49 @@
-import constructServer from "@app";
-import supertest, { SuperAgentTest } from "supertest";
-import express from "express";
 import { v4 as uuid } from "uuid";
 import { GetTermEndpointResponse } from "@typings/responses";
-import { fetchMockTermbaseData, generateJWT, importFile } from "@tests/helpers";
+import { fetchMockTermbaseData, generateJWT, getTestAPIClient, importFile } from "@tests/helpers";
 import { Role } from "@byu-trg/express-user-management";
 import { UUID } from "@typings";
 import { APP_ROOT } from "@constants";
+import { TestAPIClient } from "@tests/types";
 
-let requestClient: SuperAgentTest;
-let handleShutDown: () => Promise<void>;
+const jwt = generateJWT(
+  Role.User
+);
+let testApiClient: TestAPIClient;
 let mockData: {
   termbaseUUID: UUID,
   termUUID: UUID,
-}
-const jwt = generateJWT(
-	Role.User
-);
+};
 
 describe("tests GetTerm controller", () => {
   beforeAll(async () => {
-    const app = express();
-    handleShutDown = await constructServer(app);
-    requestClient = supertest.agent(app);
+    testApiClient = await getTestAPIClient();
 
     const termbaseUUID = await importFile(
       `${APP_ROOT}/example-tbx/valid-tbx-core.tbx`,
-      requestClient
+      testApiClient.requestClient
     );
 
     const { termUUID } = await fetchMockTermbaseData(
-			termbaseUUID,
-			requestClient,
-		);
+      termbaseUUID,
+      testApiClient.requestClient,
+    );
 
-		mockData = {
-			termbaseUUID,
-			termUUID,
-		};
+    mockData = {
+      termbaseUUID,
+      termUUID,
+    };
   });
 
   afterAll(async () => {
-		await handleShutDown();
-	});
+    await testApiClient.tearDown();
+  });
 
   test("should return a 404 response for invalid uuid (unknown uuid)", async () => {
     
-    const { status, body } = await requestClient
+    const { status, body } = await testApiClient.requestClient
       .get(`/termbase/${mockData.termbaseUUID}/term/${uuid()}`)
-      .set('Cookie', [`TRG_AUTH_TOKEN=${jwt}`]);
+      .set("Cookie", [`TRG_AUTH_TOKEN=${jwt}`]);
    
     expect(status).toBe(404);
     expect(body.error).toBeDefined();
@@ -56,18 +51,18 @@ describe("tests GetTerm controller", () => {
 
 
   test("should return a 404 response for invalid uuid (malformed uuid)", async () => {
-    const { status, body } = await requestClient
+    const { status, body } = await testApiClient.requestClient
       .get(`/termbase/${mockData.termbaseUUID}/term/randommmm`)
-      .set('Cookie', [`TRG_AUTH_TOKEN=${jwt}`]);
+      .set("Cookie", [`TRG_AUTH_TOKEN=${jwt}`]);
 
     expect(status).toBe(404);
     expect(body.error).toBeDefined();
   });
 
   test("should return a successful response", async () => {
-    const termResponse = await requestClient
+    const termResponse = await testApiClient.requestClient
       .get(`/termbase/${mockData.termbaseUUID}/term/${mockData.termUUID}`)
-      .set('Cookie', [`TRG_AUTH_TOKEN=${jwt}`]) as
+      .set("Cookie", [`TRG_AUTH_TOKEN=${jwt}`]) as
       { status: number; body: GetTermEndpointResponse};
 
     expect(termResponse.status).toBe(200);
