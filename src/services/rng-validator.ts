@@ -1,6 +1,6 @@
 import { PythonShell } from "python-shell";
 import fs from "fs";
-import { uuid } from "uuidv4";
+import { v4 as uuid } from "uuid";
 import { APP_ROOT } from "@constants";
 
 class RNGValidatorService {

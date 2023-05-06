@@ -6,7 +6,7 @@ import { handleInvalidBody } from "@responses/errors";
 import { Logger } from "winston";
 import * as yup from "yup";
 import { TbxEntity } from "@db/classes";
-import { uuid } from "uuidv4";
+import { v4 as uuid } from "uuid";
 import { PostLangSecEndpointResponse } from "@typings/responses";
 import LangSecService from "@services/db/lang-sec";
 

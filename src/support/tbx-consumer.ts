@@ -5,7 +5,7 @@ import * as types from "@typings";
 import { TbxEntity } from "@db/classes";
 import * as xml2js from "xml2js";
 import { isDefined, describe } from "@utils";
-import { uuid } from "uuidv4";
+import { v4 as uuid } from "uuid";
 import GlobalStore from "@services/store";
 import Helpers from "@helpers";
 

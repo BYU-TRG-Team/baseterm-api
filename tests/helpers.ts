@@ -4,7 +4,7 @@ import {
   ImportEndpointResponse,
   SessionSSEEndpointResponse
 } from "@typings/responses";
-import { uuid } from "uuidv4";
+import { v4 as uuid } from "uuid";
 import { SuperAgentTest } from "supertest";
 import { UUID } from "@typings";
 import EventSource from "eventsource";

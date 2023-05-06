@@ -6,7 +6,7 @@ import TBXConsumer from "@support/tbx-consumer";
 import { parseStringPromise as xml2JsParser } from "xml2js";
 import { XMLParser, XMLBuilder } from "fast-xml-parser";
 import { isDefined } from "@utils";
-import { uuid } from "uuidv4";
+import { v4 as uuid } from "uuid";
 import GlobalStore from "@services/store";
 import { Logger } from "winston";
 import { ImportEndpointResponse } from "@typings/responses";

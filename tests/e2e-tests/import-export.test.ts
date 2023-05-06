@@ -2,7 +2,7 @@ import supertest, { SuperAgentTest } from "supertest";
 import express from "express";
 import { diffAsXml} from "diff-js-xml";
 import fs from "fs";
-import { uuid } from "uuidv4";
+import { v4 as uuid } from "uuid";
 import EventSource from "eventsource";
 import { 
   ImportEndpointResponse,

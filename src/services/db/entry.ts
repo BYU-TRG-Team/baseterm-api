@@ -9,7 +9,7 @@ import { UUID } from "@typings";
 import AuxElementService from "@services/db/aux-element";
 import LangSecService from "@services/db/lang-sec";
 import TransactionService from "@services/db/transaction";
-import { uuid } from "uuidv4";
+import { v4 as uuid } from "uuid";
 
 class EntryService {
   private dbClient: Knex<any, unknown[]>;

@@ -8,7 +8,7 @@ import { PostTermEndpointResponse } from "@typings/responses";
 import TermService from "@services/db/term";
 import * as tables from "@db/tables";
 import { TbxEntity } from "@db/classes";
-import { uuid } from "uuidv4";
+import { v4 as uuid } from "uuid";
 
 class PostTermController {
   private dbClient: Knex<any, unknown[]>;
