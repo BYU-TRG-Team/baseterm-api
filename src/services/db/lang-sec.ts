@@ -8,7 +8,7 @@ import { TbxEntity } from "@db/classes";
 import { UUID } from "@typings";
 import AuxElementService from "@services/db/aux-element";
 import TermService from "@services/db/term";
-import { uuid } from "uuidv4";
+import { v4 as uuid } from "uuid";
 import TransactionService from "@services/db/transaction";
 
 class LangSecService {

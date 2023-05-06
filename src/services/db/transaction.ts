@@ -6,7 +6,7 @@ import * as types from "@typings";
 import Helpers from "@helpers";
 import { TbxEntity } from "@db/classes";
 import { UUID } from "@typings";
-import { uuid } from "uuidv4";
+import { v4 as uuid } from "uuid";
 import RefService from "./ref";
 import dateFormat from "date-format";
 

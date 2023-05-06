@@ -7,7 +7,7 @@ import { VALID_LANGUAGE_CODE} from "@tests/constants";
 import { UUID } from "@typings";
 import { SuperAgentResponse } from "@tests/types";
 import { Role } from "@byu-trg/express-user-management";
-import { uuid } from "uuidv4";
+import { v4 as uuid } from "uuid";
 import { APP_ROOT } from "@constants";
 
 let requestClient: SuperAgentTest;

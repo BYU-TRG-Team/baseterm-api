@@ -9,7 +9,7 @@ import { TbxEntity } from "@db/classes";
 import { Logger } from "winston";
 import { PostTermbaseEndpointResponse } from "@typings/responses";
 import { handleInvalidBody } from "@responses/errors";
-import { uuid } from "uuidv4";
+import { v4 as uuid } from "uuid";
 
 class PostTermbaseController {
   private dbClient: Knex<any, unknown[]>;

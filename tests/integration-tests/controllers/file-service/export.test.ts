@@ -1,7 +1,7 @@
 import supertest, { SuperAgentTest } from "supertest";
 import { ExportEndpointResponse } from "@typings/responses";
 import express from "express";
-import { uuid } from "uuidv4";
+import { v4 as uuid } from "uuid";
 import { generateJWT, importFile } from "@tests/helpers";
 import constructServer from "@app";
 import { Role } from "@byu-trg/express-user-management";

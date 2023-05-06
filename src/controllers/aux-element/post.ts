@@ -10,7 +10,7 @@ import { TbxEntity } from "@db/classes";
 import { handleInvalidBody } from "@responses/errors";
 import { TbxElement, UUID } from "@typings";
 import * as yup from "yup";
-import { uuid } from "uuidv4";
+import { v4 as uuid } from "uuid";
 
 class PostAuxElementController {
   private dbClient: Knex<any, unknown[]>;

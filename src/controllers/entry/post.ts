@@ -9,7 +9,7 @@ import { Logger } from "winston";
 import { handleInvalidBody, handleInvalidXmlIdError, handleNoResourceError } from "@responses/errors";
 import { isValidUUID } from "@utils";
 import { PostEntryEndpointResponse } from "@typings/responses";
-import { uuid } from "uuidv4";
+import { v4 as uuid } from "uuid";
 import { name as xmlNameValidator } from "xml-name-validator";
 import EntryService from "@services/db/entry";
 
