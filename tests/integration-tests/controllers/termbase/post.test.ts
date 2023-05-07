@@ -1,26 +1,17 @@
 import { v4 as uuid } from "uuid";
 import { PostTermbaseEndpointResponse } from "@typings/responses";
-import { generateJWT, getTestAPIClient } from "@tests/helpers";
+import { generateJWT } from "@tests/helpers";
 import { Role } from "@byu-trg/express-user-management";
-import { TestAPIClient } from "@tests/types";
+import testApiClient from "@tests/test-api-client";
 
 const jwt = generateJWT(
   Role.Staff
 );
-let testApiClient: TestAPIClient;
 
 describe("tests PostTermbase controller", () => {
-  beforeAll(async () => { 
-    testApiClient = await getTestAPIClient();
-  });
-
-  afterAll(async () => {
-    await testApiClient.tearDown();
-  });
-
   test("should return a response indicating a new base has been created", async () => {
     const { status, body } = (
-      await testApiClient.requestClient
+      await testApiClient
         .post("/termbase")
         .field({ 
           name: uuid(),
@@ -35,7 +26,7 @@ describe("tests PostTermbase controller", () => {
 
   test("should return a response indicating a termbase already exists with the same name", async () => {
     const baseName = uuid();
-    await testApiClient.requestClient
+    await testApiClient
       .post("/termbase")
       .field({ 
         name: baseName,
@@ -44,7 +35,7 @@ describe("tests PostTermbase controller", () => {
       .set("Cookie", [`TRG_AUTH_TOKEN=${jwt}`]);
 
 
-    const { status, body } = await testApiClient.requestClient
+    const { status, body } = await testApiClient
       .post("/termbase")
       .field({ 
         name: baseName,
@@ -57,7 +48,7 @@ describe("tests PostTermbase controller", () => {
   });
 
   test("should return a response indicating an invalid body (no name field)", async () => {
-    const { status } = await testApiClient.requestClient
+    const { status } = await testApiClient
       .post("/termbase")
       .field({ 
         lang: "en-US"
@@ -68,7 +59,7 @@ describe("tests PostTermbase controller", () => {
   });
 
   test("should return a response indicating an invalid body (no lang field)", async () => {
-    const { status, body } = await testApiClient.requestClient
+    const { status, body } = await testApiClient
       .post("/termbase")
       .field({ 
         name: uuid(),

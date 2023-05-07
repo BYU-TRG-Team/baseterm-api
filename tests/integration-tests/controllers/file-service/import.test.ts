@@ -1,27 +1,18 @@
 import { v4 as uuid } from "uuid";
 import { ImportEndpointResponse } from "@typings/responses";
-import { generateJWT, getTestAPIClient } from "@tests/helpers";
+import { generateJWT } from "@tests/helpers";
 import { Role } from "@byu-trg/express-user-management";
 import { APP_ROOT } from "@constants";
-import { TestAPIClient } from "@tests/types";
+import testApiClient from "@tests/test-api-client";
 
-let testApiClient: TestAPIClient;
 const jwt = generateJWT(
   Role.Staff
 );
 
 describe("tests Import controller", () => {
-  beforeAll(async () => {
-    testApiClient = await getTestAPIClient();
-  });
-
-  afterAll(async () => {
-    await testApiClient.tearDown();
-  });
-
   test("should return a response indicating a tbx file has successfully started importing", async () => {
     const { status, body } = (
-      await testApiClient.requestClient
+      await testApiClient
         .post("/import")
         .attach("tbxFile", `${APP_ROOT}/example-tbx/valid-tbx-core.tbx`)
         .set("Cookie", [`TRG_AUTH_TOKEN=${jwt}`])
@@ -35,7 +26,7 @@ describe("tests Import controller", () => {
   });
 
   test("should return a response indicating an invalid tbx (no header)", async () => {
-    const { status, body } = await testApiClient.requestClient
+    const { status, body } = await testApiClient
       .post("/import")
       .attach("tbxFile", `${APP_ROOT}/example-tbx/tbx-core-no-header.tbx`)
       .set("Cookie", [`TRG_AUTH_TOKEN=${jwt}`])
@@ -46,7 +37,7 @@ describe("tests Import controller", () => {
   });
 
   test("should return a response indicating an invalid body (no name field supplied)", async () => {
-    const { status } = await testApiClient.requestClient
+    const { status } = await testApiClient
       .post("/import")
       .set("Cookie", [`TRG_AUTH_TOKEN=${jwt}`])
       .attach("tbxFile", `${APP_ROOT}/example-tbx/tbx-core-no-header.tbx`);
@@ -55,7 +46,7 @@ describe("tests Import controller", () => {
   });
 
   test("should return a response indicating an invalid body (no tbxFile supplied)", async () => {
-    const { status, body } = await testApiClient.requestClient
+    const { status, body } = await testApiClient
       .post("/import")
       .set("Cookie", [`TRG_AUTH_TOKEN=${jwt}`])
       .field({ name: uuid()});

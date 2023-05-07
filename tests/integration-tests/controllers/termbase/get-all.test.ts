@@ -1,24 +1,15 @@
 import { GetTermbasesEndpointResponse } from "@typings/responses";
-import { generateJWT, getTestAPIClient } from "@tests/helpers";
+import { generateJWT } from "@tests/helpers";
 import { Role } from "@byu-trg/express-user-management";
-import { TestAPIClient } from "@tests/types";
+import testApiClient from "@tests/test-api-client";
 
 const jwt = generateJWT(
   Role.User
 );
-let testApiClient: TestAPIClient;
 
 describe("tests GetTermbases controller", () => {
-  beforeAll(async () => {
-    testApiClient = await getTestAPIClient();
-  });
-
-  afterAll(async () => {
-    await testApiClient.tearDown();
-  });
-
   test("should return a 400 for invalid query params", async () => {
-    const { status, body } = await testApiClient.requestClient
+    const { status, body } = await testApiClient
       .get("/termbases")
       .set("Cookie", [`TRG_AUTH_TOKEN=${jwt}`]);
 
@@ -28,7 +19,7 @@ describe("tests GetTermbases controller", () => {
 
   test("should return a response with an array of termbases", async () => {
     const { status, body } = (
-      await testApiClient.requestClient
+      await testApiClient
         .get("/termbases?page=1")
         .set("Cookie", [`TRG_AUTH_TOKEN=${jwt}`])
     ) as { status: number, body: GetTermbasesEndpointResponse };

@@ -1,17 +1,16 @@
 import { v4 as uuid } from "uuid";
-import { fetchMockTermbaseData, generateJWT, getTestAPIClient, importFile } from "@tests/helpers";
+import { fetchMockTermbaseData, generateJWT, importFile } from "@tests/helpers";
 import { PatchEntryEndpointResponse } from "@typings/responses";
 import { Role } from "@byu-trg/express-user-management";
 import { UUID } from "@typings";
 import { APP_ROOT } from "@constants";
-import { TestAPIClient } from "@tests/types";
+import testApiClient from "@tests/test-api-client";
 
 const personId = uuid();
 const jwt = generateJWT(
   Role.Staff,
   personId,
 );
-let testApiClient: TestAPIClient;
 let mockData: {
   termbaseUUID: UUID,
   entryUUID: UUID,
@@ -20,18 +19,16 @@ let mockData: {
 
 describe("tests PatchEntry controller", () => {
   beforeAll(async () => { 
-    testApiClient = await getTestAPIClient();
-
     const termbaseUUID = await importFile(
       `${APP_ROOT}/example-tbx/valid-tbx-core.tbx`,
-      testApiClient.requestClient,
+      testApiClient,
       uuid(),
       personId,
     );
 
     const { entryUUID } = await fetchMockTermbaseData(
       termbaseUUID,
-      testApiClient.requestClient,
+      testApiClient,
     );
 
     mockData = {
@@ -40,12 +37,8 @@ describe("tests PatchEntry controller", () => {
     };
   });
 
-  afterAll(async () => {
-    await testApiClient.tearDown();
-  });
-
   test("should return a 404 due to malformed uuid", async () => {
-    const { status } = await testApiClient.requestClient
+    const { status } = await testApiClient
       .patch(`/termbase/${mockData.termbaseUUID}/entry/testtt`)
       .set("Cookie", [`TRG_AUTH_TOKEN=${jwt}`]);
 
@@ -53,7 +46,7 @@ describe("tests PatchEntry controller", () => {
   });
 
   test("should return a 404 for random uuid", async () => {
-    const { status } = await testApiClient.requestClient
+    const { status } = await testApiClient
       .patch(`/termbase/${mockData.termbaseUUID}/entry/${uuid()}`)
       .field({
         id: "TEST"
@@ -64,7 +57,7 @@ describe("tests PatchEntry controller", () => {
   });
 
   test("should return a successful response", async () => {
-    const { status, body } = await testApiClient.requestClient
+    const { status, body } = await testApiClient
       .patch(`/termbase/${mockData.termbaseUUID}/entry/${mockData.entryUUID}`)
       .field({
         id: "TEST",

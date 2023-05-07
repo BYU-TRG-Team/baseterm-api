@@ -1,9 +1,10 @@
-import { fetchMockAuxElement, generateJWT, getTestAPIClient, importFile } from "@tests/helpers";
+import { fetchMockAuxElement, generateJWT, importFile } from "@tests/helpers";
 import { PatchAuxElementEndpointResponse } from "@typings/responses";
 import { AuxElement, UUID } from "@typings";
-import { SuperAgentResponse, TestAPIClient } from "@tests/types";
+import { SuperAgentResponse } from "@tests/types";
 import { Role } from "@byu-trg/express-user-management";
 import { APP_ROOT } from "@constants";
+import testApiClient from "@tests/test-api-client";
 
 const endpointConstructor = (
   termbaseUUID: UUID,
@@ -12,7 +13,6 @@ const endpointConstructor = (
 const jwt = generateJWT(
   Role.Staff
 );
-let testApiClient: TestAPIClient;
 let mockData: {
   termbaseUUID: UUID,
   auxElement: AuxElement,
@@ -20,15 +20,14 @@ let mockData: {
 
 describe("tests PatchAuxElement controller", () => {
   beforeAll(async () => {
-    testApiClient = await getTestAPIClient();
     const termbaseUUID = await importFile(
       `${APP_ROOT}/example-tbx/valid-tbx-core.tbx`,
-      testApiClient.requestClient
+      testApiClient
     );
 
     const auxElement = await fetchMockAuxElement(
       termbaseUUID,
-      testApiClient.requestClient,
+      testApiClient,
     );
 
     mockData = {
@@ -37,12 +36,8 @@ describe("tests PatchAuxElement controller", () => {
     };
   });
 
-  afterAll(async () => {
-    await testApiClient.tearDown();
-  });
-
   test("should return a successful response for successful patch of an aux element", async () => {
-    const { status, body } = await testApiClient.requestClient
+    const { status, body } = await testApiClient
       .patch(
         endpointConstructor(
           mockData.termbaseUUID,

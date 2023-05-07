@@ -1,26 +1,23 @@
 import { v4 as uuid } from "uuid";
 import { GetTermbaseTermsEndpointResponse } from "@typings/responses";
-import { generateJWT, getTestAPIClient, importFile } from "@tests/helpers";
+import { generateJWT, importFile } from "@tests/helpers";
 import { Role } from "@byu-trg/express-user-management";
 import { UUID } from "@typings";
 import { APP_ROOT } from "@constants";
-import { TestAPIClient } from "@tests/types";
+import testApiClient from "@tests/test-api-client";
 
 const jwt = generateJWT(
   Role.User
 );
-let testApiClient: TestAPIClient;
 let mockData: {
   termbaseUUID: UUID,
 };
 
 describe("tests GetTerms controller", () => {
   beforeAll(async () => {
-    testApiClient = await getTestAPIClient();
-
     const termbaseUUID = await importFile(
       `${APP_ROOT}/example-tbx/valid-tbx-core.tbx`,
-      testApiClient.requestClient
+      testApiClient
     );
 
     mockData = {
@@ -28,12 +25,8 @@ describe("tests GetTerms controller", () => {
     };
   });
 
-  afterAll(async () => {
-    await testApiClient.tearDown();
-  });
-
   test("should return a 404 response for invalid uuid (unknown uuid)", async () => {
-    const { status, body } = await testApiClient.requestClient
+    const { status, body } = await testApiClient
       .get(`/termbase/${uuid()}/terms?page=1`)
       .set("Cookie", [`TRG_AUTH_TOKEN=${jwt}`]);
 
@@ -42,7 +35,7 @@ describe("tests GetTerms controller", () => {
   });
 
   test("should return a response with an array of 8 terms", async () => { 
-    const { status, body } = await testApiClient.requestClient
+    const { status, body } = await testApiClient
       .get(`/termbase/${mockData.termbaseUUID}/terms?page=1`)
       .set("Cookie", [`TRG_AUTH_TOKEN=${jwt}`]);
     
@@ -59,7 +52,7 @@ describe("tests GetTerms controller", () => {
   });
 
   test("should return a response with an array of 8 terms", async () => {
-    const { status, body } = await testApiClient.requestClient
+    const { status, body } = await testApiClient
       .get(`/termbase/${mockData.termbaseUUID}/terms?page=1`)
       .set("Cookie", [`TRG_AUTH_TOKEN=${jwt}`]);
     
@@ -76,7 +69,7 @@ describe("tests GetTerms controller", () => {
   });
 
   test("should return a response with an array of 1 term", async () => {
-    const { status, body } = await testApiClient.requestClient
+    const { status, body } = await testApiClient
       .get(`/termbase/${mockData.termbaseUUID}/terms?page=1&language=de`)
       .set("Cookie", [`TRG_AUTH_TOKEN=${jwt}`]);    
 
@@ -93,7 +86,7 @@ describe("tests GetTerms controller", () => {
   });
 
   test("should return a response with an array of 1 term", async () => {
-    const { status, body } = await testApiClient.requestClient
+    const { status, body } = await testApiClient
       .get(`/termbase/${mockData.termbaseUUID}/terms?page=1&term=base`)
       .set("Cookie", [`TRG_AUTH_TOKEN=${jwt}`]);
 
@@ -110,7 +103,7 @@ describe("tests GetTerms controller", () => {
   });
 
   test("should return a response with an array of 1 term", async () => {
-    const { status, body } = await testApiClient.requestClient
+    const { status, body } = await testApiClient
       .get(`/termbase/${mockData.termbaseUUID}/terms?page=1&part_of_speech=verb`)
       .set("Cookie", [`TRG_AUTH_TOKEN=${jwt}`]);
     
@@ -127,7 +120,7 @@ describe("tests GetTerms controller", () => {
   });
 
   test("should return a response with an array of 1 term", async () => {
-    const { status, body } = await testApiClient.requestClient
+    const { status, body } = await testApiClient
       .get(`/termbase/${mockData.termbaseUUID}/terms?page=1&customer=IBM`)
       .set("Cookie", [`TRG_AUTH_TOKEN=${jwt}`]);
 
@@ -144,7 +137,7 @@ describe("tests GetTerms controller", () => {
   });
 
   test("should return a response with an array of 1 term", async () => {
-    const { status, body } = await testApiClient.requestClient
+    const { status, body } = await testApiClient
       .get(`/termbase/${mockData.termbaseUUID}/terms?page=1&concept_id=c1`)
       .set("Cookie", [`TRG_AUTH_TOKEN=${jwt}`]);
 

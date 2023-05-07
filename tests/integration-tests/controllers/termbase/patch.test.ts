@@ -1,5 +1,5 @@
 import { v4 as uuid } from "uuid";
-import { generateJWT, getTestAPIClient, importFile } from "@tests/helpers";
+import { generateJWT, importFile } from "@tests/helpers";
 import {
   GetTermbaseEndpointResponse,
   PatchTermbaseEndpointResponse
@@ -7,23 +7,20 @@ import {
 import { UUID } from "@typings";
 import { Role } from "@byu-trg/express-user-management";
 import { APP_ROOT } from "@constants";
-import { TestAPIClient } from "@tests/types";
+import testApiClient from "@tests/test-api-client";
 
 const jwt = generateJWT(
   Role.Staff
 );
-let testApiClient: TestAPIClient;
 let mockData: {
   termbaseUUID: UUID,
 };
 
 describe("tests PatchTermbase controller", () => {
   beforeAll(async () => {
-    testApiClient = await getTestAPIClient();
-
     const termbaseUUID = await importFile(
       `${APP_ROOT}/example-tbx/valid-tbx-core.tbx`,
-      testApiClient.requestClient
+      testApiClient
     );
 
     mockData = {
@@ -31,12 +28,8 @@ describe("tests PatchTermbase controller", () => {
     };
   });
 
-  afterAll(async () => {
-    await testApiClient.tearDown();
-  });
-
   test("should return a 404 due to malformed uuid", async () => {
-    const { status } = await testApiClient.requestClient
+    const { status } = await testApiClient
       .patch("/termbase/randommmmm")
       .field({
         name: uuid(),
@@ -48,7 +41,7 @@ describe("tests PatchTermbase controller", () => {
   });
 
   test("should return a 404 due to random uuid", async () => {
-    const { status } = await testApiClient.requestClient
+    const { status } = await testApiClient
       .patch(`/termbase/${uuid()}`)
       .field({
         name: uuid(),
@@ -60,12 +53,12 @@ describe("tests PatchTermbase controller", () => {
   });
 
   test("should return a successful response with no updates", async () => {
-    const { body: termbaseResponse } = await testApiClient.requestClient
+    const { body: termbaseResponse } = await testApiClient
       .get(`/termbase/${mockData.termbaseUUID}`) 
       .set("Cookie", [`TRG_AUTH_TOKEN=${jwt}`]) as 
       { body: GetTermbaseEndpointResponse };
       
-    const { body: updatedTermbaseResponse } = await testApiClient.requestClient
+    const { body: updatedTermbaseResponse } = await testApiClient
       .patch(`/termbase/${mockData.termbaseUUID}`) 
       .set("Cookie", [`TRG_AUTH_TOKEN=${jwt}`]) as 
       { body: PatchTermbaseEndpointResponse };
@@ -75,14 +68,14 @@ describe("tests PatchTermbase controller", () => {
   });
 
   test("should return a successful response with an updated name", async () => {
-    const { body: termbaseResponse } = await testApiClient.requestClient
+    const { body: termbaseResponse } = await testApiClient
       .get(`/termbase/${mockData.termbaseUUID}`) 
       .set("Cookie", [`TRG_AUTH_TOKEN=${jwt}`]) as 
       { body: GetTermbaseEndpointResponse };
 
     const updatedTermbaseName = uuid();
 
-    const { body: updatedTermbaseResponse } = await testApiClient.requestClient
+    const { body: updatedTermbaseResponse } = await testApiClient
       .patch(`/termbase/${mockData.termbaseUUID}`)
       .field({
         name: updatedTermbaseName,
@@ -95,7 +88,7 @@ describe("tests PatchTermbase controller", () => {
   });
 
   test("should disable enforcement of TBX-Basic, only update dialect if enforcement is disabled, and not allow reversion", async () => {
-    const { body: updatedTermbaseResponse } = await testApiClient.requestClient
+    const { body: updatedTermbaseResponse } = await testApiClient
       .patch(`/termbase/${mockData.termbaseUUID}`)
       .send({
         enforceBasicDialect: false,
@@ -107,7 +100,7 @@ describe("tests PatchTermbase controller", () => {
     expect(updatedTermbaseResponse.enforceBasicDialect).toBe(false);
     expect(updatedTermbaseResponse.type).toBe("TBX-Basic");
 
-    const { body: secondUpdatedTermbaseResponse } = await testApiClient.requestClient
+    const { body: secondUpdatedTermbaseResponse } = await testApiClient
       .patch(`/termbase/${mockData.termbaseUUID}`)
       .send({
         enforceBasicDialect: true,
@@ -124,17 +117,17 @@ describe("tests PatchTermbase controller", () => {
     const firstTermbaseName = uuid();
     await importFile(
       `${APP_ROOT}/example-tbx/valid-tbx-core.tbx`,
-      testApiClient.requestClient,
+      testApiClient,
       firstTermbaseName,
     );
 
-    await testApiClient.requestClient
+    await testApiClient
       .get(`/termbase/${mockData.termbaseUUID}`) 
       .set("Cookie", [`TRG_AUTH_TOKEN=${jwt}`]) as 
       { body: GetTermbaseEndpointResponse };
 
 
-    const { status } = await testApiClient.requestClient
+    const { status } = await testApiClient
       .patch(`/termbase/${mockData.termbaseUUID}`)
       .set("Cookie", [`TRG_AUTH_TOKEN=${jwt}`])
       .field({

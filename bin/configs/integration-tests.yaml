@@ -29,7 +29,7 @@ services:
     networks:
       - baseterm-integration-tests-net
 
-  test-runner:
+  baseterm-api:
     image: baseterm-api:dev
     depends_on:
       pg-migrations:
@@ -38,9 +38,32 @@ services:
       DATABASE_URL: postgres://test-user:test-pw@baseterm-pg-instance:5432/baseterm
       APP_ENV: dev
       AUTH_SECRET: killjoy
+      PORT: 4000
+    hostname: baseterm-api
     networks:
       - baseterm-integration-tests-net
-    command: "npm exec -- jest --coverage --forceExit --testMatch=**/tests/integration-tests/**/*.test.ts"
+
+  test-runner:
+    image: baseterm-api:dev
+    depends_on:
+    - baseterm-api
+    environment:
+      AUTH_SECRET: killjoy
+    networks:
+      - baseterm-integration-tests-net
+    entrypoint: [
+      "./wait-for-it/wait-for-it.sh",
+      "baseterm-api:4000",
+      "--",
+      "npm",
+      "exec",
+      "--",
+      "jest",
+      "--coverage",
+      "--runInBand",
+      "--detectOpenHandles",
+      "--testMatch=**/tests/integration-tests/**/*.test.ts"
+    ]
     
 networks:
   baseterm-integration-tests-net:

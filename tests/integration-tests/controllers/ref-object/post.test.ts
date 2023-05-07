@@ -1,17 +1,16 @@
 import { 
   generateJWT, 
-  getTestAPIClient, 
   importFile 
 } from "@tests/helpers";
 import { PostPersonRefObjectEndpointResponse } from "@typings/responses";
 import { UUID } from "@typings";
 import errorMessages from "@messages/errors";
-import { SuperAgentResponse, TestAPIClient } from "@tests/types";
+import { SuperAgentResponse } from "@tests/types";
 import { Role } from "@byu-trg/express-user-management";
 import { v4 as uuid } from "uuid";
 import { APP_ROOT } from "@constants";
+import testApiClient from "@tests/test-api-client";
 
-let testApiClient: TestAPIClient;
 let mockData: {
   termbaseUUID: UUID
 };
@@ -26,10 +25,9 @@ const jwt = generateJWT(
 
 describe("tests PostPersonRefObject controller", () => {
   beforeAll(async () => {
-    testApiClient = await getTestAPIClient();
     const termbaseUUID = await importFile(
       `${APP_ROOT}/example-tbx/valid-tbx-core.tbx`,
-      testApiClient.requestClient
+      testApiClient
     );
 
     mockData = {
@@ -37,12 +35,8 @@ describe("tests PostPersonRefObject controller", () => {
     };
   });
 
-  afterAll(async () => {
-    await testApiClient.tearDown();
-  });
-
   test("should return a 400 response for invalid body", async () => {
-    const { status, body } = await testApiClient.requestClient
+    const { status, body } = await testApiClient
       .post(
         endpointConstructor(
           mockData.termbaseUUID,
@@ -55,7 +49,7 @@ describe("tests PostPersonRefObject controller", () => {
   });
 
   test("should return a 400 response for user id mismatch", async () => {
-    const { status, body } = await testApiClient.requestClient
+    const { status, body } = await testApiClient
       .post(
         endpointConstructor(
           mockData.termbaseUUID
@@ -74,7 +68,7 @@ describe("tests PostPersonRefObject controller", () => {
   });
   
   test("should return a 200 response for successful creation of a person object", async () => {
-    const { status, body } = await testApiClient.requestClient
+    const { status, body } = await testApiClient
       .post(
         endpointConstructor(
           mockData.termbaseUUID

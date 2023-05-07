@@ -60,10 +60,6 @@ const constructServer = (app: Express) => {
     });
     next();
   });
-
-  return async () => {
-    await di.DBClient.destroy();
-  };
 };
 
 export default constructServer;
