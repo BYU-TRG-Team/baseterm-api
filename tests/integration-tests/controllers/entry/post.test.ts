@@ -1,30 +1,26 @@
-import { generateJWT, getTestAPIClient, importFile } from "@tests/helpers";
+import { generateJWT, importFile } from "@tests/helpers";
 import { PostEntryEndpointResponse } from "@typings/responses";
 import { VALID_LANGUAGE_CODE } from "@tests/constants";
 import { UUID } from "@typings";
 import { Role } from "@byu-trg/express-user-management";
 import { v4 as uuid } from "uuid";
 import { APP_ROOT } from "@constants";
-import { TestAPIClient } from "@tests/types";
+import testApiClient from "@tests/test-api-client";
 
 const personId = uuid();
 const jwt = generateJWT(
   Role.Staff,
   personId
 );
-
-let testApiClient: TestAPIClient;
 let mockData: {
   termbaseUUID: UUID
 };
 
 describe("tests PostEntry controller", () => {
   beforeAll(async () => {
-    testApiClient = await getTestAPIClient();
-
     const termbaseUUID = await importFile(
       `${APP_ROOT}/example-tbx/valid-tbx-core.tbx`,
-      testApiClient.requestClient,
+      testApiClient,
       uuid(),
       personId
     );
@@ -34,12 +30,8 @@ describe("tests PostEntry controller", () => {
     };
   });
 
-  afterAll(async () => {
-    await testApiClient.tearDown();
-  });
-
   test("should return a 400 response for invalid body", async () => {
-    const { status } = await testApiClient.requestClient
+    const { status } = await testApiClient
       .post("/termbase/randommmmmmmm/entry")
       .set("Cookie", [`TRG_AUTH_TOKEN=${jwt}`]);
     
@@ -47,7 +39,7 @@ describe("tests PostEntry controller", () => {
   });
 
   test("should return a 404 response for malformed termbaseUUID", async () => {  
-    const { status } = await testApiClient.requestClient
+    const { status } = await testApiClient
       .post("/termbase/randommmmmmmm/entry")
       .send({
         entryId: "test",
@@ -60,7 +52,7 @@ describe("tests PostEntry controller", () => {
   });
 
   test("should return a 409 response for duplicate concept entry id", async () => {    
-    const { status } = await testApiClient.requestClient
+    const { status } = await testApiClient
       .post(`/termbase/${mockData.termbaseUUID}/entry`)
       .send({
         entryId: "c5", 
@@ -73,7 +65,7 @@ describe("tests PostEntry controller", () => {
   });
 
   test("should return a successfull response with an entry id", async () => {  
-    const { status, body } = await testApiClient.requestClient
+    const { status, body } = await testApiClient
       .post(`/termbase/${mockData.termbaseUUID}/entry`)
       .send({
         entryId: "c0293409", 

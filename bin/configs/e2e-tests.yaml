@@ -8,7 +8,7 @@ services:
       POSTGRES_DB: baseterm
     hostname: baseterm-pg-instance
     networks:
-      - baseterm-integration-tests-net
+      - baseterm-e2e-tests-net
 
   pg-migrations:
     image: baseterm-api:dev
@@ -27,9 +27,9 @@ services:
       "up"
     ]
     networks:
-      - baseterm-integration-tests-net
+      - baseterm-e2e-tests-net
 
-  test-runner:
+  baseterm-api:
     image: baseterm-api:dev
     depends_on:
       pg-migrations:
@@ -38,11 +38,32 @@ services:
       DATABASE_URL: postgres://test-user:test-pw@baseterm-pg-instance:5432/baseterm
       APP_ENV: dev
       AUTH_SECRET: killjoy
+      PORT: 4000
+    hostname: baseterm-api
     networks:
-      - baseterm-integration-tests-net
-    command: "npm exec -- jest --coverage --forceExit --testMatch=**/tests/e2e-tests/**/*.test.ts --verbose false"
+      - baseterm-e2e-tests-net
+
+  test-runner:
+    image: baseterm-api:dev
+    depends_on:
+    - baseterm-api
+    environment:
+      AUTH_SECRET: killjoy
+    networks:
+      - baseterm-e2e-tests-net
+    entrypoint: [
+      "./wait-for-it/wait-for-it.sh",
+      "baseterm-api:4000",
+      "--",
+      "npm",
+      "exec",
+      "--",
+      "jest",
+      "--coverage",
+      "--testMatch=**/tests/e2e-tests/**/*.test.ts"
+    ]
     
 networks:
-  baseterm-integration-tests-net:
+  baseterm-e2e-tests-net:
     driver: bridge
-    name: baseterm-integration-tests-net
+    name: baseterm-e2e-tests-net

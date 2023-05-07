@@ -5,14 +5,12 @@ import {
   SessionSSEEndpointResponse
 } from "@typings/responses";
 import { v4 as uuid } from "uuid";
-import supertest, { SuperAgentTest } from "supertest";
+import { SuperAgentTest } from "supertest";
 import { UUID } from "@typings";
 import EventSource from "eventsource";
 import jwt from "jsonwebtoken";
 import { Role } from "@byu-trg/express-user-management";
-import express from "express";
-import constructServer from "@app";
-import { TestAPIClient } from "@tests/types";
+import { TEST_API_CLIENT_ENDPOINT } from "@tests/constants";
 
 export const postPersonObjectRef = async (
   jwt: string,
@@ -39,7 +37,6 @@ export const importFile = async (
   name: string = uuid(),
   personId = uuid(),
 ) => {
-  const { url } = requestClient.get("/");
   const jwt = generateJWT(
     Role.Staff,
     personId,
@@ -53,34 +50,31 @@ export const importFile = async (
         .set("Cookie", [`TRG_AUTH_TOKEN=${jwt}`])
     ) as { body: ImportEndpointResponse };
 
-  await (async function(){
-    await new Promise((resolve, reject) => {
-      const es = new EventSource(
-        `${url}session/${importBody.sessionId}`,
-        { 
-          withCredentials: true,
-          headers: {
-            "Cookie": `TRG_AUTH_TOKEN=${jwt}`
-          }
+  await new Promise((resolve, reject) => {
+    const eventSource = new EventSource(
+      `${TEST_API_CLIENT_ENDPOINT}/session/${importBody.sessionId}`,
+      { 
+        withCredentials: true,
+        headers: {
+          "Cookie": `TRG_AUTH_TOKEN=${jwt}`
         }
-      );
-    
-      es.onmessage = (e) => {
-        const fileSession = JSON.parse(e.data) as SessionSSEEndpointResponse;
+      }
+    );
+  
+    eventSource.onmessage = (event) => {
+      const fileSession = JSON.parse(event.data) as SessionSSEEndpointResponse;
 
-        if (fileSession.status === "completed") {
-          es.close();
-          resolve(fileSession);
-        }
+      if (fileSession.status === "completed") {
+        eventSource.close();
+        resolve(fileSession);
+      }
 
-        if (fileSession.error !== undefined) {
-          es.close();
-          reject(fileSession.errorCode);
-        }
-      };
-    });
-  }
-  )();
+      if (fileSession.error !== undefined) {
+        eventSource.close();
+        reject(fileSession.errorCode);
+      }
+    };
+  });
 
   await postPersonObjectRef(
     jwt,
@@ -190,14 +184,4 @@ export const generateJWT = (
       username: "test",
     }, process.env.AUTH_SECRET as string)
   );
-};
-
-export const getTestAPIClient = async (): Promise<TestAPIClient> => {
-  const app = express();
-  const tearDown = await constructServer(app);
-  const requestClient = supertest.agent(app);
-  return {
-    tearDown,
-    requestClient,
-  };
 };

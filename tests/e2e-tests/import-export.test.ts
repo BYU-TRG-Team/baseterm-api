@@ -7,15 +7,15 @@ import {
   ExportEndpointResponse,
 } from "@typings/responses";
 import { FileServiceSession } from "@typings/sessions";
-import { generateJWT, getTestAPIClient } from "@tests/helpers";
+import { generateJWT } from "@tests/helpers";
 import { Role } from "@byu-trg/express-user-management";
 import { APP_ROOT } from "@constants";
-import { TestAPIClient } from "@tests/types";
+import testApiClient from "@tests/test-api-client";
+import { TEST_API_CLIENT_ENDPOINT } from "@tests/constants";
 
 const jwt = generateJWT(
   Role.Staff
 );
-let testApiClient: TestAPIClient;
 
 const smallTbxFiles = [
   `${APP_ROOT}/example-tbx/valid-tbx-core.tbx`,
@@ -33,17 +33,7 @@ const largeTbxFiles = [
 ];
 
 describe("tests the lifecycle of a TBX file (import and export)", () => {
-  beforeAll(async () => {
-    testApiClient = await getTestAPIClient();
-  });
-
-  afterAll(async () => {
-    await testApiClient.tearDown();
-  });
-
   test("should import each small tbx file and export an identical file 10 times", async () => {
-    const { url } = testApiClient.requestClient.get("/");
-
     for (const tbxFile of smallTbxFiles) {
       process.stdout.write(`Testing ${tbxFile}\n`);
       const tbxFileAsString =  fs.readFileSync(tbxFile).toString();
@@ -51,7 +41,7 @@ describe("tests the lifecycle of a TBX file (import and export)", () => {
       for (let iteration = 0; iteration < 10; ++iteration) {
         // Import TBX file
         const { status: importStatus, body: importBody } = (
-            await testApiClient.requestClient
+            await testApiClient
               .post("/import")
               .attach("tbxFile", tbxFile)
               .set("Cookie", [`TRG_AUTH_TOKEN=${jwt}`])
@@ -64,7 +54,7 @@ describe("tests the lifecycle of a TBX file (import and export)", () => {
   
         await new Promise<FileServiceSession>((resolve) => {
           const eventSource = new EventSource(
-            `${url}session/${importBody.sessionId}`,
+            `${TEST_API_CLIENT_ENDPOINT}/session/${importBody.sessionId}`,
             {
               withCredentials: true,
               headers: {
@@ -85,7 +75,7 @@ describe("tests the lifecycle of a TBX file (import and export)", () => {
 
         // Export TBX file
         const { status: exportStatus, body: exportBody } = (
-            await testApiClient.requestClient
+            await testApiClient
               .get(`/export/${importBody.termbaseUUID}`)
               .set("Cookie", [`TRG_AUTH_TOKEN=${jwt}`])
           ) as { status: number,  body: ExportEndpointResponse };
@@ -95,7 +85,7 @@ describe("tests the lifecycle of a TBX file (import and export)", () => {
 
         const exportedTbxFileAsString = await new Promise<string>((resolve) => {
           const es = new EventSource(
-            `${url}session/${exportBody.sessionId}`,
+            `${TEST_API_CLIENT_ENDPOINT}/session/${exportBody.sessionId}`,
             {
               withCredentials: true,
               headers: {
@@ -135,15 +125,13 @@ describe("tests the lifecycle of a TBX file (import and export)", () => {
   }, 600000);
 
   test("should import each large tbx file and export an identical file", async () => {
-    const { url } = testApiClient.requestClient.get("/");
-
     for (const tbxFile of largeTbxFiles) {
       process.stdout.write(`Testing ${tbxFile}\n`);
       const tbxFileAsString =  fs.readFileSync(tbxFile).toString();
 
       // Import TBX file
       const { status: importStatus, body: importBody } = (
-        await testApiClient.requestClient
+        await testApiClient
           .post("/import")
           .attach("tbxFile", tbxFile)
           .set("Cookie", [`TRG_AUTH_TOKEN=${jwt}`])
@@ -156,7 +144,7 @@ describe("tests the lifecycle of a TBX file (import and export)", () => {
 
       await new Promise<FileServiceSession>((resolve) => {
         const eventSource = new EventSource(
-          `${url}session/${importBody.sessionId}`,
+          `${TEST_API_CLIENT_ENDPOINT}/session/${importBody.sessionId}`,
           {
             withCredentials: true,
             headers: {
@@ -177,7 +165,7 @@ describe("tests the lifecycle of a TBX file (import and export)", () => {
 
       // Export TBX file
       const { status: exportStatus, body: exportBody } = (
-        await testApiClient.requestClient
+        await testApiClient
           .get(`/export/${importBody.termbaseUUID}`)
           .set("Cookie", [`TRG_AUTH_TOKEN=${jwt}`])
       ) as { status: number,  body: ExportEndpointResponse };
@@ -187,7 +175,7 @@ describe("tests the lifecycle of a TBX file (import and export)", () => {
 
       const exportedTbxFileAsString = await new Promise<string>((resolve) => {
         const es = new EventSource(
-          `${url}session/${exportBody.sessionId}`,
+          `${TEST_API_CLIENT_ENDPOINT}/session/${exportBody.sessionId}`,
           {
             withCredentials: true,
             headers: {

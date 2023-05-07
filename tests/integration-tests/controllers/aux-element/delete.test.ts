@@ -1,8 +1,8 @@
-import { fetchMockAuxElement, generateJWT, getTestAPIClient, importFile } from "@tests/helpers";
+import { fetchMockAuxElement, generateJWT, importFile } from "@tests/helpers";
 import { AuxElement, UUID } from "@typings";
 import { Role } from "@byu-trg/express-user-management";
 import { APP_ROOT } from "@constants";
-import { TestAPIClient } from "@tests/types";
+import testApiClient from "@tests/test-api-client";
 
 const endpointConstructor = (
   termbaseUUID: UUID,
@@ -11,30 +11,21 @@ const endpointConstructor = (
 const jwt = generateJWT(
   Role.Staff
 );
-let testApiClient: TestAPIClient;
 let mockData: {
   termbaseUUID: UUID,
   auxElement: AuxElement,
 };
 
 describe("tests DeleteAuxElement controller", () => {
-  beforeAll(async () => {
-    testApiClient = await getTestAPIClient();
-  });
-
-  afterAll(async () => {
-    await testApiClient.tearDown();
-  });
-
   beforeEach(async () => {
     const termbaseUUID = await importFile(
       `${APP_ROOT}/example-tbx/valid-tbx-core.tbx`,
-      testApiClient.requestClient
+      testApiClient
     );
 
     const auxElement = await fetchMockAuxElement(
       termbaseUUID,
-      testApiClient.requestClient,
+      testApiClient,
     );
 
     mockData = {
@@ -44,7 +35,7 @@ describe("tests DeleteAuxElement controller", () => {
   });
 
   test("should return a successful response and produce a 404 when requesting the aux element", async () => {
-    const { status: deleteAuxElementStatus } = await testApiClient.requestClient
+    const { status: deleteAuxElementStatus } = await testApiClient
       .delete(
         endpointConstructor(
           mockData.termbaseUUID,
@@ -58,7 +49,7 @@ describe("tests DeleteAuxElement controller", () => {
 	
     expect(deleteAuxElementStatus).toBe(204);
 	
-    const { status: getAuxElementStatus } = await testApiClient.requestClient
+    const { status: getAuxElementStatus } = await testApiClient
       .get(
         endpointConstructor(
           mockData.termbaseUUID,

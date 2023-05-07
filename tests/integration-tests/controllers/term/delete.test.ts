@@ -1,8 +1,8 @@
-import { fetchMockTermbaseData, generateJWT, getTestAPIClient, importFile } from "@tests/helpers";
+import { fetchMockTermbaseData, generateJWT, importFile } from "@tests/helpers";
 import { UUID } from "@typings";
 import { Role } from "@byu-trg/express-user-management";
 import { APP_ROOT } from "@constants";
-import { TestAPIClient } from "@tests/types";
+import testApiClient from "@tests/test-api-client";
 
 const endpointConstructor = (
   termbaseUUID: UUID,
@@ -11,7 +11,6 @@ const endpointConstructor = (
 const jwt = generateJWT(
   Role.Staff
 );
-let testApiClient: TestAPIClient;
 let mockData: {
   termbaseUUID: UUID,
   termUUID: UUID,
@@ -19,17 +18,16 @@ let mockData: {
 
 describe("tests DeleteTerm controller", () => {
   beforeAll(async () => {
-    testApiClient = await getTestAPIClient();
     const termbaseUUID = await importFile(
       `${APP_ROOT}/example-tbx/valid-tbx-core.tbx`,
-      testApiClient.requestClient
+      testApiClient
     );
 
     const {
       termUUID
     } = await fetchMockTermbaseData(
       termbaseUUID,
-      testApiClient.requestClient,
+      testApiClient,
     );
 
     mockData = {
@@ -38,12 +36,8 @@ describe("tests DeleteTerm controller", () => {
     };
   });
 
-  afterAll(async () => {
-    await testApiClient.tearDown();
-  });
-
   test("should return a successful response and produce a 404 when requesting the term", async () => {
-    const { status: deleteTermStatus } = await testApiClient.requestClient
+    const { status: deleteTermStatus } = await testApiClient
       .delete(
         endpointConstructor(
           mockData.termbaseUUID,
@@ -54,7 +48,7 @@ describe("tests DeleteTerm controller", () => {
 	
     expect(deleteTermStatus).toBe(204);
 	
-    const { status: getTermStatus } = await testApiClient.requestClient
+    const { status: getTermStatus } = await testApiClient
       .get(
         endpointConstructor(
           mockData.termbaseUUID,
