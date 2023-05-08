@@ -60,6 +60,7 @@ services:
       "--",
       "jest",
       "--coverage",
+      "--runInBand",
       "--testMatch=**/tests/e2e-tests/**/*.test.ts"
     ]
     

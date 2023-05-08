@@ -61,7 +61,6 @@ services:
       "jest",
       "--coverage",
       "--runInBand",
-      "--detectOpenHandles",
       "--testMatch=**/tests/integration-tests/**/*.test.ts"
     ]
     
