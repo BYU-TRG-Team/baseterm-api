@@ -1,21 +1,9 @@
 import { diffAsXml } from "diff-js-xml";
 import fs from "fs";
-import { v4 as uuid } from "uuid";
-import EventSource from "eventsource";
-import { 
-  ImportEndpointResponse,
-  ExportEndpointResponse,
-} from "@typings/responses";
-import { FileServiceSession } from "@typings/sessions";
-import { generateJWT } from "@tests/helpers";
-import { Role } from "@byu-trg/express-user-management";
+import { exportFile, importFile } from "@tests/helpers";
 import { APP_ROOT } from "@constants";
 import testApiClient from "@tests/test-api-client";
-import { TEST_API_CLIENT_ENDPOINT } from "@tests/constants";
-
-const jwt = generateJWT(
-  Role.Staff
-);
+import { v4 as uuid } from "uuid";
 
 const smallTbxFiles = [
   `${APP_ROOT}/example-tbx/valid-tbx-core.tbx`,
@@ -36,77 +24,26 @@ describe("tests the lifecycle of a TBX file (import and export)", () => {
   test("should import each small tbx file and export an identical file 10 times", async () => {
     for (const tbxFile of smallTbxFiles) {
       process.stdout.write(`Testing ${tbxFile}\n`);
+
       const tbxFileAsString =  fs.readFileSync(tbxFile).toString();
-        
+     
       for (let iteration = 0; iteration < 10; ++iteration) {
-        // Import TBX file
-        const { status: importStatus, body: importBody } = (
-            await testApiClient
-              .post("/import")
-              .attach("tbxFile", tbxFile)
-              .set("Cookie", [`TRG_AUTH_TOKEN=${jwt}`])
-              .field({ name: uuid()})
-          ) as { status: number, body: ImportEndpointResponse };
+        const termbaseUUID = await importFile(
+          tbxFile,
+          testApiClient,
+          uuid(),
+          uuid(),
+          false
+        );
 
-        expect(importStatus).toBe(202);
-        expect(importBody.sessionId).toBeDefined();
-        expect(importBody.termbaseUUID).toBeDefined();
-  
-        await new Promise<FileServiceSession>((resolve) => {
-          const eventSource = new EventSource(
-            `${TEST_API_CLIENT_ENDPOINT}/session/${importBody.sessionId}`,
-            {
-              withCredentials: true,
-              headers: {
-                "Cookie": `TRG_AUTH_TOKEN=${jwt}`
-              }
-            }
-          );
-  
-          eventSource.onmessage = (event) => {
-            const fileSession = JSON.parse(event.data) as FileServiceSession;
-              
-            if (fileSession.status === "completed") {
-              eventSource.close();
-              resolve(fileSession);
-            }
-          };
-        });
-
-        // Export TBX file
-        const { status: exportStatus, body: exportBody } = (
-            await testApiClient
-              .get(`/export/${importBody.termbaseUUID}`)
-              .set("Cookie", [`TRG_AUTH_TOKEN=${jwt}`])
-          ) as { status: number,  body: ExportEndpointResponse };
-
-        expect(exportStatus).toBe(202);
-        expect(exportBody.sessionId).toBeDefined();
-
-        const exportedTbxFileAsString = await new Promise<string>((resolve) => {
-          const es = new EventSource(
-            `${TEST_API_CLIENT_ENDPOINT}/session/${exportBody.sessionId}`,
-            {
-              withCredentials: true,
-              headers: {
-                "Cookie": `TRG_AUTH_TOKEN=${jwt}`
-              }
-            }
-          );
-  
-          es.onmessage = (e) => {
-            const fileSession = JSON.parse(e.data) as FileServiceSession;
-              
-            if (fileSession.status === "completed") {
-              es.close();
-              resolve(fileSession.data as string);
-            }
-          };
-        });
+        const exportedTbxFile = await exportFile(
+          termbaseUUID,
+          testApiClient
+        );
 
         diffAsXml(
           tbxFileAsString, 
-          exportedTbxFileAsString, 
+          exportedTbxFile, 
           {}, 
           {
             xml2jsOptions: {
@@ -127,76 +64,24 @@ describe("tests the lifecycle of a TBX file (import and export)", () => {
   test("should import each large tbx file and export an identical file", async () => {
     for (const tbxFile of largeTbxFiles) {
       process.stdout.write(`Testing ${tbxFile}\n`);
+
       const tbxFileAsString =  fs.readFileSync(tbxFile).toString();
-
-      // Import TBX file
-      const { status: importStatus, body: importBody } = (
-        await testApiClient
-          .post("/import")
-          .attach("tbxFile", tbxFile)
-          .set("Cookie", [`TRG_AUTH_TOKEN=${jwt}`])
-          .field({ name: uuid()})
-      ) as { status: number, body: ImportEndpointResponse };
-
-      expect(importStatus).toBe(202);
-      expect(importBody.sessionId).toBeDefined();
-      expect(importBody.termbaseUUID).toBeDefined();
-
-      await new Promise<FileServiceSession>((resolve) => {
-        const eventSource = new EventSource(
-          `${TEST_API_CLIENT_ENDPOINT}/session/${importBody.sessionId}`,
-          {
-            withCredentials: true,
-            headers: {
-              "Cookie": `TRG_AUTH_TOKEN=${jwt}`
-            }
-          }
-        );
-
-        eventSource.onmessage = (event) => {
-          const fileSession = JSON.parse(event.data) as FileServiceSession;
-          
-          if (fileSession.status === "completed") {
-            eventSource.close();
-            resolve(fileSession);
-          }
-        };
-      });
-
-      // Export TBX file
-      const { status: exportStatus, body: exportBody } = (
-        await testApiClient
-          .get(`/export/${importBody.termbaseUUID}`)
-          .set("Cookie", [`TRG_AUTH_TOKEN=${jwt}`])
-      ) as { status: number,  body: ExportEndpointResponse };
-
-      expect(exportStatus).toBe(202);
-      expect(exportBody.sessionId).toBeDefined();
-
-      const exportedTbxFileAsString = await new Promise<string>((resolve) => {
-        const es = new EventSource(
-          `${TEST_API_CLIENT_ENDPOINT}/session/${exportBody.sessionId}`,
-          {
-            withCredentials: true,
-            headers: {
-              "Cookie": `TRG_AUTH_TOKEN=${jwt}`
-            }
-          }
-        );
-
-        es.onmessage = (e) => {
-          const fileSession = JSON.parse(e.data) as FileServiceSession;
-          
-          if (fileSession.status === "completed") {
-            es.close();
-            resolve(fileSession.data as string);
-          }
-        };
-      });
+      const termbaseUUID = await importFile(
+        tbxFile,
+        testApiClient,
+        uuid(),
+        uuid(),
+        false
+      );
+      
+      const exportedTbxFile = await exportFile(
+        termbaseUUID,
+        testApiClient
+      );
 
       diffAsXml(
         tbxFileAsString, 
-        exportedTbxFileAsString, 
+        exportedTbxFile, 
         {}, 
         {
           xml2jsOptions: {

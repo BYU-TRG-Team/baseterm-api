@@ -47,8 +47,6 @@ services:
     image: baseterm-api:dev
     depends_on:
     - baseterm-api
-    environment:
-      AUTH_SECRET: killjoy
     networks:
       - baseterm-e2e-tests-net
     entrypoint: [

@@ -1,4 +1,5 @@
 import {
+  ExportEndpointResponse,
   GetTermbaseTermsEndpointResponse,
   GetTermEndpointResponse,
   ImportEndpointResponse,
@@ -10,25 +11,21 @@ import { UUID } from "@typings";
 import EventSource from "eventsource";
 import jwt from "jsonwebtoken";
 import { Role } from "@byu-trg/express-user-management";
-import { TEST_API_CLIENT_ENDPOINT } from "@tests/constants";
+import { TEST_API_CLIENT_ENDPOINT, HTTP_COOKIE_NAME, TEST_API_AUTH_SECRET, RANDOM_STRING } from "@tests/constants";
+import { FileServiceSession } from "@typings/sessions";
 
-export const postPersonObjectRef = async (
-  jwt: string,
-  termbaseUUID: UUID,
-  requestClient: SuperAgentTest,
-  personId: UUID,
+export const generateJWT = (
+  role: Role,
+  personId: UUID = uuid(),
 ) => {
-  await requestClient
-    .post(
-      `/termbase/${termbaseUUID}/personRefObject`
-    )
-    .field({
-      name: "Test",
-      email: "Test",
-      role: "Test",
-      id: personId,
-    })
-    .set("Cookie", [`TRG_AUTH_TOKEN=${jwt}`]);
+  return (
+    jwt.sign({
+      id: personId, 
+      role, 
+      verified: true, 
+      username: RANDOM_STRING,
+    }, TEST_API_AUTH_SECRET)
+  );
 };
 
 export const importFile = async (
@@ -36,19 +33,20 @@ export const importFile = async (
   requestClient: SuperAgentTest,
   name: string = uuid(),
   personId = uuid(),
+  createPersonRef = true
 ) => {
   const jwt = generateJWT(
-    Role.Staff,
+    Role.Admin,
     personId,
   );
 
-  const { body: importBody } = (
-      await requestClient
-        .post("/import")
-        .attach("tbxFile", filePath)
-        .field({ name }) 
-        .set("Cookie", [`TRG_AUTH_TOKEN=${jwt}`])
-    ) as { body: ImportEndpointResponse };
+  const { body: importBody } = await requestClient
+    .post("/import")
+    .attach("tbxFile", filePath)
+    .field({ name }) 
+    .set("Cookie", [`${HTTP_COOKIE_NAME}=${jwt}`]) as { 
+      body: ImportEndpointResponse 
+    };
 
   await new Promise((resolve, reject) => {
     const eventSource = new EventSource(
@@ -56,7 +54,7 @@ export const importFile = async (
       { 
         withCredentials: true,
         headers: {
-          "Cookie": `TRG_AUTH_TOKEN=${jwt}`
+          "Cookie": `${HTTP_COOKIE_NAME}=${jwt}`
         }
       }
     );
@@ -76,14 +74,77 @@ export const importFile = async (
     };
   });
 
-  await postPersonObjectRef(
-    jwt,
-    importBody.termbaseUUID,
-    requestClient,
-    personId,
+  if (!createPersonRef) {
+    await postPersonObjectRef(
+      jwt,
+      importBody.termbaseUUID,
+      requestClient,
+      personId,
+    );
+  }
+
+  return importBody.termbaseUUID;
+};
+
+export const exportFile = async (
+  termbaseUUID: UUID,
+  requestClient: SuperAgentTest,
+) => {
+  const jwt = generateJWT(
+    Role.Admin,
+    uuid(),
   );
 
-  return importBody.termbaseUUID as UUID;
+  const { body: exportBody } = await requestClient
+    .get(`/export/${termbaseUUID}`)
+    .set("Cookie", [`${HTTP_COOKIE_NAME}=${jwt}`]) as { 
+      body: ExportEndpointResponse 
+    };
+
+  const exportedTbxFile = await new Promise<string>((resolve, reject) => {
+    const eventSource = new EventSource(
+      `${TEST_API_CLIENT_ENDPOINT}/session/${exportBody.sessionId}`,
+      {
+        withCredentials: true,
+        headers: {
+          "Cookie": `${HTTP_COOKIE_NAME}=${jwt}`
+        }
+      }
+    );
+
+    eventSource.onmessage = (event) => {
+      const fileSession = JSON.parse(event.data) as FileServiceSession;
+        
+      if (fileSession.status === "completed") {
+        eventSource.close();
+        resolve(fileSession.data as string);
+      }
+
+      if (fileSession.error !== undefined) {
+        eventSource.close();
+        reject(fileSession.errorCode);
+      }
+    };
+  });
+
+  return exportedTbxFile;
+};
+
+export const postPersonObjectRef = async (
+  jwt: string,
+  termbaseUUID: UUID,
+  requestClient: SuperAgentTest,
+  personId: UUID,
+) => {
+  await requestClient
+    .post(`/termbase/${termbaseUUID}/personRefObject`)
+    .field({
+      name: RANDOM_STRING,
+      email: RANDOM_STRING,
+      role: RANDOM_STRING,
+      id: personId,
+    })
+    .set("Cookie", [`${HTTP_COOKIE_NAME}=${jwt}`]);
 };
 
 export const fetchMockTermbaseData = async (
@@ -170,18 +231,4 @@ export const fetchMockAuxElement = async (
   }
 
   throw new Error("Failed to fetch aux element");
-};
-
-export const generateJWT = (
-  role: Role,
-  personId: UUID = uuid(),
-) => {
-  return (
-    jwt.sign({
-      id: personId, 
-      role, 
-      verified: true, 
-      username: "test",
-    }, process.env.AUTH_SECRET as string)
-  );
 };
