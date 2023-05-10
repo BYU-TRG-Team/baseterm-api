@@ -1,17 +1,14 @@
-import { fetchMockTermbaseData, generateJWT, importFile } from "@tests/helpers";
+import { fetchMockTermbaseData, importFile } from "@tests/helpers";
 import { PostAuxElementEndpointResponse } from "@typings/responses";
 import { UUID, TbxElement } from "@typings";
 import { SuperAgentResponse } from "@tests/types";
-import { Role } from "@byu-trg/express-user-management";
 import { APP_ROOT } from "@constants";
 import testApiClient from "@tests/test-api-client";
+import { TEST_AUTH_TOKEN } from "@tests/constants";
 
 const endpointConstructor = (
   termbaseUUID: UUID
 ) => `/termbase/${termbaseUUID}/auxElement`;
-const jwt = generateJWT(
-  Role.Staff
-);
 let mockData: {
   termbaseUUID: UUID,
   termUUID: UUID,
@@ -44,7 +41,7 @@ describe("tests PostAuxElement controller", () => {
           mockData.termbaseUUID
         )
       )
-      .set("Cookie", [`TRG_AUTH_TOKEN=${jwt}`])
+      .set("Cookie", [`TRG_AUTH_TOKEN=${TEST_AUTH_TOKEN}`])
       .field({
         parentUUID: mockData.termUUID,
         parentElementType: TbxElement.Term,

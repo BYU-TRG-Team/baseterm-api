@@ -1,19 +1,16 @@
-import { fetchMockTermNote, generateJWT, importFile } from "@tests/helpers";
+import { fetchMockTermNote, importFile } from "@tests/helpers";
 import { PatchTermNoteEndpointResponse } from "@typings/responses";
 import { TermNote, UUID } from "@typings";
 import { VALID_LANGUAGE_CODE } from "@tests/constants";
 import { SuperAgentResponse } from "@tests/types";
-import { Role } from "@byu-trg/express-user-management";
 import { APP_ROOT } from "@constants";
 import testApiClient from "@tests/test-api-client";
+import { TEST_AUTH_TOKEN } from "@tests/constants";
 
 const endpointConstructor = (
   termbaseUUID: UUID,
   termNoteUUID: UUID,
 ) => `/termbase/${termbaseUUID}/termNote/${termNoteUUID}`;
-const jwt = generateJWT(
-  Role.Staff
-);
 let mockData: {
   termbaseUUID: UUID,
   termNote: TermNote,
@@ -45,7 +42,7 @@ describe("tests PatchTermNote controller", () => {
           mockData.termNote.uuid
         )
       )
-      .set("Cookie", [`TRG_AUTH_TOKEN=${jwt}`])
+      .set("Cookie", [`TRG_AUTH_TOKEN=${TEST_AUTH_TOKEN}`])
       .field({
         id: "Test",
         type: "Test",

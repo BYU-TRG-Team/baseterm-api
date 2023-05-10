@@ -1,13 +1,8 @@
 import { v4 as uuid } from "uuid";
 import { SessionSSEEndpointResponse } from "@typings/responses";
 import EventSource from "eventsource";
-import { generateJWT } from "@tests/helpers";
-import { Role } from "@byu-trg/express-user-management";
 import { TEST_API_CLIENT_ENDPOINT } from "@tests/constants";
-
-const jwt = generateJWT(
-  Role.Staff
-);
+import { TEST_AUTH_TOKEN } from "@tests/constants";
 
 describe("tests Session controller", () => {
   test("should return a response indicating an undefined session", async () => {
@@ -17,7 +12,7 @@ describe("tests Session controller", () => {
         { 
           withCredentials: true,
           headers: {
-            "Cookie": `TRG_AUTH_TOKEN=${jwt}`,
+            "Cookie": `TRG_AUTH_TOKEN=${TEST_AUTH_TOKEN}`,
           }
         }
       );

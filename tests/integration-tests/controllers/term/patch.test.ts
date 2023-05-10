@@ -1,21 +1,15 @@
-import { fetchMockTermbaseData, generateJWT, importFile } from "@tests/helpers";
+import { fetchMockTermbaseData, importFile } from "@tests/helpers";
 import { PatchTermEndpointResponse } from "@typings/responses";
 import { UUID } from "@typings";
 import { SuperAgentResponse } from "@tests/types";
-import { Role } from "@byu-trg/express-user-management";
-import { v4 as uuid } from "uuid";
 import { APP_ROOT } from "@constants";
 import testApiClient from "@tests/test-api-client";
+import { TEST_AUTH_TOKEN } from "@tests/constants";
 
-const personId = uuid();
 const endpointConstructor = (
   termbaseUUID: UUID,
   termUUID: UUID,
 ) => `/termbase/${termbaseUUID}/term/${termUUID}`;
-const jwt = generateJWT(
-  Role.Staff,
-  personId,
-);
 let mockData: {
   termbaseUUID: UUID,
   termUUID: UUID,
@@ -26,8 +20,6 @@ describe("tests PatchTerm controller", () => {
     const termbaseUUID = await importFile(
       `${APP_ROOT}/example-tbx/valid-tbx-core.tbx`,
       testApiClient,
-      uuid(),
-      personId,
     );
 
     const { termUUID } = await fetchMockTermbaseData(
@@ -49,7 +41,7 @@ describe("tests PatchTerm controller", () => {
           mockData.termUUID
         )
       )
-      .set("Cookie", [`TRG_AUTH_TOKEN=${jwt}`])
+      .set("Cookie", [`TRG_AUTH_TOKEN=${TEST_AUTH_TOKEN}`])
       .field({
         value: "Test",
         id: "Test",

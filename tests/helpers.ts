@@ -8,9 +8,7 @@ import { v4 as uuid } from "uuid";
 import { SuperAgentTest } from "supertest";
 import { UUID } from "@typings";
 import EventSource from "eventsource";
-import jwt from "jsonwebtoken";
-import { Role } from "@byu-trg/express-user-management";
-import { TEST_API_CLIENT_ENDPOINT, TEST_API_AUTH_SECRET } from "@tests/constants";
+import { TEST_API_CLIENT_ENDPOINT, TEST_AUTH_TOKEN, TEST_USER_ID } from "@tests/constants";
 
 export const postPersonObjectRef = async (
   jwt: string,
@@ -35,19 +33,14 @@ export const importFile = async (
   filePath: string,
   requestClient: SuperAgentTest,
   name: string = uuid(),
-  personId = uuid(),
+  postPersonRefObject = true
 ) => {
-  const jwt = generateJWT(
-    Role.Staff,
-    personId,
-  );
-
   const { body: importBody } = (
       await requestClient
         .post("/import")
         .attach("tbxFile", filePath)
         .field({ name }) 
-        .set("Cookie", [`TRG_AUTH_TOKEN=${jwt}`])
+        .set("Cookie", [`TRG_AUTH_TOKEN=${TEST_AUTH_TOKEN}`])
     ) as { body: ImportEndpointResponse };
 
   await new Promise((resolve, reject) => {
@@ -56,7 +49,7 @@ export const importFile = async (
       { 
         withCredentials: true,
         headers: {
-          "Cookie": `TRG_AUTH_TOKEN=${jwt}`
+          "Cookie": `TRG_AUTH_TOKEN=${TEST_AUTH_TOKEN}`
         }
       }
     );
@@ -76,12 +69,14 @@ export const importFile = async (
     };
   });
 
-  await postPersonObjectRef(
-    jwt,
-    importBody.termbaseUUID,
-    requestClient,
-    personId,
-  );
+  if (postPersonRefObject) {
+    await postPersonObjectRef(
+      TEST_AUTH_TOKEN,
+      importBody.termbaseUUID,
+      requestClient,
+      TEST_USER_ID
+    );
+  }
 
   return importBody.termbaseUUID as UUID;
 };
@@ -90,19 +85,15 @@ export const fetchMockTermbaseData = async (
   termbaseUUID: UUID,
   requestClient: SuperAgentTest,
 ) => {
-  const jwt = generateJWT(
-    Role.User
-  );
-
   const { body: termbaseCreationResponse } = await requestClient
     .get(`/termbase/${termbaseUUID}/terms?page=1`)
-    .set("Cookie", [`TRG_AUTH_TOKEN=${jwt}`]) as
+    .set("Cookie", [`TRG_AUTH_TOKEN=${TEST_AUTH_TOKEN}`]) as
     { body: GetTermbaseTermsEndpointResponse };
 
   for (const term of termbaseCreationResponse.terms) {
     const { body: termResponse } = await requestClient
       .get(`/termbase/${termbaseUUID}/term/${term.uuid}`)
-      .set("Cookie", [`TRG_AUTH_TOKEN=${jwt}`]) as 
+      .set("Cookie", [`TRG_AUTH_TOKEN=${TEST_AUTH_TOKEN}`]) as 
         { body: GetTermEndpointResponse };
 
     if (termResponse.synonyms.length !== 0) {
@@ -122,19 +113,15 @@ export const fetchMockTermNote = async (
   termbaseUUID: UUID,
   requestClient: SuperAgentTest
 ) => {
-  const jwt = generateJWT(
-    Role.User
-  );
-  
   const { body: termbaseCreationResponse } = await requestClient
     .get(`/termbase/${termbaseUUID}/terms?page=1`) 
-    .set("Cookie", [`TRG_AUTH_TOKEN=${jwt}`]) as 
+    .set("Cookie", [`TRG_AUTH_TOKEN=${TEST_AUTH_TOKEN}`]) as 
       { body: GetTermbaseTermsEndpointResponse };
 
   for (const term of termbaseCreationResponse.terms) {
     const { body: termResponse } = await requestClient
       .get(`/termbase/${termbaseUUID}/term/${term.uuid}`)
-      .set("Cookie", [`TRG_AUTH_TOKEN=${jwt}`]) as 
+      .set("Cookie", [`TRG_AUTH_TOKEN=${TEST_AUTH_TOKEN}`]) as 
         { body: GetTermEndpointResponse };
 
     if (termResponse.termNotes.length !== 0) {
@@ -149,19 +136,15 @@ export const fetchMockAuxElement = async (
   termbaseUUID: UUID,
   requestClient: SuperAgentTest
 ) => {
-  const jwt = generateJWT(
-    Role.User
-  );
-
   const { body: termbaseCreationResponse } = await requestClient
     .get(`/termbase/${termbaseUUID}/terms?page=1`)
-    .set("Cookie", [`TRG_AUTH_TOKEN=${jwt}`]) as 
+    .set("Cookie", [`TRG_AUTH_TOKEN=${TEST_AUTH_TOKEN}`]) as 
       { body: GetTermbaseTermsEndpointResponse };
 
   for (const term of termbaseCreationResponse.terms) {
     const { body: termReponse } = await requestClient
       .get(`/termbase/${termbaseUUID}/term/${term.uuid}`)
-      .set("Cookie", [`TRG_AUTH_TOKEN=${jwt}`]) as 
+      .set("Cookie", [`TRG_AUTH_TOKEN=${TEST_AUTH_TOKEN}`]) as 
         { body: GetTermEndpointResponse };
 
     if (termReponse.auxElements.length !== 0) {
@@ -170,18 +153,4 @@ export const fetchMockAuxElement = async (
   }
 
   throw new Error("Failed to fetch aux element");
-};
-
-export const generateJWT = (
-  role: Role,
-  personId: UUID = uuid(),
-) => {
-  return (
-    jwt.sign({
-      id: personId, 
-      role, 
-      verified: true, 
-      username: "test",
-    }, TEST_API_AUTH_SECRET)
-  );
 };

@@ -1,13 +1,8 @@
 import { v4 as uuid } from "uuid";
 import { ImportEndpointResponse } from "@typings/responses";
-import { generateJWT } from "@tests/helpers";
-import { Role } from "@byu-trg/express-user-management";
 import { APP_ROOT } from "@constants";
 import testApiClient from "@tests/test-api-client";
-
-const jwt = generateJWT(
-  Role.Staff
-);
+import { TEST_AUTH_TOKEN } from "@tests/constants";
 
 describe("tests Import controller", () => {
   test("should return a response indicating a tbx file has successfully started importing", async () => {
@@ -15,7 +10,7 @@ describe("tests Import controller", () => {
       await testApiClient
         .post("/import")
         .attach("tbxFile", `${APP_ROOT}/example-tbx/valid-tbx-core.tbx`)
-        .set("Cookie", [`TRG_AUTH_TOKEN=${jwt}`])
+        .set("Cookie", [`TRG_AUTH_TOKEN=${TEST_AUTH_TOKEN}`])
         .field({ name: uuid()})
 
     ) as { status: number, body: ImportEndpointResponse };
@@ -29,7 +24,7 @@ describe("tests Import controller", () => {
     const { status, body } = await testApiClient
       .post("/import")
       .attach("tbxFile", `${APP_ROOT}/example-tbx/tbx-core-no-header.tbx`)
-      .set("Cookie", [`TRG_AUTH_TOKEN=${jwt}`])
+      .set("Cookie", [`TRG_AUTH_TOKEN=${TEST_AUTH_TOKEN}`])
       .field({ name: uuid()});
 
     expect(status).toBe(400);
@@ -39,7 +34,7 @@ describe("tests Import controller", () => {
   test("should return a response indicating an invalid body (no name field supplied)", async () => {
     const { status } = await testApiClient
       .post("/import")
-      .set("Cookie", [`TRG_AUTH_TOKEN=${jwt}`])
+      .set("Cookie", [`TRG_AUTH_TOKEN=${TEST_AUTH_TOKEN}`])
       .attach("tbxFile", `${APP_ROOT}/example-tbx/tbx-core-no-header.tbx`);
 
     expect(status).toBe(400);
@@ -48,7 +43,7 @@ describe("tests Import controller", () => {
   test("should return a response indicating an invalid body (no tbxFile supplied)", async () => {
     const { status, body } = await testApiClient
       .post("/import")
-      .set("Cookie", [`TRG_AUTH_TOKEN=${jwt}`])
+      .set("Cookie", [`TRG_AUTH_TOKEN=${TEST_AUTH_TOKEN}`])
       .field({ name: uuid()});
 
     expect(status).toBe(400);

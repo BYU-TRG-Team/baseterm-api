@@ -1,33 +1,27 @@
-import { 
-  generateJWT, 
-  importFile 
-} from "@tests/helpers";
+import { importFile } from "@tests/helpers";
 import { PostPersonRefObjectEndpointResponse } from "@typings/responses";
 import { UUID } from "@typings";
 import errorMessages from "@messages/errors";
 import { SuperAgentResponse } from "@tests/types";
-import { Role } from "@byu-trg/express-user-management";
 import { v4 as uuid } from "uuid";
 import { APP_ROOT } from "@constants";
 import testApiClient from "@tests/test-api-client";
+import { TEST_AUTH_TOKEN, TEST_USER_ID } from "@tests/constants";
 
-let mockData: {
-  termbaseUUID: UUID
-};
 const endpointConstructor = (
   termbaseUUID: UUID,
 ) => `/termbase/${termbaseUUID}/personRefObject`;
-const userId = uuid();
-const jwt = generateJWT(
-  Role.User,
-  userId
-);
+let mockData: {
+  termbaseUUID: UUID
+};
 
 describe("tests PostPersonRefObject controller", () => {
   beforeAll(async () => {
     const termbaseUUID = await importFile(
       `${APP_ROOT}/example-tbx/valid-tbx-core.tbx`,
-      testApiClient
+      testApiClient,
+      uuid(),
+      false
     );
 
     mockData = {
@@ -42,7 +36,7 @@ describe("tests PostPersonRefObject controller", () => {
           mockData.termbaseUUID,
         )
       )
-      .set("Cookie", [`TRG_AUTH_TOKEN=${jwt}`]);
+      .set("Cookie", [`TRG_AUTH_TOKEN=${TEST_AUTH_TOKEN}`]);
   
     expect(status).toBe(400);
     expect(body.error).toBe(errorMessages.bodyInvalid);
@@ -61,7 +55,7 @@ describe("tests PostPersonRefObject controller", () => {
         role: "Test",
         id: uuid()
       })
-      .set("Cookie", [`TRG_AUTH_TOKEN=${jwt}`]);
+      .set("Cookie", [`TRG_AUTH_TOKEN=${TEST_AUTH_TOKEN}`]);
   
     expect(status).toBe(400);
     expect(body.error).toBe(errorMessages.userIdMismatch);
@@ -78,9 +72,9 @@ describe("tests PostPersonRefObject controller", () => {
         name: "Test",
         email: "Test",
         role: "Test",
-        id: userId
+        id: TEST_USER_ID
       })
-      .set("Cookie", [`TRG_AUTH_TOKEN=${jwt}`]) as
+      .set("Cookie", [`TRG_AUTH_TOKEN=${TEST_AUTH_TOKEN}`]) as
       SuperAgentResponse<PostPersonRefObjectEndpointResponse>;
 
     expect(status).toBe(200);

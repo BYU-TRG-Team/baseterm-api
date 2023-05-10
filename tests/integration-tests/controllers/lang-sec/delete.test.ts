@@ -1,16 +1,13 @@
-import { fetchMockTermbaseData, generateJWT, importFile } from "@tests/helpers";
+import { fetchMockTermbaseData, importFile } from "@tests/helpers";
 import { UUID } from "@typings";
-import { Role } from "@byu-trg/express-user-management";
 import { APP_ROOT } from "@constants";
 import testApiClient from "@tests/test-api-client";
+import { TEST_AUTH_TOKEN } from "@tests/constants";
 
 const endpointConstructor = (
   termbaseUUID: UUID,
   langSecUUID: UUID,
 ) => `/termbase/${termbaseUUID}/langSec/${langSecUUID}`;
-const jwt = generateJWT(
-  Role.Staff
-);
 let mockData: {
   termbaseUUID: UUID,
   langSecUUID: UUID,
@@ -44,7 +41,7 @@ describe("tests DeleteLangSec controller", () => {
           mockData.langSecUUID
         )
       )
-      .set("Cookie", [`TRG_AUTH_TOKEN=${jwt}`]);
+      .set("Cookie", [`TRG_AUTH_TOKEN=${TEST_AUTH_TOKEN}`]);
 	
     expect(deleteLangSecStatus).toBe(204);
 	
@@ -55,7 +52,7 @@ describe("tests DeleteLangSec controller", () => {
           mockData.langSecUUID
         )
       )
-      .set("Cookie", [`TRG_AUTH_TOKEN=${jwt}`]);
+      .set("Cookie", [`TRG_AUTH_TOKEN=${TEST_AUTH_TOKEN}`]);
 	
     expect(getLangSecStatus).toBe(404);
   });

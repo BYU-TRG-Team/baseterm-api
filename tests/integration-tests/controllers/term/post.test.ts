@@ -1,4 +1,4 @@
-import { fetchMockTermbaseData, generateJWT, importFile } from "@tests/helpers";
+import { fetchMockTermbaseData, importFile } from "@tests/helpers";
 import { PostLangSecEndpointResponse } from "@typings/responses";
 import { UUID } from "@typings";
 import errorMessages from "@messages/errors";
@@ -7,15 +7,12 @@ import { Role } from "@byu-trg/express-user-management";
 import { v4 as uuid } from "uuid";
 import { APP_ROOT } from "@constants";
 import testApiClient from "@tests/test-api-client";
+import { TEST_AUTH_TOKEN } from "@tests/constants";
 
 const personId = uuid();
 const endpointConstructor = (
   termbaseUUID: UUID,
 ) => `/termbase/${termbaseUUID}/term`;
-const jwt = generateJWT(
-  Role.Staff,
-  personId,
-);
 let mockData: {
   termbaseUUID: UUID,
   langSecUUID: UUID,
@@ -26,8 +23,6 @@ describe("tests PostTerm controller", () => {
     const termbaseUUID = await importFile(
       `${APP_ROOT}/example-tbx/valid-tbx-core.tbx`,
       testApiClient,
-      uuid(),
-      personId,
     );
 
     const {
@@ -50,7 +45,7 @@ describe("tests PostTerm controller", () => {
           mockData.termbaseUUID
         )
       )
-      .set("Cookie", [`TRG_AUTH_TOKEN=${jwt}`]);
+      .set("Cookie", [`TRG_AUTH_TOKEN=${TEST_AUTH_TOKEN}`]);
   
     expect(status).toBe(400);
     expect(body.error).toBe(errorMessages.bodyInvalid);
@@ -67,7 +62,7 @@ describe("tests PostTerm controller", () => {
         langSecUUID: mockData.langSecUUID,
         value: "Test"
       }) 
-      .set("Cookie", [`TRG_AUTH_TOKEN=${jwt}`]) as 
+      .set("Cookie", [`TRG_AUTH_TOKEN=${TEST_AUTH_TOKEN}`]) as 
       SuperAgentResponse<PostLangSecEndpointResponse>;
 
     expect(status).toBe(200);

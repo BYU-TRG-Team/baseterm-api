@@ -1,12 +1,7 @@
 import { v4 as uuid } from "uuid";
 import { PostTermbaseEndpointResponse } from "@typings/responses";
-import { generateJWT } from "@tests/helpers";
-import { Role } from "@byu-trg/express-user-management";
 import testApiClient from "@tests/test-api-client";
-
-const jwt = generateJWT(
-  Role.Staff
-);
+import { TEST_AUTH_TOKEN } from "@tests/constants";
 
 describe("tests PostTermbase controller", () => {
   test("should return a response indicating a new base has been created", async () => {
@@ -17,7 +12,7 @@ describe("tests PostTermbase controller", () => {
           name: uuid(),
           lang: "en-US"
         })
-        .set("Cookie", [`TRG_AUTH_TOKEN=${jwt}`])
+        .set("Cookie", [`TRG_AUTH_TOKEN=${TEST_AUTH_TOKEN}`])
     ) as { status: number, body: PostTermbaseEndpointResponse }; 
 
     expect(status).toBe(200);
@@ -32,7 +27,7 @@ describe("tests PostTermbase controller", () => {
         name: baseName,
         lang: "en-US"
       })
-      .set("Cookie", [`TRG_AUTH_TOKEN=${jwt}`]);
+      .set("Cookie", [`TRG_AUTH_TOKEN=${TEST_AUTH_TOKEN}`]);
 
 
     const { status, body } = await testApiClient
@@ -41,7 +36,7 @@ describe("tests PostTermbase controller", () => {
         name: baseName,
         lang: "en-US"
       })
-      .set("Cookie", [`TRG_AUTH_TOKEN=${jwt}`]);
+      .set("Cookie", [`TRG_AUTH_TOKEN=${TEST_AUTH_TOKEN}`]);
 
     expect(status).toBe(409);
     expect(body.error).toBe("A base already exists with the same name.");
@@ -53,7 +48,7 @@ describe("tests PostTermbase controller", () => {
       .field({ 
         lang: "en-US"
       })
-      .set("Cookie", [`TRG_AUTH_TOKEN=${jwt}`]);
+      .set("Cookie", [`TRG_AUTH_TOKEN=${TEST_AUTH_TOKEN}`]);
 
     expect(status).toBe(400);
   });
@@ -64,7 +59,7 @@ describe("tests PostTermbase controller", () => {
       .field({ 
         name: uuid(),
       })
-      .set("Cookie", [`TRG_AUTH_TOKEN=${jwt}`]);
+      .set("Cookie", [`TRG_AUTH_TOKEN=${TEST_AUTH_TOKEN}`]);
 
     expect(status).toBe(400);
     expect(body.error).toBe("Body Invalid");
