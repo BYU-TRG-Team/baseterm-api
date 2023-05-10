@@ -1,8 +1,7 @@
 import { v4 as uuid } from "uuid";
 import { SessionSSEEndpointResponse } from "@typings/responses";
 import EventSource from "eventsource";
-import { TEST_API_CLIENT_ENDPOINT } from "@tests/constants";
-import { TEST_API_CLIENT_COOKIES } from "@tests/constants";
+import { TEST_API_CLIENT_COOKIES, TEST_API_CLIENT_ENDPOINT } from "@tests/test-api-client";
 
 describe("tests Session controller", () => {
   test("should return a response indicating an undefined session", async () => {

@@ -9,8 +9,8 @@ import { v4 as uuid } from "uuid";
 import { SuperAgentTest } from "supertest";
 import { UUID } from "@typings";
 import EventSource from "eventsource";
-import { EXAMPLE_TBX_FILE, TEST_API_CLIENT_COOKIES, TEST_API_CLIENT_ENDPOINT, TEST_AUTH_TOKEN, TEST_USER_ID } from "@tests/constants";
-import testApiClient from "@tests/test-api-client";
+import { EXAMPLE_TBX_FILE } from "@tests/constants";
+import testApiClient, { TEST_API_CLIENT_COOKIES, TEST_API_CLIENT_ENDPOINT, TEST_AUTH_TOKEN, TEST_USER_ID } from "@tests/test-api-client";
 
 export const postPersonObjectRef = async (
   jwt: string,

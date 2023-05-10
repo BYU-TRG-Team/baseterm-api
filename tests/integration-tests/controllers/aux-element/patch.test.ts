@@ -2,8 +2,7 @@ import { fetchMockAuxElement, importTBXFile } from "@tests/helpers";
 import { PatchAuxElementEndpointResponse } from "@typings/responses";
 import { AuxElement, UUID } from "@typings";
 import { SuperAgentResponse } from "@tests/types";
-import testApiClient from "@tests/test-api-client";
-import { TEST_API_CLIENT_COOKIES } from "@tests/constants";
+import testApiClient, { TEST_API_CLIENT_COOKIES } from "@tests/test-api-client";
 
 const endpointConstructor = (
   termbaseUUID: UUID,

@@ -2,8 +2,7 @@ import { importTBXFile } from "@tests/helpers";
 import { PostEntryEndpointResponse } from "@typings/responses";
 import { VALID_LANGUAGE_CODE } from "@tests/constants";
 import { UUID } from "@typings";
-import testApiClient from "@tests/test-api-client";
-import { TEST_API_CLIENT_COOKIES } from "@tests/constants";
+import testApiClient, { TEST_API_CLIENT_COOKIES } from "@tests/test-api-client";
 
 let mockData: {
   termbaseUUID: UUID
