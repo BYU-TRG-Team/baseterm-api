@@ -1,7 +1,6 @@
 import { v4 as uuid } from "uuid";
 import { PostTermbaseEndpointResponse } from "@typings/responses";
-import testApiClient from "@tests/test-api-client";
-import { TEST_API_CLIENT_COOKIES } from "@tests/constants";
+import testApiClient, { TEST_API_CLIENT_COOKIES } from "@tests/test-api-client";
 
 describe("tests PostTermbase controller", () => {
   test("should return a response indicating a new base has been created", async () => {

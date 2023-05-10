@@ -5,8 +5,7 @@ import {
   PatchTermbaseEndpointResponse
 } from "@typings/responses";
 import { UUID } from "@typings";
-import testApiClient from "@tests/test-api-client";
-import { TEST_API_CLIENT_COOKIES } from "@tests/constants";
+import testApiClient, { TEST_API_CLIENT_COOKIES }  from "@tests/test-api-client";
 
 let mockData: {
   termbaseUUID: UUID,

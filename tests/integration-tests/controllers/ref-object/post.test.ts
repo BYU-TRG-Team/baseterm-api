@@ -4,8 +4,7 @@ import { UUID } from "@typings";
 import errorMessages from "@messages/errors";
 import { SuperAgentResponse } from "@tests/types";
 import { v4 as uuid } from "uuid";
-import testApiClient from "@tests/test-api-client";
-import { TEST_API_CLIENT_COOKIES, TEST_USER_ID } from "@tests/constants";
+import testApiClient, { TEST_API_CLIENT_COOKIES, TEST_USER_ID } from "@tests/test-api-client";
 
 const endpointConstructor = (
   termbaseUUID: UUID,

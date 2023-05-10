@@ -1,6 +1,5 @@
 import { importTBXFile } from "@tests/helpers";
-import testApiClient from "@tests/test-api-client";
-import { TEST_API_CLIENT_COOKIES } from "@tests/constants";
+import testApiClient, { TEST_API_CLIENT_COOKIES } from "@tests/test-api-client";
 
 describe("tests DeleteTermbase controller", () => {
   test("should return a response with no content and remove termbase from DB", async () => {

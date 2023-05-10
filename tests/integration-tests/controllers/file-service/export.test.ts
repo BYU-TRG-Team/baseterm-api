@@ -1,8 +1,7 @@
 import { ExportEndpointResponse } from "@typings/responses";
 import { v4 as uuid } from "uuid";
 import { importTBXFile } from "@tests/helpers";
-import testApiClient from "@tests/test-api-client";
-import { TEST_API_CLIENT_COOKIES } from "@tests/constants";
+import testApiClient, { TEST_API_CLIENT_COOKIES } from "@tests/test-api-client";
 
 
 describe("tests Export controller", () => {

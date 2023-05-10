@@ -1,8 +1,7 @@
 import { v4 as uuid } from "uuid";
 import { ImportEndpointResponse } from "@typings/responses";
 import { APP_ROOT } from "@constants";
-import testApiClient from "@tests/test-api-client";
-import { TEST_API_CLIENT_COOKIES} from "@tests/constants";
+import testApiClient, { TEST_API_CLIENT_COOKIES }  from "@tests/test-api-client";
 
 describe("tests Import controller", () => {
   test("should return a response indicating a tbx file has successfully started importing", async () => {
