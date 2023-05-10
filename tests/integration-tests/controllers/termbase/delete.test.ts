@@ -4,7 +4,7 @@ import { TEST_API_CLIENT_COOKIES } from "@tests/constants";
 
 describe("tests DeleteTermbase controller", () => {
   test("should return a response with no content and remove termbase from DB", async () => {
-    const termbaseUUID = await importTBXFile(testApiClient);
+    const termbaseUUID = await importTBXFile();
 
     // ensure that termbase exists
     const termbaseRetrievalResponse = await testApiClient

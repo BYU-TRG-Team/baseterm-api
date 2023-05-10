@@ -10,6 +10,7 @@ import { SuperAgentTest } from "supertest";
 import { UUID } from "@typings";
 import EventSource from "eventsource";
 import { EXAMPLE_TBX_FILE, TEST_API_CLIENT_COOKIES, TEST_API_CLIENT_ENDPOINT, TEST_AUTH_TOKEN, TEST_USER_ID } from "@tests/constants";
+import testApiClient from "@tests/test-api-client";
 
 export const postPersonObjectRef = async (
   jwt: string,
@@ -31,7 +32,6 @@ export const postPersonObjectRef = async (
 };
 
 export const importTBXFile = async (
-  requestClient: SuperAgentTest, 
   options: {
     filePath?: string
     name?: string,
@@ -44,7 +44,7 @@ export const importTBXFile = async (
     createPersonRefObject = true
   } = options;
 
-  const { body: importResponseBody } = await requestClient
+  const { body: importResponseBody } = await testApiClient
     .post("/import")
     .attach("tbxFile", filePath)
     .field({ name }) 
@@ -82,7 +82,7 @@ export const importTBXFile = async (
     await postPersonObjectRef(
       TEST_AUTH_TOKEN,
       importResponseBody.termbaseUUID,
-      requestClient,
+      testApiClient,
       TEST_USER_ID
     );
   }
@@ -90,11 +90,8 @@ export const importTBXFile = async (
   return importResponseBody.termbaseUUID;
 };
 
-export const exportTBXFile = async (
-  requestClient: SuperAgentTest, 
-  termbaseUUID: UUID,
-) => {
-  const { body: exportResponseBody } = await requestClient
+export const exportTBXFile = async (termbaseUUID: UUID) => {
+  const { body: exportResponseBody } = await testApiClient
     .get(`/export/${termbaseUUID}`)
     .set("Cookie", TEST_API_CLIENT_COOKIES) as { 
       body: ExportEndpointResponse 

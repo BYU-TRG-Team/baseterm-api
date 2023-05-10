@@ -14,7 +14,7 @@ let mockData: {
 
 describe("tests LanguageSection controller", () => {
   beforeAll(async () => {
-    const termbaseUUID = await importTBXFile(testApiClient);
+    const termbaseUUID = await importTBXFile();
 
     const { langSecUUID } = await fetchMockTermbaseData(
       termbaseUUID,

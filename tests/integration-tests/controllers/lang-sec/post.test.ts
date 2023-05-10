@@ -19,7 +19,7 @@ let mockData: {
 
 describe("tests PostLangSec controller", () => {
   beforeAll(async () => {
-    const termbaseUUID = await importTBXFile(testApiClient);
+    const termbaseUUID = await importTBXFile();
 
     const {
       entryUUID

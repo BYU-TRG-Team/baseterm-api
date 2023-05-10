@@ -11,7 +11,7 @@ let mockData: {
 
 describe("tests GetTermbase controller", () => {
   beforeAll(async () => {
-    const termbaseUUID = await importTBXFile(testApiClient);
+    const termbaseUUID = await importTBXFile();
 
     mockData = {
       termbaseUUID,
