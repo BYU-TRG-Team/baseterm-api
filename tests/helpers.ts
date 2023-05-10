@@ -10,7 +10,7 @@ import { UUID } from "@typings";
 import EventSource from "eventsource";
 import jwt from "jsonwebtoken";
 import { Role } from "@byu-trg/express-user-management";
-import { TEST_API_CLIENT_ENDPOINT } from "@tests/constants";
+import { TEST_API_CLIENT_ENDPOINT, TEST_API_AUTH_SECRET } from "@tests/constants";
 
 export const postPersonObjectRef = async (
   jwt: string,
@@ -182,6 +182,6 @@ export const generateJWT = (
       role, 
       verified: true, 
       username: "test",
-    }, process.env.AUTH_SECRET as string)
+    }, TEST_API_AUTH_SECRET)
   );
 };
