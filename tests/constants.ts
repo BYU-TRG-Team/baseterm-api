@@ -3,7 +3,7 @@ import { Role, AuthToken } from "@byu-trg/express-user-management";
 import jwt from "jsonwebtoken";
 
 export const VALID_LANGUAGE_CODE = "en-US";
-export const TEST_API_CLIENT_ENDPOINT = "http://baseterm-api:4000";
+export const API_AUTH_COOKIE_NAME = "TRG_AUTH_TOKEN";
 export const TEST_API_AUTH_SECRET = "killjoy";
 export const TEST_USER_ID = uuid();
 export const TEST_AUTH_TOKEN = jwt.sign({
@@ -12,3 +12,5 @@ export const TEST_AUTH_TOKEN = jwt.sign({
   verified: true,
   username: "TEST-USER"
 } as AuthToken, TEST_API_AUTH_SECRET);
+export const TEST_API_CLIENT_COOKIES = [`${API_AUTH_COOKIE_NAME}=${TEST_AUTH_TOKEN}`];
+export const TEST_API_CLIENT_ENDPOINT = "http://baseterm-api:4000";

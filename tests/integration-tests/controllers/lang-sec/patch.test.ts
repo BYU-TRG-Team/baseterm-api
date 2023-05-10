@@ -3,9 +3,8 @@ import { PatchLangSecEndpointResponse } from "@typings/responses";
 import { VALID_LANGUAGE_CODE } from "@tests/constants";
 import { UUID } from "@typings";
 import { SuperAgentResponse } from "@tests/types";
-import { APP_ROOT } from "@constants";
 import testApiClient from "@tests/test-api-client";
-import { TEST_AUTH_TOKEN } from "@tests/constants";
+import { TEST_API_CLIENT_COOKIES } from "@tests/constants";
 
 const endpointConstructor = (
   termbaseUUID: UUID,
@@ -41,7 +40,7 @@ describe("tests PatchLangSec controller", () => {
           mockData.langSecUUID
         )
       )
-      .set("Cookie", [`TRG_AUTH_TOKEN=${TEST_AUTH_TOKEN}`])
+      .set("Cookie", TEST_API_CLIENT_COOKIES)
       .field({
         langCode: VALID_LANGUAGE_CODE,
         order: 100

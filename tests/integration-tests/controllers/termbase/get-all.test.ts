@@ -1,12 +1,12 @@
 import { GetTermbasesEndpointResponse } from "@typings/responses";
 import testApiClient from "@tests/test-api-client";
-import { TEST_AUTH_TOKEN } from "@tests/constants";
+import { TEST_API_CLIENT_COOKIES } from "@tests/constants";
 
 describe("tests GetTermbases controller", () => {
   test("should return a 400 for invalid query params", async () => {
     const { status, body } = await testApiClient
       .get("/termbases")
-      .set("Cookie", [`TRG_AUTH_TOKEN=${TEST_AUTH_TOKEN}`]);
+      .set("Cookie", TEST_API_CLIENT_COOKIES);
 
     expect(status).toBe(400);
     expect(body.error).toBeDefined();
@@ -16,7 +16,7 @@ describe("tests GetTermbases controller", () => {
     const { status, body } = (
       await testApiClient
         .get("/termbases?page=1")
-        .set("Cookie", [`TRG_AUTH_TOKEN=${TEST_AUTH_TOKEN}`])
+        .set("Cookie", TEST_API_CLIENT_COOKIES)
     ) as { status: number, body: GetTermbasesEndpointResponse };
 
     expect(status).toBe(200);

@@ -3,7 +3,7 @@ import { GetTermEndpointResponse } from "@typings/responses";
 import { fetchMockTermbaseData, importTBXFile } from "@tests/helpers";
 import { UUID } from "@typings";
 import testApiClient from "@tests/test-api-client";
-import { TEST_AUTH_TOKEN } from "@tests/constants";
+import { TEST_API_CLIENT_COOKIES } from "@tests/constants";
 
 let mockData: {
   termbaseUUID: UUID,
@@ -29,7 +29,7 @@ describe("tests GetTerm controller", () => {
     
     const { status, body } = await testApiClient
       .get(`/termbase/${mockData.termbaseUUID}/term/${uuid()}`)
-      .set("Cookie", [`TRG_AUTH_TOKEN=${TEST_AUTH_TOKEN}`]);
+      .set("Cookie", TEST_API_CLIENT_COOKIES);
    
     expect(status).toBe(404);
     expect(body.error).toBeDefined();
@@ -39,7 +39,7 @@ describe("tests GetTerm controller", () => {
   test("should return a 404 response for invalid uuid (malformed uuid)", async () => {
     const { status, body } = await testApiClient
       .get(`/termbase/${mockData.termbaseUUID}/term/randommmm`)
-      .set("Cookie", [`TRG_AUTH_TOKEN=${TEST_AUTH_TOKEN}`]);
+      .set("Cookie", TEST_API_CLIENT_COOKIES);
 
     expect(status).toBe(404);
     expect(body.error).toBeDefined();
@@ -48,7 +48,7 @@ describe("tests GetTerm controller", () => {
   test("should return a successful response", async () => {
     const termResponse = await testApiClient
       .get(`/termbase/${mockData.termbaseUUID}/term/${mockData.termUUID}`)
-      .set("Cookie", [`TRG_AUTH_TOKEN=${TEST_AUTH_TOKEN}`]) as
+      .set("Cookie", TEST_API_CLIENT_COOKIES) as
       { status: number; body: GetTermEndpointResponse};
 
     expect(termResponse.status).toBe(200);

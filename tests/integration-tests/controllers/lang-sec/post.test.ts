@@ -7,7 +7,7 @@ import { VALID_LANGUAGE_CODE} from "@tests/constants";
 import { UUID } from "@typings";
 import { SuperAgentResponse } from "@tests/types";
 import testApiClient from "@tests/test-api-client";
-import { TEST_AUTH_TOKEN } from "@tests/constants";
+import { TEST_API_CLIENT_COOKIES } from "@tests/constants";
 
 const endpointConstructor = (
   termbaseUUID: UUID,
@@ -41,7 +41,7 @@ describe("tests PostLangSec controller", () => {
           mockData.termbaseUUID,
         )
       )
-      .set("Cookie", [`TRG_AUTH_TOKEN=${TEST_AUTH_TOKEN}`]);
+      .set("Cookie", TEST_API_CLIENT_COOKIES);
   
     expect(status).toBe(400);
   });
@@ -58,7 +58,7 @@ describe("tests PostLangSec controller", () => {
         langCode: VALID_LANGUAGE_CODE,
         initialTerm: "Test"
       }) 
-      .set("Cookie", [`TRG_AUTH_TOKEN=${TEST_AUTH_TOKEN}`]) as 
+      .set("Cookie", TEST_API_CLIENT_COOKIES) as 
       SuperAgentResponse<PostLangSecEndpointResponse>;
   
     expect(status).toBe(200);

@@ -5,7 +5,7 @@ import errorMessages from "@messages/errors";
 import { SuperAgentResponse } from "@tests/types";
 import { v4 as uuid } from "uuid";
 import testApiClient from "@tests/test-api-client";
-import { TEST_AUTH_TOKEN, TEST_USER_ID } from "@tests/constants";
+import { TEST_API_CLIENT_COOKIES, TEST_USER_ID } from "@tests/constants";
 
 const endpointConstructor = (
   termbaseUUID: UUID,
@@ -32,7 +32,7 @@ describe("tests PostPersonRefObject controller", () => {
           mockData.termbaseUUID,
         )
       )
-      .set("Cookie", [`TRG_AUTH_TOKEN=${TEST_AUTH_TOKEN}`]);
+      .set("Cookie", TEST_API_CLIENT_COOKIES);
   
     expect(status).toBe(400);
     expect(body.error).toBe(errorMessages.bodyInvalid);
@@ -51,7 +51,7 @@ describe("tests PostPersonRefObject controller", () => {
         role: "Test",
         id: uuid()
       })
-      .set("Cookie", [`TRG_AUTH_TOKEN=${TEST_AUTH_TOKEN}`]);
+      .set("Cookie", TEST_API_CLIENT_COOKIES);
   
     expect(status).toBe(400);
     expect(body.error).toBe(errorMessages.userIdMismatch);
@@ -70,7 +70,7 @@ describe("tests PostPersonRefObject controller", () => {
         role: "Test",
         id: TEST_USER_ID
       })
-      .set("Cookie", [`TRG_AUTH_TOKEN=${TEST_AUTH_TOKEN}`]) as
+      .set("Cookie", TEST_API_CLIENT_COOKIES) as
       SuperAgentResponse<PostPersonRefObjectEndpointResponse>;
 
     expect(status).toBe(200);
