@@ -4,15 +4,15 @@ import testApiClient, { TEST_API_CLIENT_COOKIES } from "@tests/test-api-client";
 
 describe("tests PostTermbase controller", () => {
   test("should return a response indicating a new base has been created", async () => {
-    const { status, body } = (
-      await testApiClient
-        .post("/termbase")
-        .field({ 
-          name: uuid(),
-          lang: "en-US"
-        })
-        .set("Cookie", TEST_API_CLIENT_COOKIES)
-    ) as { status: number, body: PostTermbaseEndpointResponse }; 
+    const { status, body } = await testApiClient
+      .post("/termbase")
+      .field({ 
+        name: uuid(),
+        lang: "en-US"
+      })
+      .set("Cookie", TEST_API_CLIENT_COOKIES) as { 
+        status: number, body: PostTermbaseEndpointResponse 
+      }; 
 
     expect(status).toBe(200);
     expect(body.uuid).toBeDefined();

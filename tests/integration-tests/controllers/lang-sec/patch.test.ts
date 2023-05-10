@@ -5,10 +5,6 @@ import { UUID } from "@typings";
 import { SuperAgentResponse } from "@tests/types";
 import testApiClient, { TEST_API_CLIENT_COOKIES } from "@tests/test-api-client";
 
-const endpointConstructor = (
-  termbaseUUID: UUID,
-  langSecUUID: UUID,
-) => `/termbase/${termbaseUUID}/langSec/${langSecUUID}`;
 let mockData: {
   termbaseUUID: UUID,
   langSecUUID: UUID,
@@ -33,12 +29,7 @@ describe("tests PatchLangSec controller", () => {
 
   test("should return a 200 response for successful patch of term", async () => {
     const { status, body } = await testApiClient
-      .patch(
-        endpointConstructor(
-          mockData.termbaseUUID,
-          mockData.langSecUUID
-        )
-      )
+      .patch(`/termbase/${mockData.termbaseUUID}/langSec/${mockData.langSecUUID}`)
       .set("Cookie", TEST_API_CLIENT_COOKIES)
       .field({
         langCode: VALID_LANGUAGE_CODE,

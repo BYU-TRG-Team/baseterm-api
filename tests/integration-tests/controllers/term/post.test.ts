@@ -5,9 +5,6 @@ import errorMessages from "@messages/errors";
 import { SuperAgentResponse } from "@tests/types";
 import testApiClient, { TEST_API_CLIENT_COOKIES } from "@tests/test-api-client";
 
-const endpointConstructor = (
-  termbaseUUID: UUID,
-) => `/termbase/${termbaseUUID}/term`;
 let mockData: {
   termbaseUUID: UUID,
   langSecUUID: UUID,
@@ -32,11 +29,7 @@ describe("tests PostTerm controller", () => {
 
   test("should return a 400 response for invalid body", async () => {
     const { status, body } = await testApiClient
-      .post(
-        endpointConstructor(
-          mockData.termbaseUUID
-        )
-      )
+      .post(`/termbase/${mockData.termbaseUUID}/term`)
       .set("Cookie", TEST_API_CLIENT_COOKIES);
   
     expect(status).toBe(400);
@@ -45,11 +38,7 @@ describe("tests PostTerm controller", () => {
   
   test("should return a 200 response for successful creation of a term", async () => {
     const { status, body } = await testApiClient
-      .post(
-        endpointConstructor(
-          mockData.termbaseUUID
-        )
-      )
+      .post(`/termbase/${mockData.termbaseUUID}/term`)
       .field({
         langSecUUID: mockData.langSecUUID,
         value: "Test"

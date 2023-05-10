@@ -4,10 +4,6 @@ import { AuxElement, UUID } from "@typings";
 import { SuperAgentResponse } from "@tests/types";
 import testApiClient, { TEST_API_CLIENT_COOKIES } from "@tests/test-api-client";
 
-const endpointConstructor = (
-  termbaseUUID: UUID,
-  auxElementUUID: UUID,
-) => `/termbase/${termbaseUUID}/auxElement/${auxElementUUID}`;
 let mockData: {
   termbaseUUID: UUID,
   auxElement: AuxElement,
@@ -16,7 +12,6 @@ let mockData: {
 describe("tests PatchAuxElement controller", () => {
   beforeAll(async () => {
     const termbaseUUID = await importTBXFile();
-
     const auxElement = await fetchMockAuxElement(
       termbaseUUID,
       testApiClient,
@@ -30,12 +25,7 @@ describe("tests PatchAuxElement controller", () => {
 
   test("should return a successful response for successful patch of an aux element", async () => {
     const { status, body } = await testApiClient
-      .patch(
-        endpointConstructor(
-          mockData.termbaseUUID,
-          mockData.auxElement.uuid,
-        )
-      )
+      .patch(`/termbase/${mockData.termbaseUUID}/auxElement/${mockData.auxElement.uuid}`)
       .set("Cookie", TEST_API_CLIENT_COOKIES)
       .field({
         elementType: mockData.auxElement.elementType,

@@ -4,9 +4,6 @@ import { UUID, TbxElement } from "@typings";
 import { SuperAgentResponse } from "@tests/types";
 import testApiClient, { TEST_API_CLIENT_COOKIES } from "@tests/test-api-client";
 
-const endpointConstructor = (
-  termbaseUUID: UUID
-) => `/termbase/${termbaseUUID}/auxElement`;
 let mockData: {
   termbaseUUID: UUID,
   termUUID: UUID,
@@ -15,7 +12,6 @@ let mockData: {
 describe("tests PostAuxElement controller", () => {
   beforeAll(async () => {
     const termbaseUUID = await importTBXFile();
-
     const {
       termUUID,
     } = await fetchMockTermbaseData(
@@ -31,11 +27,7 @@ describe("tests PostAuxElement controller", () => {
 
   test("should return a 200 response for successful post of aux element", async () => {
     const { status } = await testApiClient
-      .post(
-        endpointConstructor(
-          mockData.termbaseUUID
-        )
-      )
+      .post(`/termbase/${mockData.termbaseUUID}/auxElement`)
       .set("Cookie", TEST_API_CLIENT_COOKIES)
       .field({
         parentUUID: mockData.termUUID,

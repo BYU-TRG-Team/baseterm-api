@@ -12,25 +12,6 @@ import EventSource from "eventsource";
 import { EXAMPLE_TBX_FILE } from "@tests/constants";
 import testApiClient, { TEST_API_CLIENT_COOKIES, TEST_API_CLIENT_ENDPOINT, TEST_AUTH_TOKEN, TEST_USER_ID } from "@tests/test-api-client";
 
-export const postPersonObjectRef = async (
-  jwt: string,
-  termbaseUUID: UUID,
-  requestClient: SuperAgentTest,
-  personId: UUID,
-) => {
-  await requestClient
-    .post(
-      `/termbase/${termbaseUUID}/personRefObject`
-    )
-    .field({
-      name: "Test",
-      email: "Test",
-      role: "Test",
-      id: personId,
-    })
-    .set("Cookie", [`TRG_AUTH_TOKEN=${jwt}`]);
-};
-
 export const importTBXFile = async (
   options: {
     filePath?: string
@@ -124,6 +105,25 @@ export const exportTBXFile = async (termbaseUUID: UUID) => {
   });
 
   return exportedTbxFile;
+};
+
+export const postPersonObjectRef = async (
+  jwt: string,
+  termbaseUUID: UUID,
+  requestClient: SuperAgentTest,
+  personId: UUID,
+) => {
+  await requestClient
+    .post(
+      `/termbase/${termbaseUUID}/personRefObject`
+    )
+    .field({
+      name: "Test",
+      email: "Test",
+      role: "Test",
+      id: personId,
+    })
+    .set("Cookie", [`TRG_AUTH_TOKEN=${jwt}`]);
 };
 
 export const fetchMockTermbaseData = async (

@@ -2,10 +2,6 @@ import { fetchMockTermbaseData, importTBXFile } from "@tests/helpers";
 import { UUID } from "@typings";
 import testApiClient, { TEST_API_CLIENT_COOKIES } from "@tests/test-api-client";
 
-const endpointConstructor = (
-  termbaseUUID: UUID,
-  entryUUID: UUID,
-) => `/termbase/${termbaseUUID}/entry/${entryUUID}`;
 let mockData: {
   termbaseUUID: UUID,
   entryUUID: UUID,
@@ -14,7 +10,6 @@ let mockData: {
 describe("tests DeleteEntry controller", () => {
   beforeAll(async () => {
     const termbaseUUID = await importTBXFile();
-
     const {
       entryUUID
     } = await fetchMockTermbaseData(
@@ -30,23 +25,13 @@ describe("tests DeleteEntry controller", () => {
 
   test("should return a successful response and produce a 404 when requesting the entry", async () => {
     const { status: deleteEntryStatus } = await testApiClient
-      .delete(
-        endpointConstructor(
-          mockData.termbaseUUID,
-          mockData.entryUUID
-        )
-      )
+      .delete(`/termbase/${mockData.termbaseUUID}/entry/${mockData.entryUUID}`)
       .set("Cookie", TEST_API_CLIENT_COOKIES);
 	
     expect(deleteEntryStatus).toBe(204);
 	
     const { status: getEntryStatus } = await testApiClient
-      .get(
-        endpointConstructor(
-          mockData.termbaseUUID,
-          mockData.entryUUID
-        )
-      )
+      .get(`/termbase/${mockData.termbaseUUID}/entry/${mockData.entryUUID}`)
       .set("Cookie", TEST_API_CLIENT_COOKIES);
 	
     expect(getEntryStatus).toBe(404);

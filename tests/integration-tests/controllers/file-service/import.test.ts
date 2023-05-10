@@ -5,14 +5,13 @@ import testApiClient, { TEST_API_CLIENT_COOKIES }  from "@tests/test-api-client"
 
 describe("tests Import controller", () => {
   test("should return a response indicating a tbx file has successfully started importing", async () => {
-    const { status, body } = (
-      await testApiClient
-        .post("/import")
-        .attach("tbxFile", `${APP_ROOT}/example-tbx/valid-tbx-core.tbx`)
-        .set("Cookie", TEST_API_CLIENT_COOKIES)
-        .field({ name: uuid()})
-
-    ) as { status: number, body: ImportEndpointResponse };
+    const { status, body } = await testApiClient
+      .post("/import")
+      .attach("tbxFile", `${APP_ROOT}/example-tbx/valid-tbx-core.tbx`)
+      .set("Cookie", TEST_API_CLIENT_COOKIES)
+      .field({ name: uuid()}) as { 
+        status: number, body: ImportEndpointResponse 
+      };
 
     expect(status).toBe(202);
     expect(body.sessionId).toBeDefined();

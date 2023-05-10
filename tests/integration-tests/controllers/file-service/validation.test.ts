@@ -4,11 +4,11 @@ import testApiClient from "@tests/test-api-client";
 
 describe("tests Validation controller", () => {
   test("should return a response indicating a valid tbx file", async () => {
-    const { status, body } = (
-      await testApiClient
-        .post("/validate")
-        .attach("tbxFile", `${APP_ROOT}/example-tbx/valid-tbx-core.tbx`)
-    ) as { status: number, body: ValidationEndpointResponse };
+    const { status, body } = await testApiClient
+      .post("/validate")
+      .attach("tbxFile", `${APP_ROOT}/example-tbx/valid-tbx-core.tbx`) as { 
+        status: number, body: ValidationEndpointResponse 
+      };
 
 
     expect(status).toBe(200); 
