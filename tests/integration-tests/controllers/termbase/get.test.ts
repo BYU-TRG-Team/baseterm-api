@@ -1,14 +1,11 @@
 import { v4 as uuid } from "uuid";
 import { GetTermbaseEndpointResponse } from "@typings/responses";
-import { generateJWT, importFile } from "@tests/helpers";
-import { Role } from "@byu-trg/express-user-management";
+import { importFile } from "@tests/helpers";
 import { UUID } from "@typings";
 import { APP_ROOT } from "@constants";
 import testApiClient from "@tests/test-api-client";
+import { TEST_AUTH_TOKEN } from "@tests/constants";
 
-const jwt = generateJWT(
-  Role.User
-);
 let mockData: {
   termbaseUUID: UUID
 };
@@ -28,7 +25,7 @@ describe("tests GetTermbase controller", () => {
   test("should return a 404 response for invalid uuid (unknown uuid)", async () => {
     const { status, body } = await testApiClient
       .get(`/termbase/${uuid()}?page=1`)
-      .set("Cookie", [`TRG_AUTH_TOKEN=${jwt}`]);
+      .set("Cookie", [`TRG_AUTH_TOKEN=${TEST_AUTH_TOKEN}`]);
 
     expect(status).toBe(404);
     expect(body.error).toBeDefined();
@@ -37,7 +34,7 @@ describe("tests GetTermbase controller", () => {
   test("should return a response with an array of 8 terms", async () => {
     const { status, body } = await testApiClient
       .get(`/termbase/${mockData.termbaseUUID}`)
-      .set("Cookie", [`TRG_AUTH_TOKEN=${jwt}`]);
+      .set("Cookie", [`TRG_AUTH_TOKEN=${TEST_AUTH_TOKEN}`]);
     const responseBody = body as GetTermbaseEndpointResponse;
     expect(status).toBe(200);
     expect(responseBody.metadata.languages).toStrictEqual([ "de", "en", "fr" ]);

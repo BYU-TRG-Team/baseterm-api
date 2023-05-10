@@ -1,16 +1,11 @@
 import { v4 as uuid } from "uuid";
-import { fetchMockTermbaseData, generateJWT, importFile } from "@tests/helpers";
+import { fetchMockTermbaseData, importFile } from "@tests/helpers";
 import { PatchEntryEndpointResponse } from "@typings/responses";
-import { Role } from "@byu-trg/express-user-management";
 import { UUID } from "@typings";
 import { APP_ROOT } from "@constants";
 import testApiClient from "@tests/test-api-client";
+import { TEST_AUTH_TOKEN } from "@tests/constants";
 
-const personId = uuid();
-const jwt = generateJWT(
-  Role.Staff,
-  personId,
-);
 let mockData: {
   termbaseUUID: UUID,
   entryUUID: UUID,
@@ -21,9 +16,7 @@ describe("tests PatchEntry controller", () => {
   beforeAll(async () => { 
     const termbaseUUID = await importFile(
       `${APP_ROOT}/example-tbx/valid-tbx-core.tbx`,
-      testApiClient,
-      uuid(),
-      personId,
+      testApiClient
     );
 
     const { entryUUID } = await fetchMockTermbaseData(
@@ -40,7 +33,7 @@ describe("tests PatchEntry controller", () => {
   test("should return a 404 due to malformed uuid", async () => {
     const { status } = await testApiClient
       .patch(`/termbase/${mockData.termbaseUUID}/entry/testtt`)
-      .set("Cookie", [`TRG_AUTH_TOKEN=${jwt}`]);
+      .set("Cookie", [`TRG_AUTH_TOKEN=${TEST_AUTH_TOKEN}`]);
 
     expect(status).toBe(404);
   });
@@ -51,7 +44,7 @@ describe("tests PatchEntry controller", () => {
       .field({
         id: "TEST"
       })
-      .set("Cookie", [`TRG_AUTH_TOKEN=${jwt}`]);
+      .set("Cookie", [`TRG_AUTH_TOKEN=${TEST_AUTH_TOKEN}`]);
 
     expect(status).toBe(404);
   });
@@ -62,7 +55,7 @@ describe("tests PatchEntry controller", () => {
       .field({
         id: "TEST",
       }) 
-      .set("Cookie", [`TRG_AUTH_TOKEN=${jwt}`]) as 
+      .set("Cookie", [`TRG_AUTH_TOKEN=${TEST_AUTH_TOKEN}`]) as 
       { body: PatchEntryEndpointResponse, status: number };
 
     expect(status).toBe(200);

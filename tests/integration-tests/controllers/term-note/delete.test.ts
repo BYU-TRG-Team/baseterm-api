@@ -1,16 +1,13 @@
-import { fetchMockTermNote, generateJWT, importFile } from "@tests/helpers";
+import { fetchMockTermNote, importFile } from "@tests/helpers";
 import { UUID } from "@typings";
-import { Role } from "@byu-trg/express-user-management";
 import { APP_ROOT } from "@constants";
 import testApiClient from "@tests/test-api-client";
+import { TEST_AUTH_TOKEN } from "@tests/constants";
 
 const endpointConstructor = (
   termbaseUUID: UUID,
   termNoteUUID: UUID,
 ) => `/termbase/${termbaseUUID}/termNote/${termNoteUUID}`;
-const jwt = generateJWT(
-  Role.Staff
-);
 let mockData: {
   termbaseUUID: UUID,
   termNoteUUID: UUID,
@@ -42,7 +39,7 @@ describe("tests DeleteTermNote controller", () => {
           mockData.termNoteUUID
         )
       )
-      .set("Cookie", [`TRG_AUTH_TOKEN=${jwt}`]);
+      .set("Cookie", [`TRG_AUTH_TOKEN=${TEST_AUTH_TOKEN}`]);
 	
     expect(deleteTermNoteStatus).toBe(204);
 	
@@ -53,7 +50,7 @@ describe("tests DeleteTermNote controller", () => {
           mockData.termNoteUUID
         )
       )
-      .set("Cookie", [`TRG_AUTH_TOKEN=${jwt}`]);
+      .set("Cookie", [`TRG_AUTH_TOKEN=${TEST_AUTH_TOKEN}`]);
 	
     expect(getTermNoteStatus).toBe(404);
   });

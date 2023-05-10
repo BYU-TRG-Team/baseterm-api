@@ -1,17 +1,12 @@
 import { GetTermbasesEndpointResponse } from "@typings/responses";
-import { generateJWT } from "@tests/helpers";
-import { Role } from "@byu-trg/express-user-management";
 import testApiClient from "@tests/test-api-client";
-
-const jwt = generateJWT(
-  Role.User
-);
+import { TEST_AUTH_TOKEN } from "@tests/constants";
 
 describe("tests GetTermbases controller", () => {
   test("should return a 400 for invalid query params", async () => {
     const { status, body } = await testApiClient
       .get("/termbases")
-      .set("Cookie", [`TRG_AUTH_TOKEN=${jwt}`]);
+      .set("Cookie", [`TRG_AUTH_TOKEN=${TEST_AUTH_TOKEN}`]);
 
     expect(status).toBe(400);
     expect(body.error).toBeDefined();
@@ -21,7 +16,7 @@ describe("tests GetTermbases controller", () => {
     const { status, body } = (
       await testApiClient
         .get("/termbases?page=1")
-        .set("Cookie", [`TRG_AUTH_TOKEN=${jwt}`])
+        .set("Cookie", [`TRG_AUTH_TOKEN=${TEST_AUTH_TOKEN}`])
     ) as { status: number, body: GetTermbasesEndpointResponse };
 
     expect(status).toBe(200);

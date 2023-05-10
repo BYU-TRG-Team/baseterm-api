@@ -7,15 +7,9 @@ import {
   ExportEndpointResponse,
 } from "@typings/responses";
 import { FileServiceSession } from "@typings/sessions";
-import { generateJWT } from "@tests/helpers";
-import { Role } from "@byu-trg/express-user-management";
 import { APP_ROOT } from "@constants";
 import testApiClient from "@tests/test-api-client";
-import { TEST_API_CLIENT_ENDPOINT } from "@tests/constants";
-
-const jwt = generateJWT(
-  Role.Staff
-);
+import { TEST_API_CLIENT_ENDPOINT, TEST_AUTH_TOKEN } from "@tests/constants";
 
 const smallTbxFiles = [
   `${APP_ROOT}/example-tbx/valid-tbx-core.tbx`,
@@ -44,7 +38,7 @@ describe("tests the lifecycle of a TBX file (import and export)", () => {
             await testApiClient
               .post("/import")
               .attach("tbxFile", tbxFile)
-              .set("Cookie", [`TRG_AUTH_TOKEN=${jwt}`])
+              .set("Cookie", [`TRG_AUTH_TOKEN=${TEST_AUTH_TOKEN}`])
               .field({ name: uuid()})
           ) as { status: number, body: ImportEndpointResponse };
 
@@ -58,7 +52,7 @@ describe("tests the lifecycle of a TBX file (import and export)", () => {
             {
               withCredentials: true,
               headers: {
-                "Cookie": `TRG_AUTH_TOKEN=${jwt}`
+                "Cookie": `TRG_AUTH_TOKEN=${TEST_AUTH_TOKEN}`
               }
             }
           );
@@ -77,7 +71,7 @@ describe("tests the lifecycle of a TBX file (import and export)", () => {
         const { status: exportStatus, body: exportBody } = (
             await testApiClient
               .get(`/export/${importBody.termbaseUUID}`)
-              .set("Cookie", [`TRG_AUTH_TOKEN=${jwt}`])
+              .set("Cookie", [`TRG_AUTH_TOKEN=${TEST_AUTH_TOKEN}`])
           ) as { status: number,  body: ExportEndpointResponse };
 
         expect(exportStatus).toBe(202);
@@ -89,7 +83,7 @@ describe("tests the lifecycle of a TBX file (import and export)", () => {
             {
               withCredentials: true,
               headers: {
-                "Cookie": `TRG_AUTH_TOKEN=${jwt}`
+                "Cookie": `TRG_AUTH_TOKEN=${TEST_AUTH_TOKEN}`
               }
             }
           );
@@ -134,7 +128,7 @@ describe("tests the lifecycle of a TBX file (import and export)", () => {
         await testApiClient
           .post("/import")
           .attach("tbxFile", tbxFile)
-          .set("Cookie", [`TRG_AUTH_TOKEN=${jwt}`])
+          .set("Cookie", [`TRG_AUTH_TOKEN=${TEST_AUTH_TOKEN}`])
           .field({ name: uuid()})
       ) as { status: number, body: ImportEndpointResponse };
 
@@ -148,7 +142,7 @@ describe("tests the lifecycle of a TBX file (import and export)", () => {
           {
             withCredentials: true,
             headers: {
-              "Cookie": `TRG_AUTH_TOKEN=${jwt}`
+              "Cookie": `TRG_AUTH_TOKEN=${TEST_AUTH_TOKEN}`
             }
           }
         );
@@ -167,7 +161,7 @@ describe("tests the lifecycle of a TBX file (import and export)", () => {
       const { status: exportStatus, body: exportBody } = (
         await testApiClient
           .get(`/export/${importBody.termbaseUUID}`)
-          .set("Cookie", [`TRG_AUTH_TOKEN=${jwt}`])
+          .set("Cookie", [`TRG_AUTH_TOKEN=${TEST_AUTH_TOKEN}`])
       ) as { status: number,  body: ExportEndpointResponse };
 
       expect(exportStatus).toBe(202);
@@ -179,7 +173,7 @@ describe("tests the lifecycle of a TBX file (import and export)", () => {
           {
             withCredentials: true,
             headers: {
-              "Cookie": `TRG_AUTH_TOKEN=${jwt}`
+              "Cookie": `TRG_AUTH_TOKEN=${TEST_AUTH_TOKEN}`
             }
           }
         );

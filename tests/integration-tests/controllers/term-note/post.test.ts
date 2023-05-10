@@ -1,18 +1,15 @@
 import { PostTermNoteEndpointResponse } from "@typings/responses";
-import { fetchMockTermbaseData, generateJWT, importFile } from "@tests/helpers";
+import { fetchMockTermbaseData, importFile } from "@tests/helpers";
 import { UUID } from "@typings";
 import errorMessages from "@messages/errors";
 import { SuperAgentResponse } from "@tests/types";
-import { Role } from "@byu-trg/express-user-management";
 import { APP_ROOT } from "@constants";
 import testApiClient from "@tests/test-api-client";
+import { TEST_AUTH_TOKEN } from "@tests/constants";
 
 const endpointConstructor = (
   termbaseUUID: UUID
 ) => `/termbase/${termbaseUUID}/termNote`;
-const jwt = generateJWT(
-  Role.Staff
-);
 let mockData: {
   termbaseUUID: UUID,
   termUUID: UUID,
@@ -45,7 +42,7 @@ describe("tests PostTermNote controller", () => {
           mockData.termbaseUUID
         )
       )
-      .set("Cookie", [`TRG_AUTH_TOKEN=${jwt}`]);
+      .set("Cookie", [`TRG_AUTH_TOKEN=${TEST_AUTH_TOKEN}`]);
   
     expect(status).toBe(400);
     expect(body.error).toBe(errorMessages.bodyInvalid);
@@ -64,7 +61,7 @@ describe("tests PostTermNote controller", () => {
         type: "Test",
         isGrp: false,
       }) 
-      .set("Cookie", [`TRG_AUTH_TOKEN=${jwt}`]) as 
+      .set("Cookie", [`TRG_AUTH_TOKEN=${TEST_AUTH_TOKEN}`]) as 
       SuperAgentResponse<PostTermNoteEndpointResponse>;
   
     expect(status).toBe(200);

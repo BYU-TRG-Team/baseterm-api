@@ -1,16 +1,14 @@
-import { fetchMockTermbaseData, generateJWT, importFile } from "@tests/helpers";
+import { fetchMockTermbaseData, importFile } from "@tests/helpers";
 import { UUID } from "@typings";
 import { Role } from "@byu-trg/express-user-management";
 import { APP_ROOT } from "@constants";
 import testApiClient from "@tests/test-api-client";
+import { TEST_AUTH_TOKEN } from "@tests/constants";
 
 const endpointConstructor = (
   termbaseUUID: UUID,
   termUUID: UUID,
 ) => `/termbase/${termbaseUUID}/term/${termUUID}`;
-const jwt = generateJWT(
-  Role.Staff
-);
 let mockData: {
   termbaseUUID: UUID,
   termUUID: UUID,
@@ -44,7 +42,7 @@ describe("tests DeleteTerm controller", () => {
           mockData.termUUID
         )
       )
-      .set("Cookie", [`TRG_AUTH_TOKEN=${jwt}`]);
+      .set("Cookie", [`TRG_AUTH_TOKEN=${TEST_AUTH_TOKEN}`]);
 	
     expect(deleteTermStatus).toBe(204);
 	
@@ -55,7 +53,7 @@ describe("tests DeleteTerm controller", () => {
           mockData.termUUID
         )
       )
-      .set("Cookie", [`TRG_AUTH_TOKEN=${jwt}`]);
+      .set("Cookie", [`TRG_AUTH_TOKEN=${TEST_AUTH_TOKEN}`]);
 	
     expect(getTermStatus).toBe(404);
   });

@@ -1,17 +1,12 @@
-import { generateJWT, importFile } from "@tests/helpers";
+import { importFile } from "@tests/helpers";
 import { PostEntryEndpointResponse } from "@typings/responses";
 import { VALID_LANGUAGE_CODE } from "@tests/constants";
 import { UUID } from "@typings";
-import { Role } from "@byu-trg/express-user-management";
 import { v4 as uuid } from "uuid";
 import { APP_ROOT } from "@constants";
 import testApiClient from "@tests/test-api-client";
+import { TEST_AUTH_TOKEN } from "@tests/constants";
 
-const personId = uuid();
-const jwt = generateJWT(
-  Role.Staff,
-  personId
-);
 let mockData: {
   termbaseUUID: UUID
 };
@@ -21,8 +16,7 @@ describe("tests PostEntry controller", () => {
     const termbaseUUID = await importFile(
       `${APP_ROOT}/example-tbx/valid-tbx-core.tbx`,
       testApiClient,
-      uuid(),
-      personId
+      uuid()
     );
 
     mockData = {
@@ -33,7 +27,7 @@ describe("tests PostEntry controller", () => {
   test("should return a 400 response for invalid body", async () => {
     const { status } = await testApiClient
       .post("/termbase/randommmmmmmm/entry")
-      .set("Cookie", [`TRG_AUTH_TOKEN=${jwt}`]);
+      .set("Cookie", [`TRG_AUTH_TOKEN=${TEST_AUTH_TOKEN}`]);
     
     expect(status).toBe(400);
   });
@@ -46,7 +40,7 @@ describe("tests PostEntry controller", () => {
         initialLanguageSection: VALID_LANGUAGE_CODE,
         initialTerm: "test",
       })
-      .set("Cookie", [`TRG_AUTH_TOKEN=${jwt}`]);
+      .set("Cookie", [`TRG_AUTH_TOKEN=${TEST_AUTH_TOKEN}`]);
 
     expect(status).toBe(404);
   });
@@ -59,7 +53,7 @@ describe("tests PostEntry controller", () => {
         initialLanguageSection: VALID_LANGUAGE_CODE,
         initialTerm: "test",
       })
-      .set("Cookie", [`TRG_AUTH_TOKEN=${jwt}`]);
+      .set("Cookie", [`TRG_AUTH_TOKEN=${TEST_AUTH_TOKEN}`]);
 
     expect(status).toBe(409);
   });
@@ -72,7 +66,7 @@ describe("tests PostEntry controller", () => {
         initialLanguageSection: VALID_LANGUAGE_CODE,
         initialTerm: "test",
       }) 
-      .set("Cookie", [`TRG_AUTH_TOKEN=${jwt}`]) as 
+      .set("Cookie", [`TRG_AUTH_TOKEN=${TEST_AUTH_TOKEN}`]) as 
       { body: PostEntryEndpointResponse, status: number };
 
     expect(status).toBe(200);

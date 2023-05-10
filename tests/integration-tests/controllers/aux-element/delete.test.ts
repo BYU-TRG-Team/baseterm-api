@@ -1,16 +1,13 @@
-import { fetchMockAuxElement, generateJWT, importFile } from "@tests/helpers";
+import { fetchMockAuxElement, importFile } from "@tests/helpers";
 import { AuxElement, UUID } from "@typings";
-import { Role } from "@byu-trg/express-user-management";
 import { APP_ROOT } from "@constants";
 import testApiClient from "@tests/test-api-client";
+import { TEST_AUTH_TOKEN } from "@tests/constants";
 
 const endpointConstructor = (
   termbaseUUID: UUID,
   auxElementUUID: UUID,
 ) => `/termbase/${termbaseUUID}/auxElement/${auxElementUUID}`;
-const jwt = generateJWT(
-  Role.Staff
-);
 let mockData: {
   termbaseUUID: UUID,
   auxElement: AuxElement,
@@ -45,7 +42,7 @@ describe("tests DeleteAuxElement controller", () => {
       .field({
         elementType: mockData.auxElement.elementType,
       })
-      .set("Cookie", [`TRG_AUTH_TOKEN=${jwt}`]);
+      .set("Cookie", [`TRG_AUTH_TOKEN=${TEST_AUTH_TOKEN}`]);
 	
     expect(deleteAuxElementStatus).toBe(204);
 	
