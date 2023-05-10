@@ -7,9 +7,10 @@ import {
   ExportEndpointResponse,
 } from "@typings/responses";
 import { FileServiceSession } from "@typings/sessions";
-import { APP_ROOT } from "@constants";
 import testApiClient from "@tests/test-api-client";
 import { TEST_API_CLIENT_ENDPOINT, TEST_API_CLIENT_COOKIES, SMALL_TBX_FILES, LARGE_TBX_FILES } from "@tests/constants";
+
+const TEST_TIMEOUT = 300_000; // 5 minutes
 
 describe("tests the lifecycle of a TBX file (import and export)", () => {
   test("should import each small tbx file and export an identical file 10 times", async () => {
@@ -101,7 +102,7 @@ describe("tests the lifecycle of a TBX file (import and export)", () => {
         );
       }
     }
-  }, 600000);
+  }, TEST_TIMEOUT);
 
   test("should import each large tbx file and export an identical file", async () => {
     for (const tbxFile of LARGE_TBX_FILES) {
@@ -190,5 +191,5 @@ describe("tests the lifecycle of a TBX file (import and export)", () => {
         } 
       );
     }
-  }, 600000);
+  }, TEST_TIMEOUT);
 });
