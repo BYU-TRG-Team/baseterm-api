@@ -1,4 +1,5 @@
 import {
+  ExportEndpointResponse,
   GetTermbaseTermsEndpointResponse,
   GetTermEndpointResponse,
   ImportEndpointResponse,
@@ -8,7 +9,7 @@ import { v4 as uuid } from "uuid";
 import { SuperAgentTest } from "supertest";
 import { UUID } from "@typings";
 import EventSource from "eventsource";
-import { EXAMPLE_TBX_FILE, TEST_API_CLIENT_ENDPOINT, TEST_AUTH_TOKEN, TEST_USER_ID } from "@tests/constants";
+import { EXAMPLE_TBX_FILE, TEST_API_CLIENT_COOKIES, TEST_API_CLIENT_ENDPOINT, TEST_AUTH_TOKEN, TEST_USER_ID } from "@tests/constants";
 
 export const postPersonObjectRef = async (
   jwt: string,
@@ -43,21 +44,21 @@ export const importTBXFile = async (
     createPersonRefObject = true
   } = options;
 
-  const { body: importBody } = (
-      await requestClient
-        .post("/import")
-        .attach("tbxFile", filePath)
-        .field({ name }) 
-        .set("Cookie", [`TRG_AUTH_TOKEN=${TEST_AUTH_TOKEN}`])
-    ) as { body: ImportEndpointResponse };
+  const { body: importResponseBody } = await requestClient
+    .post("/import")
+    .attach("tbxFile", filePath)
+    .field({ name }) 
+    .set("Cookie", TEST_API_CLIENT_COOKIES) as { 
+      body: ImportEndpointResponse 
+    };
 
   await new Promise((resolve, reject) => {
     const eventSource = new EventSource(
-      `${TEST_API_CLIENT_ENDPOINT}/session/${importBody.sessionId}`,
+      `${TEST_API_CLIENT_ENDPOINT}/session/${importResponseBody.sessionId}`,
       { 
         withCredentials: true,
         headers: {
-          "Cookie": `TRG_AUTH_TOKEN=${TEST_AUTH_TOKEN}`
+          "Cookie": TEST_API_CLIENT_COOKIES.join("; ")
         }
       }
     );
@@ -80,13 +81,52 @@ export const importTBXFile = async (
   if (createPersonRefObject) {
     await postPersonObjectRef(
       TEST_AUTH_TOKEN,
-      importBody.termbaseUUID,
+      importResponseBody.termbaseUUID,
       requestClient,
       TEST_USER_ID
     );
   }
 
-  return importBody.termbaseUUID;
+  return importResponseBody.termbaseUUID;
+};
+
+export const exportTBXFile = async (
+  requestClient: SuperAgentTest, 
+  termbaseUUID: UUID,
+) => {
+  const { body: exportResponseBody } = await requestClient
+    .get(`/export/${termbaseUUID}`)
+    .set("Cookie", TEST_API_CLIENT_COOKIES) as { 
+      body: ExportEndpointResponse 
+    };
+
+  const exportedTbxFile = await new Promise<string>((resolve, reject) => {
+    const eventSource = new EventSource(
+      `${TEST_API_CLIENT_ENDPOINT}/session/${exportResponseBody.sessionId}`,
+      { 
+        withCredentials: true,
+        headers: {
+          "Cookie": TEST_API_CLIENT_COOKIES.join("; ")
+        }
+      }
+    );
+  
+    eventSource.onmessage = (event) => {
+      const fileSession = JSON.parse(event.data) as SessionSSEEndpointResponse;
+
+      if (fileSession.status === "completed") {
+        eventSource.close();
+        resolve(fileSession.data as string);
+      }
+
+      if (fileSession.error !== undefined) {
+        eventSource.close();
+        reject(fileSession.errorCode);
+      }
+    };
+  });
+
+  return exportedTbxFile;
 };
 
 export const fetchMockTermbaseData = async (
