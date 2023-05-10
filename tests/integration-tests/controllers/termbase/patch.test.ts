@@ -108,15 +108,9 @@ describe("tests PatchTermbase controller", () => {
 
   test("should return a 409 for duplicate name", async () => {
     const termbaseName = uuid();
-    const termbaseUUID = await importTBXFile(testApiClient, {
+    await importTBXFile(testApiClient, {
       name: termbaseName
     });
-
-    await testApiClient
-      .get(`/termbase/${mockData.termbaseUUID}`) 
-      .set("Cookie", TEST_API_CLIENT_COOKIES) as 
-      { body: GetTermbaseEndpointResponse };
-
 
     const { status } = await testApiClient
       .patch(`/termbase/${mockData.termbaseUUID}`)
