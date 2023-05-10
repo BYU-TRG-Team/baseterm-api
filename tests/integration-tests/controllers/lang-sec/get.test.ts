@@ -5,7 +5,7 @@ import {
 import { GetLanguageSectionEndpointResponse } from "@typings/responses";
 import { UUID } from "@typings";
 import testApiClient from "@tests/test-api-client";
-import { TEST_AUTH_TOKEN } from "@tests/constants";
+import { TEST_API_CLIENT_COOKIES} from "@tests/constants";
 
 let mockData: {
   termbaseUUID: UUID,
@@ -30,7 +30,7 @@ describe("tests LanguageSection controller", () => {
   test("should return a 404 response for malformed langSecUUID", async () => {      
     const { status } = await testApiClient
       .get(`/termbase/${mockData.termbaseUUID}/langSec/randommmm`)
-      .set("Cookie", [`TRG_AUTH_TOKEN=${TEST_AUTH_TOKEN}`]);
+      .set("Cookie", TEST_API_CLIENT_COOKIES);
 
     expect(status).toBe(404);
   });
@@ -38,7 +38,7 @@ describe("tests LanguageSection controller", () => {
   test("should return a successful response", async () => {  
     const { status, body } = await testApiClient
       .get(`/termbase/${mockData.termbaseUUID}/langSec/${mockData.langSecUUID}`) 
-      .set("Cookie", [`TRG_AUTH_TOKEN=${TEST_AUTH_TOKEN}`]) as
+      .set("Cookie", TEST_API_CLIENT_COOKIES) as
       { body: GetLanguageSectionEndpointResponse, status: number };
 
     expect(status).toBe(200);

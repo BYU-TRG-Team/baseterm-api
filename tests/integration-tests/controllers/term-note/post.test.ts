@@ -3,9 +3,8 @@ import { fetchMockTermbaseData, importTBXFile } from "@tests/helpers";
 import { UUID } from "@typings";
 import errorMessages from "@messages/errors";
 import { SuperAgentResponse } from "@tests/types";
-import { APP_ROOT } from "@constants";
 import testApiClient from "@tests/test-api-client";
-import { TEST_AUTH_TOKEN } from "@tests/constants";
+import { TEST_API_CLIENT_COOKIES } from "@tests/constants";
 
 const endpointConstructor = (
   termbaseUUID: UUID
@@ -39,7 +38,7 @@ describe("tests PostTermNote controller", () => {
           mockData.termbaseUUID
         )
       )
-      .set("Cookie", [`TRG_AUTH_TOKEN=${TEST_AUTH_TOKEN}`]);
+      .set("Cookie", TEST_API_CLIENT_COOKIES);
   
     expect(status).toBe(400);
     expect(body.error).toBe(errorMessages.bodyInvalid);
@@ -58,7 +57,7 @@ describe("tests PostTermNote controller", () => {
         type: "Test",
         isGrp: false,
       }) 
-      .set("Cookie", [`TRG_AUTH_TOKEN=${TEST_AUTH_TOKEN}`]) as 
+      .set("Cookie", TEST_API_CLIENT_COOKIES) as 
       SuperAgentResponse<PostTermNoteEndpointResponse>;
   
     expect(status).toBe(200);

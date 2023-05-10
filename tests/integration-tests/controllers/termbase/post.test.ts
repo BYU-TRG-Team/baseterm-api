@@ -1,7 +1,7 @@
 import { v4 as uuid } from "uuid";
 import { PostTermbaseEndpointResponse } from "@typings/responses";
 import testApiClient from "@tests/test-api-client";
-import { TEST_AUTH_TOKEN } from "@tests/constants";
+import { TEST_API_CLIENT_COOKIES } from "@tests/constants";
 
 describe("tests PostTermbase controller", () => {
   test("should return a response indicating a new base has been created", async () => {
@@ -12,7 +12,7 @@ describe("tests PostTermbase controller", () => {
           name: uuid(),
           lang: "en-US"
         })
-        .set("Cookie", [`TRG_AUTH_TOKEN=${TEST_AUTH_TOKEN}`])
+        .set("Cookie", TEST_API_CLIENT_COOKIES)
     ) as { status: number, body: PostTermbaseEndpointResponse }; 
 
     expect(status).toBe(200);
@@ -27,7 +27,7 @@ describe("tests PostTermbase controller", () => {
         name: baseName,
         lang: "en-US"
       })
-      .set("Cookie", [`TRG_AUTH_TOKEN=${TEST_AUTH_TOKEN}`]);
+      .set("Cookie", TEST_API_CLIENT_COOKIES);
 
 
     const { status, body } = await testApiClient
@@ -36,7 +36,7 @@ describe("tests PostTermbase controller", () => {
         name: baseName,
         lang: "en-US"
       })
-      .set("Cookie", [`TRG_AUTH_TOKEN=${TEST_AUTH_TOKEN}`]);
+      .set("Cookie", TEST_API_CLIENT_COOKIES);
 
     expect(status).toBe(409);
     expect(body.error).toBe("A base already exists with the same name.");
@@ -48,7 +48,7 @@ describe("tests PostTermbase controller", () => {
       .field({ 
         lang: "en-US"
       })
-      .set("Cookie", [`TRG_AUTH_TOKEN=${TEST_AUTH_TOKEN}`]);
+      .set("Cookie", TEST_API_CLIENT_COOKIES);
 
     expect(status).toBe(400);
   });
@@ -59,7 +59,7 @@ describe("tests PostTermbase controller", () => {
       .field({ 
         name: uuid(),
       })
-      .set("Cookie", [`TRG_AUTH_TOKEN=${TEST_AUTH_TOKEN}`]);
+      .set("Cookie", TEST_API_CLIENT_COOKIES);
 
     expect(status).toBe(400);
     expect(body.error).toBe("Body Invalid");

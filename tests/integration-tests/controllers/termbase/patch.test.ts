@@ -6,7 +6,7 @@ import {
 } from "@typings/responses";
 import { UUID } from "@typings";
 import testApiClient from "@tests/test-api-client";
-import { TEST_AUTH_TOKEN } from "@tests/constants";
+import { TEST_API_CLIENT_COOKIES } from "@tests/constants";
 
 let mockData: {
   termbaseUUID: UUID,
@@ -28,7 +28,7 @@ describe("tests PatchTermbase controller", () => {
         name: uuid(),
         lang: "en-US"
       })
-      .set("Cookie", [`TRG_AUTH_TOKEN=${TEST_AUTH_TOKEN}`]);
+      .set("Cookie", TEST_API_CLIENT_COOKIES);
 
     expect(status).toBe(404);
   });
@@ -40,7 +40,7 @@ describe("tests PatchTermbase controller", () => {
         name: uuid(),
         lang: "en-US"
       })
-      .set("Cookie", [`TRG_AUTH_TOKEN=${TEST_AUTH_TOKEN}`]);
+      .set("Cookie", TEST_API_CLIENT_COOKIES);
 
     expect(status).toBe(404);
   });
@@ -48,12 +48,12 @@ describe("tests PatchTermbase controller", () => {
   test("should return a successful response with no updates", async () => {
     const { body: termbaseResponse } = await testApiClient
       .get(`/termbase/${mockData.termbaseUUID}`) 
-      .set("Cookie", [`TRG_AUTH_TOKEN=${TEST_AUTH_TOKEN}`]) as 
+      .set("Cookie", TEST_API_CLIENT_COOKIES) as 
       { body: GetTermbaseEndpointResponse };
       
     const { body: updatedTermbaseResponse } = await testApiClient
       .patch(`/termbase/${mockData.termbaseUUID}`) 
-      .set("Cookie", [`TRG_AUTH_TOKEN=${TEST_AUTH_TOKEN}`]) as 
+      .set("Cookie", TEST_API_CLIENT_COOKIES) as 
       { body: PatchTermbaseEndpointResponse };
 
     expect(updatedTermbaseResponse.name).toBe(termbaseResponse.name);
@@ -63,7 +63,7 @@ describe("tests PatchTermbase controller", () => {
   test("should return a successful response with an updated name", async () => {
     const { body: termbaseResponse } = await testApiClient
       .get(`/termbase/${mockData.termbaseUUID}`) 
-      .set("Cookie", [`TRG_AUTH_TOKEN=${TEST_AUTH_TOKEN}`]) as 
+      .set("Cookie", TEST_API_CLIENT_COOKIES) as 
       { body: GetTermbaseEndpointResponse };
 
     const updatedTermbaseName = uuid();
@@ -73,7 +73,7 @@ describe("tests PatchTermbase controller", () => {
       .field({
         name: updatedTermbaseName,
       })
-      .set("Cookie", [`TRG_AUTH_TOKEN=${TEST_AUTH_TOKEN}`]) as 
+      .set("Cookie", TEST_API_CLIENT_COOKIES) as 
       { body: PatchTermbaseEndpointResponse };
 
     expect(updatedTermbaseResponse.name).toBe(updatedTermbaseName);
@@ -87,7 +87,7 @@ describe("tests PatchTermbase controller", () => {
         enforceBasicDialect: false,
         type: "Test",
       }) 
-      .set("Cookie", [`TRG_AUTH_TOKEN=${TEST_AUTH_TOKEN}`]) as 
+      .set("Cookie", TEST_API_CLIENT_COOKIES) as 
       { body: PatchTermbaseEndpointResponse };
 
     expect(updatedTermbaseResponse.enforceBasicDialect).toBe(false);
@@ -99,7 +99,7 @@ describe("tests PatchTermbase controller", () => {
         enforceBasicDialect: true,
         type: "Test"
       }) 
-      .set("Cookie", [`TRG_AUTH_TOKEN=${TEST_AUTH_TOKEN}`]) as 
+      .set("Cookie", TEST_API_CLIENT_COOKIES) as 
       { body: PatchTermbaseEndpointResponse };
 
     expect(secondUpdatedTermbaseResponse.enforceBasicDialect).toBe(false);
@@ -114,13 +114,13 @@ describe("tests PatchTermbase controller", () => {
 
     await testApiClient
       .get(`/termbase/${mockData.termbaseUUID}`) 
-      .set("Cookie", [`TRG_AUTH_TOKEN=${TEST_AUTH_TOKEN}`]) as 
+      .set("Cookie", TEST_API_CLIENT_COOKIES) as 
       { body: GetTermbaseEndpointResponse };
 
 
     const { status } = await testApiClient
       .patch(`/termbase/${mockData.termbaseUUID}`)
-      .set("Cookie", [`TRG_AUTH_TOKEN=${TEST_AUTH_TOKEN}`])
+      .set("Cookie", TEST_API_CLIENT_COOKIES)
       .field({
         name: termbaseName,
       });

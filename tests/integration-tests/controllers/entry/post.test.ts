@@ -3,7 +3,7 @@ import { PostEntryEndpointResponse } from "@typings/responses";
 import { VALID_LANGUAGE_CODE } from "@tests/constants";
 import { UUID } from "@typings";
 import testApiClient from "@tests/test-api-client";
-import { TEST_AUTH_TOKEN } from "@tests/constants";
+import { TEST_API_CLIENT_COOKIES } from "@tests/constants";
 
 let mockData: {
   termbaseUUID: UUID
@@ -21,7 +21,7 @@ describe("tests PostEntry controller", () => {
   test("should return a 400 response for invalid body", async () => {
     const { status } = await testApiClient
       .post("/termbase/randommmmmmmm/entry")
-      .set("Cookie", [`TRG_AUTH_TOKEN=${TEST_AUTH_TOKEN}`]);
+      .set("Cookie", TEST_API_CLIENT_COOKIES);
     
     expect(status).toBe(400);
   });
@@ -34,7 +34,7 @@ describe("tests PostEntry controller", () => {
         initialLanguageSection: VALID_LANGUAGE_CODE,
         initialTerm: "test",
       })
-      .set("Cookie", [`TRG_AUTH_TOKEN=${TEST_AUTH_TOKEN}`]);
+      .set("Cookie", TEST_API_CLIENT_COOKIES);
 
     expect(status).toBe(404);
   });
@@ -47,7 +47,7 @@ describe("tests PostEntry controller", () => {
         initialLanguageSection: VALID_LANGUAGE_CODE,
         initialTerm: "test",
       })
-      .set("Cookie", [`TRG_AUTH_TOKEN=${TEST_AUTH_TOKEN}`]);
+      .set("Cookie", TEST_API_CLIENT_COOKIES);
 
     expect(status).toBe(409);
   });
@@ -60,7 +60,7 @@ describe("tests PostEntry controller", () => {
         initialLanguageSection: VALID_LANGUAGE_CODE,
         initialTerm: "test",
       }) 
-      .set("Cookie", [`TRG_AUTH_TOKEN=${TEST_AUTH_TOKEN}`]) as 
+      .set("Cookie", TEST_API_CLIENT_COOKIES) as 
       { body: PostEntryEndpointResponse, status: number };
 
     expect(status).toBe(200);

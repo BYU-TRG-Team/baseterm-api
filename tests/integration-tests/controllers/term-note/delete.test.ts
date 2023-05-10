@@ -1,7 +1,7 @@
 import { fetchMockTermNote, importTBXFile } from "@tests/helpers";
 import { UUID } from "@typings";
 import testApiClient from "@tests/test-api-client";
-import { TEST_AUTH_TOKEN } from "@tests/constants";
+import { TEST_API_CLIENT_COOKIES } from "@tests/constants";
 
 const endpointConstructor = (
   termbaseUUID: UUID,
@@ -35,7 +35,7 @@ describe("tests DeleteTermNote controller", () => {
           mockData.termNoteUUID
         )
       )
-      .set("Cookie", [`TRG_AUTH_TOKEN=${TEST_AUTH_TOKEN}`]);
+      .set("Cookie", TEST_API_CLIENT_COOKIES);
 	
     expect(deleteTermNoteStatus).toBe(204);
 	
@@ -46,7 +46,7 @@ describe("tests DeleteTermNote controller", () => {
           mockData.termNoteUUID
         )
       )
-      .set("Cookie", [`TRG_AUTH_TOKEN=${TEST_AUTH_TOKEN}`]);
+      .set("Cookie", TEST_API_CLIENT_COOKIES);
 	
     expect(getTermNoteStatus).toBe(404);
   });

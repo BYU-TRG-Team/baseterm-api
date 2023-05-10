@@ -1,9 +1,8 @@
 import { fetchMockTermbaseData, importTBXFile } from "@tests/helpers";
 import { GetEntryEndpointResponse, } from "@typings/responses";
 import { UUID } from "@typings";
-import { APP_ROOT } from "@constants";
 import testApiClient from "@tests/test-api-client";
-import { TEST_AUTH_TOKEN } from "@tests/constants";
+import { TEST_API_CLIENT_COOKIES } from "@tests/constants";
 
 let mockData: {
   termbaseUUID: UUID,
@@ -28,7 +27,7 @@ describe("tests GetEntry controller", () => {
   test("should return a 404 response for malformed entryUUID", async () => {      
     const { status } = await testApiClient
       .get(`/termbase/${mockData.termbaseUUID}/entry/randommmm`)
-      .set("Cookie", [`TRG_AUTH_TOKEN=${TEST_AUTH_TOKEN}`]);
+      .set("Cookie", TEST_API_CLIENT_COOKIES);
 
     expect(status).toBe(404);
   });
@@ -36,7 +35,7 @@ describe("tests GetEntry controller", () => {
   test("should return a successful response", async () => {  
     const { status, body } = await testApiClient
       .get(`/termbase/${mockData.termbaseUUID}/entry/${mockData.entryUUID}`) 
-      .set("Cookie", [`TRG_AUTH_TOKEN=${TEST_AUTH_TOKEN}`]) as 
+      .set("Cookie", TEST_API_CLIENT_COOKIES) as 
       { body: GetEntryEndpointResponse, status: number };
 
     expect(status).toBe(200);

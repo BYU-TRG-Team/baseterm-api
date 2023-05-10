@@ -2,7 +2,7 @@ import { v4 as uuid } from "uuid";
 import { SessionSSEEndpointResponse } from "@typings/responses";
 import EventSource from "eventsource";
 import { TEST_API_CLIENT_ENDPOINT } from "@tests/constants";
-import { TEST_AUTH_TOKEN } from "@tests/constants";
+import { TEST_API_CLIENT_COOKIES } from "@tests/constants";
 
 describe("tests Session controller", () => {
   test("should return a response indicating an undefined session", async () => {
@@ -12,7 +12,7 @@ describe("tests Session controller", () => {
         { 
           withCredentials: true,
           headers: {
-            "Cookie": `TRG_AUTH_TOKEN=${TEST_AUTH_TOKEN}`,
+            "Cookie": TEST_API_CLIENT_COOKIES.join("; "),
           }
         }
       );
