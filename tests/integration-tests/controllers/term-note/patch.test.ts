@@ -1,4 +1,4 @@
-import { fetchMockTermNote, importFile } from "@tests/helpers";
+import { fetchMockTermNote, importTBXFile } from "@tests/helpers";
 import { PatchTermNoteEndpointResponse } from "@typings/responses";
 import { TermNote, UUID } from "@typings";
 import { VALID_LANGUAGE_CODE } from "@tests/constants";
@@ -18,10 +18,7 @@ let mockData: {
 
 describe("tests PatchTermNote controller", () => {
   beforeAll(async () => {
-    const termbaseUUID = await importFile(
-      `${APP_ROOT}/example-tbx/valid-tbx-core.tbx`,
-      testApiClient
-    );
+    const termbaseUUID = await importTBXFile(testApiClient);
 
     const termNote = await fetchMockTermNote(
       termbaseUUID,

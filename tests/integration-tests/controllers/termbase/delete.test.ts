@@ -1,14 +1,11 @@
-import { importFile } from "@tests/helpers";
+import { importTBXFile } from "@tests/helpers";
 import { APP_ROOT } from "@constants";
 import testApiClient from "@tests/test-api-client";
 import { TEST_AUTH_TOKEN } from "@tests/constants";
 
 describe("tests DeleteTermbase controller", () => {
   test("should return a response with no content and remove termbase from DB", async () => {
-    const termbaseUUID = await importFile(
-      `${APP_ROOT}/example-tbx/valid-tbx-core.tbx`,
-      testApiClient,
-    );
+    const termbaseUUID = await importTBXFile(testApiClient);
 
     // ensure that termbase exists
     const termbaseRetrievalResponse = await testApiClient

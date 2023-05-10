@@ -1,11 +1,10 @@
 import { v4 as uuid } from "uuid";
-import { importFile } from "@tests/helpers";
+import { importTBXFile } from "@tests/helpers";
 import {
   GetTermbaseEndpointResponse,
   PatchTermbaseEndpointResponse
 } from "@typings/responses";
 import { UUID } from "@typings";
-import { APP_ROOT } from "@constants";
 import testApiClient from "@tests/test-api-client";
 import { TEST_AUTH_TOKEN } from "@tests/constants";
 
@@ -15,10 +14,7 @@ let mockData: {
 
 describe("tests PatchTermbase controller", () => {
   beforeAll(async () => {
-    const termbaseUUID = await importFile(
-      `${APP_ROOT}/example-tbx/valid-tbx-core.tbx`,
-      testApiClient
-    );
+    const termbaseUUID = await importTBXFile(testApiClient);
 
     mockData = {
       termbaseUUID,
@@ -111,12 +107,10 @@ describe("tests PatchTermbase controller", () => {
   });
 
   test("should return a 409 for duplicate name", async () => {
-    const firstTermbaseName = uuid();
-    await importFile(
-      `${APP_ROOT}/example-tbx/valid-tbx-core.tbx`,
-      testApiClient,
-      firstTermbaseName,
-    );
+    const termbaseName = uuid();
+    const termbaseUUID = await importTBXFile(testApiClient, {
+      name: termbaseName
+    });
 
     await testApiClient
       .get(`/termbase/${mockData.termbaseUUID}`) 
@@ -128,7 +122,7 @@ describe("tests PatchTermbase controller", () => {
       .patch(`/termbase/${mockData.termbaseUUID}`)
       .set("Cookie", [`TRG_AUTH_TOKEN=${TEST_AUTH_TOKEN}`])
       .field({
-        name: firstTermbaseName,
+        name: termbaseName,
       });
 
     expect(status).toBe(409);

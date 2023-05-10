@@ -1,9 +1,7 @@
-import { importFile } from "@tests/helpers";
+import { importTBXFile } from "@tests/helpers";
 import { PostEntryEndpointResponse } from "@typings/responses";
 import { VALID_LANGUAGE_CODE } from "@tests/constants";
 import { UUID } from "@typings";
-import { v4 as uuid } from "uuid";
-import { APP_ROOT } from "@constants";
 import testApiClient from "@tests/test-api-client";
 import { TEST_AUTH_TOKEN } from "@tests/constants";
 
@@ -13,11 +11,7 @@ let mockData: {
 
 describe("tests PostEntry controller", () => {
   beforeAll(async () => {
-    const termbaseUUID = await importFile(
-      `${APP_ROOT}/example-tbx/valid-tbx-core.tbx`,
-      testApiClient,
-      uuid()
-    );
+    const termbaseUUID = await importTBXFile(testApiClient);
 
     mockData = {
       termbaseUUID,

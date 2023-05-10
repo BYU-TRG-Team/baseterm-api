@@ -1,4 +1,4 @@
-import { fetchMockTermbaseData, importFile } from "@tests/helpers";
+import { fetchMockTermbaseData, importTBXFile } from "@tests/helpers";
 import { UUID } from "@typings";
 import { APP_ROOT } from "@constants";
 import testApiClient from "@tests/test-api-client";
@@ -15,10 +15,7 @@ let mockData: {
 
 describe("tests DeleteEntry controller", () => {
   beforeAll(async () => {
-    const termbaseUUID = await importFile(
-      `${APP_ROOT}/example-tbx/valid-tbx-core.tbx`,
-      testApiClient
-    );
+    const termbaseUUID = await importTBXFile(testApiClient);
 
     const {
       entryUUID

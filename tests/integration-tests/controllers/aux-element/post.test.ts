@@ -1,4 +1,4 @@
-import { fetchMockTermbaseData, importFile } from "@tests/helpers";
+import { fetchMockTermbaseData, importTBXFile } from "@tests/helpers";
 import { PostAuxElementEndpointResponse } from "@typings/responses";
 import { UUID, TbxElement } from "@typings";
 import { SuperAgentResponse } from "@tests/types";
@@ -16,10 +16,7 @@ let mockData: {
 
 describe("tests PostAuxElement controller", () => {
   beforeAll(async () => {
-    const termbaseUUID = await importFile(
-      `${APP_ROOT}/example-tbx/valid-tbx-core.tbx`,
-      testApiClient
-    );
+    const termbaseUUID = await importTBXFile(testApiClient);
 
     const {
       termUUID,

@@ -1,8 +1,7 @@
-import { fetchMockAuxElement, importFile } from "@tests/helpers";
+import { fetchMockAuxElement, importTBXFile } from "@tests/helpers";
 import { PatchAuxElementEndpointResponse } from "@typings/responses";
 import { AuxElement, UUID } from "@typings";
 import { SuperAgentResponse } from "@tests/types";
-import { APP_ROOT } from "@constants";
 import testApiClient from "@tests/test-api-client";
 import { TEST_AUTH_TOKEN } from "@tests/constants";
 
@@ -17,10 +16,7 @@ let mockData: {
 
 describe("tests PatchAuxElement controller", () => {
   beforeAll(async () => {
-    const termbaseUUID = await importFile(
-      `${APP_ROOT}/example-tbx/valid-tbx-core.tbx`,
-      testApiClient
-    );
+    const termbaseUUID = await importTBXFile(testApiClient);
 
     const auxElement = await fetchMockAuxElement(
       termbaseUUID,

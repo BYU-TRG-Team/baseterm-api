@@ -1,8 +1,7 @@
 import { v4 as uuid } from "uuid";
 import { GetTermbaseTermsEndpointResponse } from "@typings/responses";
-import { importFile } from "@tests/helpers";
+import { importTBXFile } from "@tests/helpers";
 import { UUID } from "@typings";
-import { APP_ROOT } from "@constants";
 import testApiClient from "@tests/test-api-client";
 import { TEST_AUTH_TOKEN } from "@tests/constants";
 
@@ -12,10 +11,7 @@ let mockData: {
 
 describe("tests GetTerms controller", () => {
   beforeAll(async () => {
-    const termbaseUUID = await importFile(
-      `${APP_ROOT}/example-tbx/valid-tbx-core.tbx`,
-      testApiClient
-    );
+    const termbaseUUID = await importTBXFile(testApiClient);
 
     mockData = {
       termbaseUUID,
