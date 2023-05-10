@@ -1,6 +1,6 @@
 {
-  "name": "@byu-trg/language-code-service",
-  "version": "1.4.1",
+  "name": "baseterm-api",
+  "version": "1.5.0",
   "description": "HTTP REST API for TermBase eXchange V3 data.",
   "main": "dist/src/index.js",
   "scripts": {
@@ -19,14 +19,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/BYU-TRG-Team/js-baseterm-api.git"
+    "url": "git+https://github.com/BYU-TRG-Team/baseterm-api.git"
   },
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/BYU-TRG-Team/js-baseterm-api/issues"
+    "url": "https://github.com/BYU-TRG-Team/baseterm-api/issues"
   },
-  "homepage": "https://github.com/BYU-TRG-Team/js-baseterm-api#readme",
+  "homepage": "https://github.com/BYU-TRG-Team/baseterm-api#readme",
   "dependencies": {
     "@byu-trg/express-user-management": "^1.0.1",
     "@byu-trg/language-code-service": "^1.1.4",
