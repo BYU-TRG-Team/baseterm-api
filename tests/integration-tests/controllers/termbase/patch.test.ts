@@ -14,7 +14,7 @@ let mockData: {
 
 describe("tests PatchTermbase controller", () => {
   beforeAll(async () => {
-    const termbaseUUID = await importTBXFile(testApiClient);
+    const termbaseUUID = await importTBXFile();
 
     mockData = {
       termbaseUUID,
@@ -108,7 +108,7 @@ describe("tests PatchTermbase controller", () => {
 
   test("should return a 409 for duplicate name", async () => {
     const termbaseName = uuid();
-    await importTBXFile(testApiClient, {
+    await importTBXFile({
       name: termbaseName
     });
 

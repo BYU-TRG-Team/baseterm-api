@@ -14,7 +14,7 @@ let mockData: {
 
 describe("tests DeleteTerm controller", () => {
   beforeAll(async () => {
-    const termbaseUUID = await importTBXFile(testApiClient, {
+    const termbaseUUID = await importTBXFile({
       createPersonRefObject: false
     });
 

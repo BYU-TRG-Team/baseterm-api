@@ -1,6 +1,5 @@
 import { diffAsXml } from "diff-js-xml";
 import fs from "fs";
-import testApiClient from "@tests/test-api-client";
 import { SMALL_TBX_FILES, LARGE_TBX_FILES } from "@tests/constants";
 import { exportTBXFile, importTBXFile } from "@tests/helpers";
 
@@ -13,15 +12,12 @@ describe("tests the lifecycle of a TBX file (import and export)", () => {
       const tbxFileAsString =  fs.readFileSync(tbxFile).toString();
       
       for (let i = 0; i < 10; ++i) {
-        const termbaseUUID = await importTBXFile(testApiClient, {
+        const termbaseUUID = await importTBXFile({
           filePath: tbxFile,
           createPersonRefObject: false,
         });
   
-        const exportedTbxFile = await exportTBXFile(
-          testApiClient,
-          termbaseUUID
-        );
+        const exportedTbxFile = await exportTBXFile(termbaseUUID);
   
         diffAsXml(
           tbxFileAsString, 
@@ -48,15 +44,12 @@ describe("tests the lifecycle of a TBX file (import and export)", () => {
       process.stdout.write(`Testing ${tbxFile}\n`);
       const tbxFileAsString =  fs.readFileSync(tbxFile).toString();
 
-      const termbaseUUID = await importTBXFile(testApiClient, {
+      const termbaseUUID = await importTBXFile({
         filePath: tbxFile,
         createPersonRefObject: false,
       });
 
-      const exportedTbxFile = await exportTBXFile(
-        testApiClient,
-        termbaseUUID
-      );
+      const exportedTbxFile = await exportTBXFile(termbaseUUID);
 
       diffAsXml(
         tbxFileAsString, 

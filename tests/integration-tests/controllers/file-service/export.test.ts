@@ -25,7 +25,7 @@ describe("tests Export controller", () => {
   });
 
   test("should return a response indicating a successful export request", async () => {
-    const termbaseUUID = await importTBXFile(testApiClient);
+    const termbaseUUID = await importTBXFile();
 
     const { status: exportStatus, body: exportBody } = (
       await testApiClient
