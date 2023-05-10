@@ -1,9 +1,6 @@
 import { v4 as uuid } from "uuid";
 import { importTBXFile } from "@tests/helpers";
-import {
-  GetTermbaseEndpointResponse,
-  PatchTermbaseEndpointResponse
-} from "@typings/responses";
+import { GetTermbaseEndpointResponse, PatchTermbaseEndpointResponse } from "@typings/responses";
 import { UUID } from "@typings";
 import testApiClient, { TEST_API_CLIENT_COOKIES }  from "@tests/test-api-client";
 
@@ -47,13 +44,15 @@ describe("tests PatchTermbase controller", () => {
   test("should return a successful response with no updates", async () => {
     const { body: termbaseResponse } = await testApiClient
       .get(`/termbase/${mockData.termbaseUUID}`) 
-      .set("Cookie", TEST_API_CLIENT_COOKIES) as 
-      { body: GetTermbaseEndpointResponse };
+      .set("Cookie", TEST_API_CLIENT_COOKIES) as { 
+        body: GetTermbaseEndpointResponse 
+      };
       
     const { body: updatedTermbaseResponse } = await testApiClient
       .patch(`/termbase/${mockData.termbaseUUID}`) 
-      .set("Cookie", TEST_API_CLIENT_COOKIES) as 
-      { body: PatchTermbaseEndpointResponse };
+      .set("Cookie", TEST_API_CLIENT_COOKIES) as { 
+        body: PatchTermbaseEndpointResponse 
+      };
 
     expect(updatedTermbaseResponse.name).toBe(termbaseResponse.name);
     expect(updatedTermbaseResponse.type).toBe(termbaseResponse.type);
@@ -62,8 +61,9 @@ describe("tests PatchTermbase controller", () => {
   test("should return a successful response with an updated name", async () => {
     const { body: termbaseResponse } = await testApiClient
       .get(`/termbase/${mockData.termbaseUUID}`) 
-      .set("Cookie", TEST_API_CLIENT_COOKIES) as 
-      { body: GetTermbaseEndpointResponse };
+      .set("Cookie", TEST_API_CLIENT_COOKIES) as { 
+        body: GetTermbaseEndpointResponse 
+      };
 
     const updatedTermbaseName = uuid();
 
@@ -72,8 +72,9 @@ describe("tests PatchTermbase controller", () => {
       .field({
         name: updatedTermbaseName,
       })
-      .set("Cookie", TEST_API_CLIENT_COOKIES) as 
-      { body: PatchTermbaseEndpointResponse };
+      .set("Cookie", TEST_API_CLIENT_COOKIES) as { 
+        body: PatchTermbaseEndpointResponse 
+      };
 
     expect(updatedTermbaseResponse.name).toBe(updatedTermbaseName);
     expect(updatedTermbaseResponse.type).toBe(termbaseResponse.type);
@@ -86,8 +87,9 @@ describe("tests PatchTermbase controller", () => {
         enforceBasicDialect: false,
         type: "Test",
       }) 
-      .set("Cookie", TEST_API_CLIENT_COOKIES) as 
-      { body: PatchTermbaseEndpointResponse };
+      .set("Cookie", TEST_API_CLIENT_COOKIES) as { 
+        body: PatchTermbaseEndpointResponse 
+      };
 
     expect(updatedTermbaseResponse.enforceBasicDialect).toBe(false);
     expect(updatedTermbaseResponse.type).toBe("TBX-Basic");
@@ -98,8 +100,9 @@ describe("tests PatchTermbase controller", () => {
         enforceBasicDialect: true,
         type: "Test"
       }) 
-      .set("Cookie", TEST_API_CLIENT_COOKIES) as 
-      { body: PatchTermbaseEndpointResponse };
+      .set("Cookie", TEST_API_CLIENT_COOKIES) as { 
+        body: PatchTermbaseEndpointResponse 
+      };
 
     expect(secondUpdatedTermbaseResponse.enforceBasicDialect).toBe(false);
     expect(secondUpdatedTermbaseResponse.type).toBe("Test");

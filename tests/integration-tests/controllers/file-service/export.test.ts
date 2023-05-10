@@ -26,11 +26,11 @@ describe("tests Export controller", () => {
   test("should return a response indicating a successful export request", async () => {
     const termbaseUUID = await importTBXFile();
 
-    const { status: exportStatus, body: exportBody } = (
-      await testApiClient
-        .get(`/export/${termbaseUUID}`) 
-        .set("Cookie", TEST_API_CLIENT_COOKIES)
-    ) as { status: number, body: ExportEndpointResponse };
+    const { status: exportStatus, body: exportBody } = await testApiClient
+      .get(`/export/${termbaseUUID}`) 
+      .set("Cookie", TEST_API_CLIENT_COOKIES) as { 
+        status: number, body: ExportEndpointResponse 
+      };
 
     expect(exportStatus).toBe(202);
     expect(exportBody.sessionId).toBeDefined();

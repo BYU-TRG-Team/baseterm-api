@@ -59,8 +59,9 @@ describe("tests PostEntry controller", () => {
         initialLanguageSection: VALID_LANGUAGE_CODE,
         initialTerm: "test",
       }) 
-      .set("Cookie", TEST_API_CLIENT_COOKIES) as 
-      { body: PostEntryEndpointResponse, status: number };
+      .set("Cookie", TEST_API_CLIENT_COOKIES) as { 
+        body: PostEntryEndpointResponse, status: number 
+      };
 
     expect(status).toBe(200);
     expect(body.uuid).toBeDefined();

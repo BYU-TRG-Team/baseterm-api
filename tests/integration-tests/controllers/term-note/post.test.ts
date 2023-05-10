@@ -5,9 +5,6 @@ import errorMessages from "@messages/errors";
 import { SuperAgentResponse } from "@tests/types";
 import testApiClient, { TEST_API_CLIENT_COOKIES } from "@tests/test-api-client";
 
-const endpointConstructor = (
-  termbaseUUID: UUID
-) => `/termbase/${termbaseUUID}/termNote`;
 let mockData: {
   termbaseUUID: UUID,
   termUUID: UUID,
@@ -32,11 +29,7 @@ describe("tests PostTermNote controller", () => {
 
   test("should return a 400 response for invalid body", async () => {
     const { status, body } = await testApiClient
-      .post(
-        endpointConstructor(
-          mockData.termbaseUUID
-        )
-      )
+      .post(`/termbase/${mockData.termbaseUUID}/termNote`)
       .set("Cookie", TEST_API_CLIENT_COOKIES);
   
     expect(status).toBe(400);
@@ -45,19 +38,14 @@ describe("tests PostTermNote controller", () => {
   
   test("should return a 200 response for successful creation of a term note", async () => {
     const { status, body } = await testApiClient
-      .post(
-        endpointConstructor(
-          mockData.termbaseUUID
-        )
-      )
+      .post(`/termbase/${mockData.termbaseUUID}/termNote`)
       .field({
         termUUID: mockData.termUUID,
         value: "Test",
         type: "Test",
         isGrp: false,
       }) 
-      .set("Cookie", TEST_API_CLIENT_COOKIES) as 
-      SuperAgentResponse<PostTermNoteEndpointResponse>;
+      .set("Cookie", TEST_API_CLIENT_COOKIES) as SuperAgentResponse<PostTermNoteEndpointResponse>;
   
     expect(status).toBe(200);
     expect(body.uuid).toBeDefined();

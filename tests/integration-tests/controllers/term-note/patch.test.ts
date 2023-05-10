@@ -3,12 +3,9 @@ import { PatchTermNoteEndpointResponse } from "@typings/responses";
 import { TermNote, UUID } from "@typings";
 import { VALID_LANGUAGE_CODE } from "@tests/constants";
 import { SuperAgentResponse } from "@tests/types";
-import testApiClient, { TEST_API_CLIENT_COOKIES } from "@tests/test-api-client";
+import testApiClient from "@tests/test-api-client";
+import { TEST_API_CLIENT_COOKIES } from "@tests/test-api-client";
 
-const endpointConstructor = (
-  termbaseUUID: UUID,
-  termNoteUUID: UUID,
-) => `/termbase/${termbaseUUID}/termNote/${termNoteUUID}`;
 let mockData: {
   termbaseUUID: UUID,
   termNote: TermNote,
@@ -30,13 +27,8 @@ describe("tests PatchTermNote controller", () => {
   });
 
   test("should return a 200 response for successful patch of term note", async () => {
-    const { status, body} = await testApiClient
-      .patch(
-        endpointConstructor(
-          mockData.termbaseUUID,
-          mockData.termNote.uuid
-        )
-      )
+    const { status, body } = await testApiClient
+      .patch(`/termbase/${mockData.termbaseUUID}/termNote/${mockData.termNote.uuid}`)
       .set("Cookie", TEST_API_CLIENT_COOKIES)
       .field({
         id: "Test",

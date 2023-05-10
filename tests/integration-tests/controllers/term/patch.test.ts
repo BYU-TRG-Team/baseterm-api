@@ -4,10 +4,6 @@ import { UUID } from "@typings";
 import { SuperAgentResponse } from "@tests/types";
 import testApiClient, { TEST_API_CLIENT_COOKIES } from "@tests/test-api-client";
 
-const endpointConstructor = (
-  termbaseUUID: UUID,
-  termUUID: UUID,
-) => `/termbase/${termbaseUUID}/term/${termUUID}`;
 let mockData: {
   termbaseUUID: UUID,
   termUUID: UUID,
@@ -30,12 +26,7 @@ describe("tests PatchTerm controller", () => {
 
   test("should return a 200 response for successful patch of term", async () => {
     const { status, body} = await testApiClient
-      .patch(
-        endpointConstructor(
-          mockData.termbaseUUID,
-          mockData.termUUID
-        )
-      )
+      .patch(`/termbase/${mockData.termbaseUUID}/term/${mockData.termUUID}`)
       .set("Cookie", TEST_API_CLIENT_COOKIES)
       .field({
         value: "Test",

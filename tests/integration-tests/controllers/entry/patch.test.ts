@@ -9,11 +9,9 @@ let mockData: {
   entryUUID: UUID,
 };
 
-
 describe("tests PatchEntry controller", () => {
   beforeAll(async () => { 
     const termbaseUUID = await importTBXFile();
-
     const { entryUUID } = await fetchMockTermbaseData(
       termbaseUUID,
       testApiClient,
@@ -50,8 +48,9 @@ describe("tests PatchEntry controller", () => {
       .field({
         id: "TEST",
       }) 
-      .set("Cookie", TEST_API_CLIENT_COOKIES) as 
-      { body: PatchEntryEndpointResponse, status: number };
+      .set("Cookie", TEST_API_CLIENT_COOKIES) as { 
+        body: PatchEntryEndpointResponse, status: number 
+      };
 
     expect(status).toBe(200);
     expect(body.id).toBe("TEST");
