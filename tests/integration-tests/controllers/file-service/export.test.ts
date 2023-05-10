@@ -1,7 +1,6 @@
 import { ExportEndpointResponse } from "@typings/responses";
 import { v4 as uuid } from "uuid";
-import { importFile } from "@tests/helpers";
-import { APP_ROOT } from "@constants";
+import { importTBXFile } from "@tests/helpers";
 import testApiClient from "@tests/test-api-client";
 import { TEST_AUTH_TOKEN } from "@tests/constants";
 
@@ -26,10 +25,7 @@ describe("tests Export controller", () => {
   });
 
   test("should return a response indicating a successful export request", async () => {
-    const termbaseUUID = await importFile(
-      `${APP_ROOT}/example-tbx/valid-tbx-core.tbx`,
-      testApiClient,
-    );
+    const termbaseUUID = await importTBXFile(testApiClient);
 
     const { status: exportStatus, body: exportBody } = (
       await testApiClient

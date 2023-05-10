@@ -1,12 +1,11 @@
 import { 
   fetchMockTermbaseData, 
-  importFile 
+  importTBXFile
 } from "@tests/helpers";
 import { PostLangSecEndpointResponse } from "@typings/responses";
 import { VALID_LANGUAGE_CODE} from "@tests/constants";
 import { UUID } from "@typings";
 import { SuperAgentResponse } from "@tests/types";
-import { APP_ROOT } from "@constants";
 import testApiClient from "@tests/test-api-client";
 import { TEST_AUTH_TOKEN } from "@tests/constants";
 
@@ -20,10 +19,7 @@ let mockData: {
 
 describe("tests PostLangSec controller", () => {
   beforeAll(async () => {
-    const termbaseUUID = await importFile(
-      `${APP_ROOT}/example-tbx/valid-tbx-core.tbx`,
-      testApiClient,
-    );
+    const termbaseUUID = await importTBXFile(testApiClient);
 
     const {
       entryUUID

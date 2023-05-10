@@ -9,6 +9,7 @@ import { SuperAgentTest } from "supertest";
 import { UUID } from "@typings";
 import EventSource from "eventsource";
 import { TEST_API_CLIENT_ENDPOINT, TEST_AUTH_TOKEN, TEST_USER_ID } from "@tests/constants";
+import { APP_ROOT } from "@constants";
 
 export const postPersonObjectRef = async (
   jwt: string,
@@ -29,12 +30,20 @@ export const postPersonObjectRef = async (
     .set("Cookie", [`TRG_AUTH_TOKEN=${jwt}`]);
 };
 
-export const importFile = async (
-  filePath: string,
-  requestClient: SuperAgentTest,
-  name: string = uuid(),
-  postPersonRefObject = true
+export const importTBXFile = async (
+  requestClient: SuperAgentTest, 
+  options: {
+    filePath?: string
+    name?: string,
+    createPersonRefObject?: boolean
+  } = {}
 ) => {
+  const {
+    filePath = `${APP_ROOT}/example-tbx/valid-tbx-core.tbx`,
+    name = uuid(),
+    createPersonRefObject = true
+  } = options;
+
   const { body: importBody } = (
       await requestClient
         .post("/import")
@@ -69,7 +78,7 @@ export const importFile = async (
     };
   });
 
-  if (postPersonRefObject) {
+  if (createPersonRefObject) {
     await postPersonObjectRef(
       TEST_AUTH_TOKEN,
       importBody.termbaseUUID,
@@ -78,7 +87,7 @@ export const importFile = async (
     );
   }
 
-  return importBody.termbaseUUID as UUID;
+  return importBody.termbaseUUID;
 };
 
 export const fetchMockTermbaseData = async (

@@ -1,5 +1,5 @@
 import { v4 as uuid } from "uuid";
-import { fetchMockTermbaseData, importFile } from "@tests/helpers";
+import { fetchMockTermbaseData, importTBXFile } from "@tests/helpers";
 import { PatchEntryEndpointResponse } from "@typings/responses";
 import { UUID } from "@typings";
 import { APP_ROOT } from "@constants";
@@ -14,10 +14,7 @@ let mockData: {
 
 describe("tests PatchEntry controller", () => {
   beforeAll(async () => { 
-    const termbaseUUID = await importFile(
-      `${APP_ROOT}/example-tbx/valid-tbx-core.tbx`,
-      testApiClient
-    );
+    const termbaseUUID = await importTBXFile(testApiClient);
 
     const { entryUUID } = await fetchMockTermbaseData(
       termbaseUUID,

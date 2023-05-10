@@ -1,10 +1,9 @@
-import { importFile } from "@tests/helpers";
+import { importTBXFile } from "@tests/helpers";
 import { PostPersonRefObjectEndpointResponse } from "@typings/responses";
 import { UUID } from "@typings";
 import errorMessages from "@messages/errors";
 import { SuperAgentResponse } from "@tests/types";
 import { v4 as uuid } from "uuid";
-import { APP_ROOT } from "@constants";
 import testApiClient from "@tests/test-api-client";
 import { TEST_AUTH_TOKEN, TEST_USER_ID } from "@tests/constants";
 
@@ -17,12 +16,9 @@ let mockData: {
 
 describe("tests PostPersonRefObject controller", () => {
   beforeAll(async () => {
-    const termbaseUUID = await importFile(
-      `${APP_ROOT}/example-tbx/valid-tbx-core.tbx`,
-      testApiClient,
-      uuid(),
-      false
-    );
+    const termbaseUUID = await importTBXFile(testApiClient, {
+      createPersonRefObject: false
+    });
 
     mockData = {
       termbaseUUID

@@ -1,5 +1,5 @@
 import { PostTermNoteEndpointResponse } from "@typings/responses";
-import { fetchMockTermbaseData, importFile } from "@tests/helpers";
+import { fetchMockTermbaseData, importTBXFile } from "@tests/helpers";
 import { UUID } from "@typings";
 import errorMessages from "@messages/errors";
 import { SuperAgentResponse } from "@tests/types";
@@ -17,10 +17,7 @@ let mockData: {
 
 describe("tests PostTermNote controller", () => {
   beforeAll(async () => {
-    const termbaseUUID = await importFile(
-      `${APP_ROOT}/example-tbx/valid-tbx-core.tbx`,
-      testApiClient
-    );
+    const termbaseUUID = await importTBXFile(testApiClient);
 
     const {
       termUUID

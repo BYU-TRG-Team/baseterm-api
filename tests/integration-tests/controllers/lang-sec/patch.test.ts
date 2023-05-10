@@ -1,10 +1,8 @@
-import { fetchMockTermbaseData, importFile } from "@tests/helpers";
+import { fetchMockTermbaseData, importTBXFile } from "@tests/helpers";
 import { PatchLangSecEndpointResponse } from "@typings/responses";
 import { VALID_LANGUAGE_CODE } from "@tests/constants";
 import { UUID } from "@typings";
 import { SuperAgentResponse } from "@tests/types";
-import { Role } from "@byu-trg/express-user-management";
-import { v4 as uuid } from "uuid";
 import { APP_ROOT } from "@constants";
 import testApiClient from "@tests/test-api-client";
 import { TEST_AUTH_TOKEN } from "@tests/constants";
@@ -20,10 +18,7 @@ let mockData: {
 
 describe("tests PatchLangSec controller", () => {
   beforeAll(async () => {
-    const termbaseUUID = await importFile(
-      `${APP_ROOT}/example-tbx/valid-tbx-core.tbx`,
-      testApiClient,
-    );
+    const termbaseUUID = await importTBXFile(testApiClient);
 
     const {
       langSecUUID
