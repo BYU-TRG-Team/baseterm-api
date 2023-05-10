@@ -9,26 +9,11 @@ import {
 import { FileServiceSession } from "@typings/sessions";
 import { APP_ROOT } from "@constants";
 import testApiClient from "@tests/test-api-client";
-import { TEST_API_CLIENT_ENDPOINT, TEST_API_CLIENT_COOKIES } from "@tests/constants";
-
-const smallTbxFiles = [
-  `${APP_ROOT}/example-tbx/valid-tbx-core.tbx`,
-  `${APP_ROOT}/example-tbx/test-files/test1.tbx`,
-  `${APP_ROOT}/example-tbx/test-files/test5.tbx`,
-  `${APP_ROOT}/example-tbx/test-files/test6.tbx`,
-  `${APP_ROOT}/example-tbx/test-files/test8.tbx`,
-];
-
-const largeTbxFiles = [
-  `${APP_ROOT}/example-tbx/test-files/test2.tbx`,
-  `${APP_ROOT}/example-tbx/test-files/test3.tbx`,
-  `${APP_ROOT}/example-tbx/test-files/test4.tbx`,
-  `${APP_ROOT}/example-tbx/test-files/test7.tbx`,
-];
+import { TEST_API_CLIENT_ENDPOINT, TEST_API_CLIENT_COOKIES, SMALL_TBX_FILES, LARGE_TBX_FILES } from "@tests/constants";
 
 describe("tests the lifecycle of a TBX file (import and export)", () => {
   test("should import each small tbx file and export an identical file 10 times", async () => {
-    for (const tbxFile of smallTbxFiles) {
+    for (const tbxFile of SMALL_TBX_FILES) {
       process.stdout.write(`Testing ${tbxFile}\n`);
       const tbxFileAsString =  fs.readFileSync(tbxFile).toString();
         
@@ -119,7 +104,7 @@ describe("tests the lifecycle of a TBX file (import and export)", () => {
   }, 600000);
 
   test("should import each large tbx file and export an identical file", async () => {
-    for (const tbxFile of largeTbxFiles) {
+    for (const tbxFile of LARGE_TBX_FILES) {
       process.stdout.write(`Testing ${tbxFile}\n`);
       const tbxFileAsString =  fs.readFileSync(tbxFile).toString();
 

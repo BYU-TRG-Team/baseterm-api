@@ -8,8 +8,7 @@ import { v4 as uuid } from "uuid";
 import { SuperAgentTest } from "supertest";
 import { UUID } from "@typings";
 import EventSource from "eventsource";
-import { TEST_API_CLIENT_ENDPOINT, TEST_AUTH_TOKEN, TEST_USER_ID } from "@tests/constants";
-import { APP_ROOT } from "@constants";
+import { EXAMPLE_TBX_FILE, TEST_API_CLIENT_ENDPOINT, TEST_AUTH_TOKEN, TEST_USER_ID } from "@tests/constants";
 
 export const postPersonObjectRef = async (
   jwt: string,
@@ -39,7 +38,7 @@ export const importTBXFile = async (
   } = {}
 ) => {
   const {
-    filePath = `${APP_ROOT}/example-tbx/valid-tbx-core.tbx`,
+    filePath = EXAMPLE_TBX_FILE,
     name = uuid(),
     createPersonRefObject = true
   } = options;
