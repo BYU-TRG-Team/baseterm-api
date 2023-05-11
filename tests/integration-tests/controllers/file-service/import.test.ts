@@ -3,6 +3,7 @@ import { ImportEndpointResponse } from "@typings/responses";
 import { APP_ROOT } from "@constants";
 import testApiClient, { TEST_API_CLIENT_COOKIES }  from "@tests/test-api-client";
 import { TestAPIClientResponse } from "@tests/types";
+import { INVALID_TEST_TBX_FILE } from "@tests/constants";
 
 describe("tests Import controller", () => {
   test("should return a response indicating a tbx file has successfully started importing", async () => {
@@ -20,7 +21,7 @@ describe("tests Import controller", () => {
   test("should return a response indicating an invalid tbx (no header)", async () => {
     const { status, body } = await testApiClient
       .post("/import")
-      .attach("tbxFile", `${APP_ROOT}/example-tbx/tbx-core-no-header.tbx`)
+      .attach("tbxFile", INVALID_TEST_TBX_FILE)
       .set("Cookie", TEST_API_CLIENT_COOKIES)
       .field({ name: uuid()});
 
@@ -32,7 +33,7 @@ describe("tests Import controller", () => {
     const { status } = await testApiClient
       .post("/import")
       .set("Cookie", TEST_API_CLIENT_COOKIES)
-      .attach("tbxFile", `${APP_ROOT}/example-tbx/tbx-core-no-header.tbx`);
+      .attach("tbxFile", INVALID_TEST_TBX_FILE);
 
     expect(status).toBe(400);
   });

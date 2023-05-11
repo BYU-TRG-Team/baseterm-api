@@ -8,7 +8,7 @@ import {
 import { v4 as uuid } from "uuid";
 import { UUID } from "@typings";
 import EventSource from "eventsource";
-import { EXAMPLE_TBX_FILE, EXAMPLE_TBX_FILE_TESTABLE_TERM } from "@tests/constants";
+import { PRIMARY_TEST_TBX_FILE, PRIMARY_TEST_TBX_FILE_TESTABLE_TERM } from "@tests/constants";
 import testApiClient, { TEST_API_CLIENT_COOKIES, TEST_API_CLIENT_ENDPOINT, TEST_USER_ID } from "@tests/test-api-client";
 import { TestAPIClientResponse, TestData } from "@tests/types";
 
@@ -19,12 +19,12 @@ export const generateTestData = async (
 ): Promise<TestData> => {
   const { createPersonRefObject = true }  = options;
   const termbaseUUID = await importTBXFile({
-    filePath: EXAMPLE_TBX_FILE,
+    filePath: PRIMARY_TEST_TBX_FILE,
     createPersonRefObject,
   });
 
   const { body: getTermbaseTermsResponse } = await testApiClient
-    .get(`/termbase/${termbaseUUID}/terms?page=1&term=${EXAMPLE_TBX_FILE_TESTABLE_TERM}`)
+    .get(`/termbase/${termbaseUUID}/terms?page=1&term=${PRIMARY_TEST_TBX_FILE_TESTABLE_TERM}`)
     .set("Cookie", TEST_API_CLIENT_COOKIES) as TestAPIClientResponse<GetTermbaseTermsEndpointResponse>;
 
   if (getTermbaseTermsResponse.terms.length !== 1) {
