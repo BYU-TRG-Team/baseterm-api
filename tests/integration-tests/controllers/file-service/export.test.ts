@@ -1,10 +1,16 @@
 import { ExportEndpointResponse } from "@typings/responses";
 import { v4 as uuid } from "uuid";
-import { importTBXFile } from "@tests/helpers";
+import { generateTestData } from "@tests/helpers";
 import testApiClient, { TEST_API_CLIENT_COOKIES } from "@tests/test-api-client";
-import { TestAPIClientResponse } from "@tests/types";
+import { TestAPIClientResponse, TestData } from "@tests/types";
+
+let testData: TestData;
 
 describe("tests Export controller", () => {
+  beforeAll(async () => {
+    testData = await generateTestData();
+  });
+  
   test("should return a response indicating no termbase resource (supplying unknown uuid)", async () => {
     const { status, body } = await testApiClient
       .get(`/export/${uuid()}`)
@@ -24,10 +30,8 @@ describe("tests Export controller", () => {
   });
 
   test("should return a response indicating a successful export request", async () => {
-    const termbaseUUID = await importTBXFile();
-
     const { status, body } = await testApiClient
-      .get(`/export/${termbaseUUID}`) 
+      .get(`/export/${testData.termbaseUUID}`) 
       .set("Cookie", TEST_API_CLIENT_COOKIES) as TestAPIClientResponse<ExportEndpointResponse>;
 
     expect(status).toBe(202);
