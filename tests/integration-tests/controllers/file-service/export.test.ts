@@ -4,7 +4,6 @@ import { importTBXFile } from "@tests/helpers";
 import testApiClient, { TEST_API_CLIENT_COOKIES } from "@tests/test-api-client";
 import { TestAPIClientResponse } from "@tests/types";
 
-
 describe("tests Export controller", () => {
   test("should return a response indicating no termbase resource (supplying unknown uuid)", async () => {
     const { status, body } = await testApiClient

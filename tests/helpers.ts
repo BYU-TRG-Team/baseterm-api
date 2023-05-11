@@ -6,12 +6,46 @@ import {
   SessionSSEEndpointResponse
 } from "@typings/responses";
 import { v4 as uuid } from "uuid";
-import { SuperAgentTest } from "supertest";
 import { UUID } from "@typings";
 import EventSource from "eventsource";
-import { EXAMPLE_TBX_FILE } from "@tests/constants";
-import testApiClient, { TEST_API_CLIENT_COOKIES, TEST_API_CLIENT_ENDPOINT, TEST_AUTH_TOKEN, TEST_USER_ID } from "@tests/test-api-client";
-import { TestAPIClientResponse } from "@tests/types";
+import { EXAMPLE_TBX_FILE, EXAMPLE_TBX_FILE_TESTABLE_TERM } from "@tests/constants";
+import testApiClient, { TEST_API_CLIENT_COOKIES, TEST_API_CLIENT_ENDPOINT, TEST_USER_ID } from "@tests/test-api-client";
+import { TestAPIClientResponse, TestData } from "@tests/types";
+
+export const generateTestData = async (
+  options: {
+    createPersonRefObject?: boolean
+  } = {}
+): Promise<TestData> => {
+  const { createPersonRefObject = true }  = options;
+  const termbaseUUID = await importTBXFile({
+    filePath: EXAMPLE_TBX_FILE,
+    createPersonRefObject,
+  });
+
+  const { body: getTermbaseTermsResponse } = await testApiClient
+    .get(`/termbase/${termbaseUUID}/terms?page=1&term=${EXAMPLE_TBX_FILE_TESTABLE_TERM}`)
+    .set("Cookie", TEST_API_CLIENT_COOKIES) as TestAPIClientResponse<GetTermbaseTermsEndpointResponse>;
+
+  if (getTermbaseTermsResponse.terms.length !== 1) {
+    throw new Error("Failed to fetch test data.");
+  }
+
+  const term = getTermbaseTermsResponse.terms[0];
+
+  const { body: getTermResponse } = await testApiClient
+    .get(`/termbase/${termbaseUUID}/term/${term.uuid}`)
+    .set("Cookie", TEST_API_CLIENT_COOKIES) as TestAPIClientResponse<GetTermEndpointResponse>;
+
+  return {
+    termbaseUUID,
+    entry: getTermResponse.conceptEntry,
+    langSec: getTermResponse.languageSection,
+    term: getTermResponse,
+    auxElement: getTermResponse.auxElements[0],
+    termNote: getTermResponse.termNotes[0],
+  };
+};
 
 export const importTBXFile = async (
   options: {
@@ -59,12 +93,15 @@ export const importTBXFile = async (
   });
 
   if (createPersonRefObject) {
-    await postPersonObjectRef(
-      TEST_AUTH_TOKEN,
-      importResponse.termbaseUUID,
-      testApiClient,
-      TEST_USER_ID
-    );
+    await testApiClient
+      .post(`/termbase/${importResponse.termbaseUUID}/personRefObject`)
+      .field({
+        name: "Test",
+        email: "Test",
+        role: "Test",
+        id: TEST_USER_ID,
+      })
+      .set("Cookie", TEST_API_CLIENT_COOKIES);
   }
 
   return importResponse.termbaseUUID;
@@ -104,87 +141,3 @@ export const exportTBXFile = async (termbaseUUID: UUID) => {
   return exportedTbxFile;
 };
 
-export const postPersonObjectRef = async (
-  jwt: string,
-  termbaseUUID: UUID,
-  requestClient: SuperAgentTest,
-  personId: UUID,
-) => {
-  await requestClient
-    .post(`/termbase/${termbaseUUID}/personRefObject`)
-    .field({
-      name: "Test",
-      email: "Test",
-      role: "Test",
-      id: personId,
-    })
-    .set("Cookie", [`TRG_AUTH_TOKEN=${jwt}`]);
-};
-
-export const fetchMockTermbaseData = async (
-  termbaseUUID: UUID,
-  requestClient: SuperAgentTest,
-) => {
-  const { body: getTermbaseTermsResponse } = await requestClient
-    .get(`/termbase/${termbaseUUID}/terms?page=1`)
-    .set("Cookie", TEST_API_CLIENT_COOKIES) as TestAPIClientResponse<GetTermbaseTermsEndpointResponse>;
-
-  for (const term of getTermbaseTermsResponse.terms) {
-    const { body: getTermResponse } = await requestClient
-      .get(`/termbase/${termbaseUUID}/term/${term.uuid}`)
-      .set("Cookie", TEST_API_CLIENT_COOKIES) as TestAPIClientResponse<GetTermEndpointResponse>;
-
-    if (getTermResponse.synonyms.length !== 0) {
-      return {
-        entryUUID: getTermResponse.conceptEntry.uuid,
-        langSecUUID: getTermResponse.languageSection.uuid,
-        termUUID: getTermResponse.uuid,
-        termbaseUUID,
-      };
-    }
-  }
-
-  throw new Error("Failed to find an appropriate term");
-};
-
-export const fetchMockTermNote = async (
-  termbaseUUID: UUID,
-  requestClient: SuperAgentTest
-) => {
-  const { body: getTermbaseTermsResponse } = await requestClient
-    .get(`/termbase/${termbaseUUID}/terms?page=1`) 
-    .set("Cookie", TEST_API_CLIENT_COOKIES) as TestAPIClientResponse<GetTermbaseTermsEndpointResponse>;
-
-  for (const term of getTermbaseTermsResponse.terms) {
-    const { body: getTermResponse } = await requestClient
-      .get(`/termbase/${termbaseUUID}/term/${term.uuid}`)
-      .set("Cookie", TEST_API_CLIENT_COOKIES) as TestAPIClientResponse<GetTermEndpointResponse>;
-
-    if (getTermResponse.termNotes.length !== 0) {
-      return getTermResponse.termNotes[0];
-    }
-  }
-
-  throw new Error("Failed to fetch term note");
-};
-
-export const fetchMockAuxElement = async (
-  termbaseUUID: UUID,
-  requestClient: SuperAgentTest
-) => {
-  const { body: getTermbaseTermsResponse } = await requestClient
-    .get(`/termbase/${termbaseUUID}/terms?page=1`)
-    .set("Cookie", TEST_API_CLIENT_COOKIES) as TestAPIClientResponse<GetTermbaseTermsEndpointResponse>;
-
-  for (const term of getTermbaseTermsResponse.terms) {
-    const { body: getTermResponse } = await requestClient
-      .get(`/termbase/${termbaseUUID}/term/${term.uuid}`)
-      .set("Cookie", TEST_API_CLIENT_COOKIES) as TestAPIClientResponse<GetTermEndpointResponse>;
-
-    if (getTermResponse.auxElements.length !== 0) {
-      return getTermResponse.auxElements[0];
-    }
-  }
-
-  throw new Error("Failed to fetch aux element");
-};

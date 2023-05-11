@@ -1,34 +1,20 @@
-import { fetchMockTermNote, importTBXFile } from "@tests/helpers";
+import { generateTestData } from "@tests/helpers";
 import { PatchTermNoteEndpointResponse } from "@typings/responses";
-import { TermNote, UUID } from "@typings";
 import { VALID_LANGUAGE_CODE } from "@tests/constants";
-import { TestAPIClientResponse } from "@tests/types";
+import { TestAPIClientResponse, TestData } from "@tests/types";
 import testApiClient from "@tests/test-api-client";
 import { TEST_API_CLIENT_COOKIES } from "@tests/test-api-client";
 
-let mockData: {
-  termbaseUUID: UUID,
-  termNote: TermNote,
-};
+let testData: TestData;
 
 describe("tests PatchTermNote controller", () => {
   beforeAll(async () => {
-    const termbaseUUID = await importTBXFile();
-
-    const termNote = await fetchMockTermNote(
-      termbaseUUID,
-      testApiClient
-    );
-
-    mockData = {
-      termbaseUUID,
-      termNote,
-    };
+    testData = await generateTestData();
   });
 
   test("should return a 200 response for successful patch of term note", async () => {
     const { status, body } = await testApiClient
-      .patch(`/termbase/${mockData.termbaseUUID}/termNote/${mockData.termNote.uuid}`)
+      .patch(`/termbase/${testData.termbaseUUID}/termNote/${testData.termNote.uuid}`)
       .set("Cookie", TEST_API_CLIENT_COOKIES)
       .field({
         id: "Test",

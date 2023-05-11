@@ -1,35 +1,19 @@
-import { fetchMockTermbaseData, importTBXFile } from "@tests/helpers";
+import { generateTestData } from "@tests/helpers";
 import { PostLangSecEndpointResponse } from "@typings/responses";
-import { UUID } from "@typings";
 import errorMessages from "@messages/errors";
-import { TestAPIClientResponse } from "@tests/types";
+import { TestAPIClientResponse, TestData } from "@tests/types";
 import testApiClient, { TEST_API_CLIENT_COOKIES } from "@tests/test-api-client";
 
-let mockData: {
-  termbaseUUID: UUID,
-  langSecUUID: UUID,
-};
+let testData: TestData;
 
 describe("tests PostTerm controller", () => {
   beforeAll(async () => {
-    const termbaseUUID = await importTBXFile();
-
-    const {
-      langSecUUID
-    } = await fetchMockTermbaseData(
-      termbaseUUID,
-      testApiClient,
-    );
-
-    mockData = {
-      termbaseUUID,
-      langSecUUID,
-    };
+    testData = await generateTestData();
   });
 
   test("should return a 400 response for invalid body", async () => {
     const { status, body } = await testApiClient
-      .post(`/termbase/${mockData.termbaseUUID}/term`)
+      .post(`/termbase/${testData.termbaseUUID}/term`)
       .set("Cookie", TEST_API_CLIENT_COOKIES);
   
     expect(status).toBe(400);
@@ -38,9 +22,9 @@ describe("tests PostTerm controller", () => {
   
   test("should return a 200 response for successful creation of a term", async () => {
     const { status, body } = await testApiClient
-      .post(`/termbase/${mockData.termbaseUUID}/term`)
+      .post(`/termbase/${testData.termbaseUUID}/term`)
       .field({
-        langSecUUID: mockData.langSecUUID,
+        langSecUUID: testData.langSec.uuid,
         value: "Test"
       }) 
       .set("Cookie", TEST_API_CLIENT_COOKIES) as TestAPIClientResponse<PostLangSecEndpointResponse>;

@@ -1,32 +1,18 @@
-import { fetchMockTermbaseData, importTBXFile } from "@tests/helpers";
+import { generateTestData } from "@tests/helpers";
 import { GetLanguageSectionEndpointResponse } from "@typings/responses";
-import { UUID } from "@typings";
 import testApiClient, { TEST_API_CLIENT_COOKIES }  from "@tests/test-api-client";
-import { TestAPIClientResponse } from "@tests/types";
+import { TestAPIClientResponse, TestData } from "@tests/types";
 
-let mockData: {
-  termbaseUUID: UUID,
-  langSecUUID: UUID,
-};
+let testData: TestData;
 
 describe("tests LanguageSection controller", () => {
   beforeAll(async () => {
-    const termbaseUUID = await importTBXFile();
-
-    const { langSecUUID } = await fetchMockTermbaseData(
-      termbaseUUID,
-      testApiClient,
-    );
-
-    mockData = {
-      termbaseUUID,
-      langSecUUID,
-    };
+    testData = await generateTestData();
   });
 
   test("should return a 404 response for malformed langSecUUID", async () => {      
     const { status } = await testApiClient
-      .get(`/termbase/${mockData.termbaseUUID}/langSec/randommmm`)
+      .get(`/termbase/${testData.termbaseUUID}/langSec/randommmm`)
       .set("Cookie", TEST_API_CLIENT_COOKIES);
 
     expect(status).toBe(404);
@@ -34,7 +20,7 @@ describe("tests LanguageSection controller", () => {
 
   test("should return a successful response", async () => {  
     const { status, body } = await testApiClient
-      .get(`/termbase/${mockData.termbaseUUID}/langSec/${mockData.langSecUUID}`) 
+      .get(`/termbase/${testData.termbaseUUID}/langSec/${testData.langSec.uuid}`) 
       .set("Cookie", TEST_API_CLIENT_COOKIES) as TestAPIClientResponse<GetLanguageSectionEndpointResponse>;
 
     expect(status).toBe(200);

@@ -1,21 +1,14 @@
-import { importTBXFile } from "@tests/helpers";
+import { generateTestData } from "@tests/helpers";
 import { PostEntryEndpointResponse } from "@typings/responses";
 import { VALID_LANGUAGE_CODE } from "@tests/constants";
-import { UUID } from "@typings";
 import testApiClient, { TEST_API_CLIENT_COOKIES } from "@tests/test-api-client";
-import { TestAPIClientResponse } from "@tests/types";
+import { TestAPIClientResponse, TestData } from "@tests/types";
 
-let mockData: {
-  termbaseUUID: UUID
-};
+let testData: TestData;
 
 describe("tests PostEntry controller", () => {
   beforeAll(async () => {
-    const termbaseUUID = await importTBXFile();
-
-    mockData = {
-      termbaseUUID,
-    };
+    testData = await generateTestData();
   });
 
   test("should return a 400 response for invalid body", async () => {
@@ -41,7 +34,7 @@ describe("tests PostEntry controller", () => {
 
   test("should return a 409 response for duplicate concept entry id", async () => {    
     const { status } = await testApiClient
-      .post(`/termbase/${mockData.termbaseUUID}/entry`)
+      .post(`/termbase/${testData.termbaseUUID}/entry`)
       .send({
         entryId: "c5", 
         initialLanguageSection: VALID_LANGUAGE_CODE,
@@ -54,7 +47,7 @@ describe("tests PostEntry controller", () => {
 
   test("should return a successfull response with an entry id", async () => {  
     const { status, body } = await testApiClient
-      .post(`/termbase/${mockData.termbaseUUID}/entry`)
+      .post(`/termbase/${testData.termbaseUUID}/entry`)
       .send({
         entryId: "c0293409", 
         initialLanguageSection: VALID_LANGUAGE_CODE,

@@ -1,33 +1,19 @@
 import { v4 as uuid } from "uuid";
 import { GetTermEndpointResponse } from "@typings/responses";
-import { fetchMockTermbaseData, importTBXFile } from "@tests/helpers";
-import { UUID } from "@typings";
+import { generateTestData } from "@tests/helpers";
 import testApiClient,  { TEST_API_CLIENT_COOKIES } from "@tests/test-api-client";
-import { TestAPIClientResponse } from "@tests/types";
+import { TestAPIClientResponse, TestData } from "@tests/types";
 
-let mockData: {
-  termbaseUUID: UUID,
-  termUUID: UUID,
-};
+let testData: TestData;
 
 describe("tests GetTerm controller", () => {
   beforeAll(async () => {
-    const termbaseUUID = await importTBXFile();
-
-    const { termUUID } = await fetchMockTermbaseData(
-      termbaseUUID,
-      testApiClient,
-    );
-
-    mockData = {
-      termbaseUUID,
-      termUUID,
-    };
+    testData = await generateTestData();
   });
 
   test("should return a 404 response for invalid uuid (unknown uuid)", async () => { 
     const { status, body } = await testApiClient
-      .get(`/termbase/${mockData.termbaseUUID}/term/${uuid()}`)
+      .get(`/termbase/${testData.termbaseUUID}/term/${uuid()}`)
       .set("Cookie", TEST_API_CLIENT_COOKIES);
    
     expect(status).toBe(404);
@@ -37,7 +23,7 @@ describe("tests GetTerm controller", () => {
 
   test("should return a 404 response for invalid uuid (malformed uuid)", async () => {
     const { status, body } = await testApiClient
-      .get(`/termbase/${mockData.termbaseUUID}/term/randommmm`)
+      .get(`/termbase/${testData.termbaseUUID}/term/randommmm`)
       .set("Cookie", TEST_API_CLIENT_COOKIES);
 
     expect(status).toBe(404);
@@ -46,7 +32,7 @@ describe("tests GetTerm controller", () => {
 
   test("should return a successful response", async () => {
     const termResponse = await testApiClient
-      .get(`/termbase/${mockData.termbaseUUID}/term/${mockData.termUUID}`)
+      .get(`/termbase/${testData.termbaseUUID}/term/${testData.term.uuid}`)
       .set("Cookie", TEST_API_CLIENT_COOKIES) as TestAPIClientResponse<GetTermEndpointResponse>;
 
     expect(termResponse.status).toBe(200);

@@ -1,21 +1,14 @@
 import { v4 as uuid } from "uuid";
 import { GetTermbaseTermsEndpointResponse } from "@typings/responses";
-import { importTBXFile } from "@tests/helpers";
-import { UUID } from "@typings";
+import { generateTestData } from "@tests/helpers";
 import testApiClient, { TEST_API_CLIENT_COOKIES } from "@tests/test-api-client";
-import { TestAPIClientResponse } from "@tests/types";
+import { TestAPIClientResponse, TestData } from "@tests/types";
 
-let mockData: {
-  termbaseUUID: UUID,
-};
+let testData: TestData;
 
 describe("tests GetTerms controller", () => {
   beforeAll(async () => {
-    const termbaseUUID = await importTBXFile();
-
-    mockData = {
-      termbaseUUID,
-    };
+    testData = await generateTestData();
   });
 
   test("should return a 404 response for invalid uuid (unknown uuid)", async () => {
@@ -29,7 +22,7 @@ describe("tests GetTerms controller", () => {
 
   test("should return a response with an array of 8 terms", async () => { 
     const { status, body } = await testApiClient
-      .get(`/termbase/${mockData.termbaseUUID}/terms?page=1`)
+      .get(`/termbase/${testData.termbaseUUID}/terms?page=1`)
       .set("Cookie", TEST_API_CLIENT_COOKIES) as TestAPIClientResponse<GetTermbaseTermsEndpointResponse>;
 
     expect(status).toBe(200);
@@ -44,7 +37,7 @@ describe("tests GetTerms controller", () => {
 
   test("should return a response with an array of 8 terms", async () => {
     const { status, body } = await testApiClient
-      .get(`/termbase/${mockData.termbaseUUID}/terms?page=1`)
+      .get(`/termbase/${testData.termbaseUUID}/terms?page=1`)
       .set("Cookie", TEST_API_CLIENT_COOKIES) as TestAPIClientResponse<GetTermbaseTermsEndpointResponse>;
 
     expect(status).toBe(200);
@@ -59,7 +52,7 @@ describe("tests GetTerms controller", () => {
 
   test("should return a response with an array of 1 term", async () => {
     const { status, body } = await testApiClient
-      .get(`/termbase/${mockData.termbaseUUID}/terms?page=1&language=de`)
+      .get(`/termbase/${testData.termbaseUUID}/terms?page=1&language=de`)
       .set("Cookie", TEST_API_CLIENT_COOKIES) as TestAPIClientResponse<GetTermbaseTermsEndpointResponse>;
 
     expect(status).toBe(200);
@@ -74,7 +67,7 @@ describe("tests GetTerms controller", () => {
 
   test("should return a response with an array of 1 term", async () => {
     const { status, body } = await testApiClient
-      .get(`/termbase/${mockData.termbaseUUID}/terms?page=1&term=base`)
+      .get(`/termbase/${testData.termbaseUUID}/terms?page=1&term=base`)
       .set("Cookie", TEST_API_CLIENT_COOKIES) as TestAPIClientResponse<GetTermbaseTermsEndpointResponse>;
 
     expect(status).toBe(200);
@@ -89,7 +82,7 @@ describe("tests GetTerms controller", () => {
 
   test("should return a response with an array of 1 term", async () => {
     const { status, body } = await testApiClient
-      .get(`/termbase/${mockData.termbaseUUID}/terms?page=1&part_of_speech=verb`)
+      .get(`/termbase/${testData.termbaseUUID}/terms?page=1&part_of_speech=verb`)
       .set("Cookie", TEST_API_CLIENT_COOKIES) as TestAPIClientResponse<GetTermbaseTermsEndpointResponse>;
     
     expect(status).toBe(200);
@@ -104,7 +97,7 @@ describe("tests GetTerms controller", () => {
 
   test("should return a response with an array of 1 term", async () => {
     const { status, body } = await testApiClient
-      .get(`/termbase/${mockData.termbaseUUID}/terms?page=1&customer=IBM`)
+      .get(`/termbase/${testData.termbaseUUID}/terms?page=1&customer=IBM`)
       .set("Cookie", TEST_API_CLIENT_COOKIES) as TestAPIClientResponse<GetTermbaseTermsEndpointResponse>;
 
     expect(status).toBe(200);
@@ -119,7 +112,7 @@ describe("tests GetTerms controller", () => {
 
   test("should return a response with an array of 1 term", async () => {
     const { status, body } = await testApiClient
-      .get(`/termbase/${mockData.termbaseUUID}/terms?page=1&concept_id=c1`)
+      .get(`/termbase/${testData.termbaseUUID}/terms?page=1&concept_id=c1`)
       .set("Cookie", TEST_API_CLIENT_COOKIES) as TestAPIClientResponse<GetTermbaseTermsEndpointResponse>;
 
     expect(status).toBe(200);

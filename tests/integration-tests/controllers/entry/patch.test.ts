@@ -1,32 +1,19 @@
 import { v4 as uuid } from "uuid";
-import { fetchMockTermbaseData, importTBXFile } from "@tests/helpers";
+import { generateTestData } from "@tests/helpers";
 import { PatchEntryEndpointResponse } from "@typings/responses";
-import { UUID } from "@typings";
 import testApiClient, { TEST_API_CLIENT_COOKIES } from "@tests/test-api-client";
-import { TestAPIClientResponse } from "@tests/types";
+import { TestAPIClientResponse, TestData } from "@tests/types";
 
-let mockData: {
-  termbaseUUID: UUID,
-  entryUUID: UUID,
-};
+let testData: TestData;
 
 describe("tests PatchEntry controller", () => {
   beforeAll(async () => { 
-    const termbaseUUID = await importTBXFile();
-    const { entryUUID } = await fetchMockTermbaseData(
-      termbaseUUID,
-      testApiClient,
-    );
-
-    mockData = {
-      termbaseUUID,
-      entryUUID,
-    };
+    testData = await generateTestData();
   });
 
   test("should return a 404 due to malformed uuid", async () => {
     const { status } = await testApiClient
-      .patch(`/termbase/${mockData.termbaseUUID}/entry/testtt`)
+      .patch(`/termbase/${testData.termbaseUUID}/entry/testtt`)
       .set("Cookie", TEST_API_CLIENT_COOKIES);
 
     expect(status).toBe(404);
@@ -34,7 +21,7 @@ describe("tests PatchEntry controller", () => {
 
   test("should return a 404 for random uuid", async () => {
     const { status } = await testApiClient
-      .patch(`/termbase/${mockData.termbaseUUID}/entry/${uuid()}`)
+      .patch(`/termbase/${testData.termbaseUUID}/entry/${uuid()}`)
       .field({
         id: "TEST"
       })
@@ -45,7 +32,7 @@ describe("tests PatchEntry controller", () => {
 
   test("should return a successful response", async () => {
     const { status, body } = await testApiClient
-      .patch(`/termbase/${mockData.termbaseUUID}/entry/${mockData.entryUUID}`)
+      .patch(`/termbase/${testData.termbaseUUID}/entry/${testData.entry.uuid}`)
       .field({
         id: "TEST",
       }) 
