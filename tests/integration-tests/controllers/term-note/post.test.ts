@@ -1,35 +1,20 @@
 import { PostTermNoteEndpointResponse } from "@typings/responses";
-import { fetchMockTermbaseData, importTBXFile } from "@tests/helpers";
-import { UUID } from "@typings";
+import { generateTestData } from "@tests/helpers";
 import errorMessages from "@messages/errors";
-import { TestAPIClientResponse } from "@tests/types";
+import { TestAPIClientResponse, TestData } from "@tests/types";
 import testApiClient, { TEST_API_CLIENT_COOKIES } from "@tests/test-api-client";
 
-let mockData: {
-  termbaseUUID: UUID,
-  termUUID: UUID,
-};
+let testData: TestData;
 
 describe("tests PostTermNote controller", () => {
   beforeAll(async () => {
-    const termbaseUUID = await importTBXFile();
-
-    const {
-      termUUID
-    } = await fetchMockTermbaseData(
-      termbaseUUID,
-      testApiClient,
-    );
-
-    mockData = {
-      termbaseUUID,
-      termUUID,
-    };
+    testData = await generateTestData();
   });
+
 
   test("should return a 400 response for invalid body", async () => {
     const { status, body } = await testApiClient
-      .post(`/termbase/${mockData.termbaseUUID}/termNote`)
+      .post(`/termbase/${testData.termbaseUUID}/termNote`)
       .set("Cookie", TEST_API_CLIENT_COOKIES);
   
     expect(status).toBe(400);
@@ -38,9 +23,9 @@ describe("tests PostTermNote controller", () => {
   
   test("should return a 200 response for successful creation of a term note", async () => {
     const { status, body } = await testApiClient
-      .post(`/termbase/${mockData.termbaseUUID}/termNote`)
+      .post(`/termbase/${testData.termbaseUUID}/termNote`)
       .field({
-        termUUID: mockData.termUUID,
+        termUUID: testData.term.uuid,
         value: "Test",
         type: "Test",
         isGrp: false,

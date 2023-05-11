@@ -1,36 +1,23 @@
-import { fetchMockTermNote, importTBXFile } from "@tests/helpers";
-import { UUID } from "@typings";
+import { generateTestData } from "@tests/helpers";
 import testApiClient, { TEST_API_CLIENT_COOKIES } from "@tests/test-api-client";
+import { TestData } from "@tests/types";
 
-let mockData: {
-  termbaseUUID: UUID,
-  termNoteUUID: UUID,
-};
+let testData: TestData;
 
 describe("tests DeleteTermNote controller", () => {
   beforeAll(async () => {
-    const termbaseUUID = await importTBXFile();
-
-    const termNote = await fetchMockTermNote(
-      termbaseUUID,
-      testApiClient,
-    );
-
-    mockData = {
-      termbaseUUID,
-      termNoteUUID: termNote.uuid
-    };
+    testData = await generateTestData();
   });
 
   test("should return a successful response and produce a 404 when requesting the term note", async () => {
     const { status: deleteTermNoteStatus } = await testApiClient
-      .delete(`/termbase/${mockData.termbaseUUID}/termNote/${mockData.termNoteUUID}`)
+      .delete(`/termbase/${testData.termbaseUUID}/termNote/${testData.termNote.uuid}`)
       .set("Cookie", TEST_API_CLIENT_COOKIES);
 	
     expect(deleteTermNoteStatus).toBe(204);
 	
     const { status: getTermNoteStatus } = await testApiClient
-      .get(`/termbase/${mockData.termbaseUUID}/termNote/${mockData.termNoteUUID}`)
+      .get(`/termbase/${testData.termbaseUUID}/termNote/${testData.termNote.uuid}`)
       .set("Cookie", TEST_API_CLIENT_COOKIES);
 	
     expect(getTermNoteStatus).toBe(404);

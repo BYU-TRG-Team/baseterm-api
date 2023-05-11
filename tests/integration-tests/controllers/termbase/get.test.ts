@@ -1,21 +1,14 @@
 import { v4 as uuid } from "uuid";
 import { GetTermbaseEndpointResponse } from "@typings/responses";
-import { importTBXFile } from "@tests/helpers";
-import { UUID } from "@typings";
 import testApiClient, { TEST_API_CLIENT_COOKIES } from "@tests/test-api-client";
-import { TestAPIClientResponse } from "@tests/types";
+import { TestAPIClientResponse, TestData } from "@tests/types";
+import { generateTestData } from "@tests/helpers";
 
-let mockData: {
-  termbaseUUID: UUID
-};
+let testData: TestData;
 
 describe("tests GetTermbase controller", () => {
   beforeAll(async () => {
-    const termbaseUUID = await importTBXFile();
-
-    mockData = {
-      termbaseUUID,
-    };
+    testData = await generateTestData();
   });
 
   test("should return a 404 response for invalid uuid (unknown uuid)", async () => {
@@ -29,7 +22,7 @@ describe("tests GetTermbase controller", () => {
 
   test("should return a response with an array of 8 terms", async () => {
     const { status, body } = await testApiClient
-      .get(`/termbase/${mockData.termbaseUUID}`)
+      .get(`/termbase/${testData.termbaseUUID}`)
       .set("Cookie", TEST_API_CLIENT_COOKIES) as TestAPIClientResponse<GetTermbaseEndpointResponse>;
 
     expect(status).toBe(200);

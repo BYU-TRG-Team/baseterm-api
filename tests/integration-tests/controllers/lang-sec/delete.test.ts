@@ -1,37 +1,23 @@
-import { fetchMockTermbaseData, importTBXFile } from "@tests/helpers";
-import { UUID } from "@typings";
+import { generateTestData } from "@tests/helpers";
 import testApiClient, { TEST_API_CLIENT_COOKIES } from "@tests/test-api-client";
+import { TestData } from "@tests/types";
 
-let mockData: {
-  termbaseUUID: UUID,
-  langSecUUID: UUID,
-};
+let testData: TestData;
 
 describe("tests DeleteLangSec controller", () => {
   beforeAll(async () => {
-    const termbaseUUID = await importTBXFile();
-    const {
-      langSecUUID
-    } = await fetchMockTermbaseData(
-      termbaseUUID,
-      testApiClient,
-    );
-
-    mockData = {
-      termbaseUUID,
-      langSecUUID,
-    };
+    testData = await generateTestData();
   });
 
   test("should return a successful response and produce a 404 when requesting the lang sec", async () => {
     const { status: deleteLangSecStatus } = await testApiClient
-      .delete(`/termbase/${mockData.termbaseUUID}/langSec/${mockData.langSecUUID}`)
+      .delete(`/termbase/${testData.termbaseUUID}/langSec/${testData.langSec.uuid}`)
       .set("Cookie", TEST_API_CLIENT_COOKIES);
 	
     expect(deleteLangSecStatus).toBe(204);
 	
     const { status: getLangSecStatus } = await testApiClient
-      .get(`/termbase/${mockData.termbaseUUID}/langSec/${mockData.langSecUUID}`)
+      .get(`/termbase/${testData.termbaseUUID}/langSec/${testData.langSec.uuid}`)
       .set("Cookie", TEST_API_CLIENT_COOKIES);
 	
     expect(getLangSecStatus).toBe(404);

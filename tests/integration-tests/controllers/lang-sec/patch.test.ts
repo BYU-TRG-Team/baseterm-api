@@ -1,35 +1,19 @@
-import { fetchMockTermbaseData, importTBXFile } from "@tests/helpers";
+import { generateTestData } from "@tests/helpers";
 import { PatchLangSecEndpointResponse } from "@typings/responses";
 import { VALID_LANGUAGE_CODE } from "@tests/constants";
-import { UUID } from "@typings";
-import { TestAPIClientResponse } from "@tests/types";
+import { TestAPIClientResponse, TestData } from "@tests/types";
 import testApiClient, { TEST_API_CLIENT_COOKIES } from "@tests/test-api-client";
 
-let mockData: {
-  termbaseUUID: UUID,
-  langSecUUID: UUID,
-};
+let testData: TestData;
 
 describe("tests PatchLangSec controller", () => {
   beforeAll(async () => {
-    const termbaseUUID = await importTBXFile();
-
-    const {
-      langSecUUID
-    } = await fetchMockTermbaseData(
-      termbaseUUID,
-      testApiClient,
-    );
-
-    mockData = {
-      termbaseUUID,
-      langSecUUID,
-    };
+    testData = await generateTestData();
   });
 
   test("should return a 200 response for successful patch of term", async () => {
     const { status, body } = await testApiClient
-      .patch(`/termbase/${mockData.termbaseUUID}/langSec/${mockData.langSecUUID}`)
+      .patch(`/termbase/${testData.termbaseUUID}/langSec/${testData.langSec.uuid}`)
       .set("Cookie", TEST_API_CLIENT_COOKIES)
       .field({
         langCode: VALID_LANGUAGE_CODE,

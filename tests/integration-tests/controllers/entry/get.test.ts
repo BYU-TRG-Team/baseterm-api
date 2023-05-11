@@ -1,31 +1,18 @@
-import { fetchMockTermbaseData, importTBXFile } from "@tests/helpers";
+import {  generateTestData } from "@tests/helpers";
 import { GetEntryEndpointResponse, } from "@typings/responses";
-import { UUID } from "@typings";
 import testApiClient, { TEST_API_CLIENT_COOKIES } from "@tests/test-api-client";
-import { TestAPIClientResponse } from "@tests/types";
+import { TestAPIClientResponse, TestData } from "@tests/types";
 
-let mockData: {
-  termbaseUUID: UUID,
-  entryUUID: UUID,
-};
+let testData: TestData;
 
 describe("tests GetEntry controller", () => {
   beforeAll(async () => {
-    const termbaseUUID = await importTBXFile();
-    const { entryUUID } = await fetchMockTermbaseData(
-      termbaseUUID,
-      testApiClient,
-    );
-
-    mockData = {
-      termbaseUUID,
-      entryUUID,
-    };
+    testData = await generateTestData();
   });
 
   test("should return a 404 response for malformed entryUUID", async () => {      
     const { status } = await testApiClient
-      .get(`/termbase/${mockData.termbaseUUID}/entry/randommmm`)
+      .get(`/termbase/${testData.termbaseUUID}/entry/randommmm`)
       .set("Cookie", TEST_API_CLIENT_COOKIES);
 
     expect(status).toBe(404);
@@ -33,7 +20,7 @@ describe("tests GetEntry controller", () => {
 
   test("should return a successful response", async () => {  
     const { status, body } = await testApiClient
-      .get(`/termbase/${mockData.termbaseUUID}/entry/${mockData.entryUUID}`) 
+      .get(`/termbase/${testData.termbaseUUID}/entry/${testData.entry.uuid}`) 
       .set("Cookie", TEST_API_CLIENT_COOKIES) as TestAPIClientResponse<GetEntryEndpointResponse>;
 
     expect(status).toBe(200);

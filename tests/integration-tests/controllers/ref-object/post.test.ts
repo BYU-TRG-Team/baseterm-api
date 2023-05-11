@@ -1,29 +1,22 @@
-import { importTBXFile } from "@tests/helpers";
+import { generateTestData } from "@tests/helpers";
 import { PostPersonRefObjectEndpointResponse } from "@typings/responses";
-import { UUID } from "@typings";
 import errorMessages from "@messages/errors";
-import { TestAPIClientResponse } from "@tests/types";
+import { TestAPIClientResponse, TestData } from "@tests/types";
 import { v4 as uuid } from "uuid";
 import testApiClient, { TEST_API_CLIENT_COOKIES, TEST_USER_ID } from "@tests/test-api-client";
 
-let mockData: {
-  termbaseUUID: UUID
-};
+let testData: TestData;
 
 describe("tests PostPersonRefObject controller", () => {
   beforeAll(async () => {
-    const termbaseUUID = await importTBXFile({
+    testData = await generateTestData({
       createPersonRefObject: false
     });
-
-    mockData = {
-      termbaseUUID
-    };
   });
 
   test("should return a 400 response for invalid body", async () => {
     const { status, body } = await testApiClient
-      .post(`/termbase/${mockData.termbaseUUID}/personRefObject`)
+      .post(`/termbase/${testData.termbaseUUID}/personRefObject`)
       .set("Cookie", TEST_API_CLIENT_COOKIES);
   
     expect(status).toBe(400);
@@ -32,7 +25,7 @@ describe("tests PostPersonRefObject controller", () => {
 
   test("should return a 400 response for user id mismatch", async () => {
     const { status, body } = await testApiClient
-      .post(`/termbase/${mockData.termbaseUUID}/personRefObject`)
+      .post(`/termbase/${testData.termbaseUUID}/personRefObject`)
       .field({
         name: "Test",
         email: "Test",
@@ -47,7 +40,7 @@ describe("tests PostPersonRefObject controller", () => {
   
   test("should return a 200 response for successful creation of a person object", async () => {
     const { status, body } = await testApiClient
-      .post(`/termbase/${mockData.termbaseUUID}/personRefObject`)
+      .post(`/termbase/${testData.termbaseUUID}/personRefObject`)
       .field({
         name: "Test",
         email: "Test",

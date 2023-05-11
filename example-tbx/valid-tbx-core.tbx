@@ -79,6 +79,7 @@
             <termNote type="partOfSpeech">noun</termNote>
             <termNote type="termType">acronym</termNote>
             <termNote type="administrativeStatus">deprecatedTerm-admn-sts</termNote>
+            <descrip type="definition">This is a sample definition at the term level.</descrip>
           </termSec>
           <termSec>
             <term>progressive power lens</term>
