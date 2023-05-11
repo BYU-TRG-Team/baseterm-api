@@ -1,6 +1,5 @@
 import { generateTestData } from "@tests/helpers";
 import { PatchLangSecEndpointResponse } from "@typings/responses";
-import { VALID_LANGUAGE_CODE } from "@tests/constants";
 import { TestAPIClientResponse, TestData } from "@tests/types";
 import testApiClient, { TEST_API_CLIENT_COOKIES } from "@tests/test-api-client";
 
@@ -16,12 +15,12 @@ describe("tests PatchLangSec controller", () => {
       .patch(`/termbase/${testData.termbaseUUID}/langSec/${testData.langSec.uuid}`)
       .set("Cookie", TEST_API_CLIENT_COOKIES)
       .field({
-        langCode: VALID_LANGUAGE_CODE,
-        order: 100
+        langCode: "en-US",
+        order: 0
       }) as TestAPIClientResponse<PatchLangSecEndpointResponse>;
   
     expect(status).toBe(200);
-    expect(body.xmlLang).toBe(VALID_LANGUAGE_CODE);
-    expect(body.order).toBe(100);
+    expect(body.xmlLang).toBe("en-US");
+    expect(body.order).toBe(0);
   });
 });

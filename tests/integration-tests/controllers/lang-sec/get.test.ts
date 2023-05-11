@@ -12,7 +12,7 @@ describe("tests LanguageSection controller", () => {
 
   test("should return a 404 response for malformed langSecUUID", async () => {      
     const { status } = await testApiClient
-      .get(`/termbase/${testData.termbaseUUID}/langSec/randommmm`)
+      .get(`/termbase/${testData.termbaseUUID}/langSec/TEST`)
       .set("Cookie", TEST_API_CLIENT_COOKIES);
 
     expect(status).toBe(404);

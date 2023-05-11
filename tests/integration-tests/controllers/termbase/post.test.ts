@@ -5,10 +5,11 @@ import { TestAPIClientResponse } from "@tests/types";
 
 describe("tests PostTermbase controller", () => {
   test("should return a response indicating a new base has been created", async () => {
+    const termbaseName = uuid();
     const { status, body } = await testApiClient
       .post("/termbase")
       .field({ 
-        name: uuid(),
+        name: termbaseName,
         lang: "en-US"
       })
       .set("Cookie", TEST_API_CLIENT_COOKIES) as TestAPIClientResponse<PostTermbaseEndpointResponse>;
@@ -18,20 +19,19 @@ describe("tests PostTermbase controller", () => {
   });
 
   test("should return a response indicating a termbase already exists with the same name", async () => {
-    const baseName = uuid();
+    const termbaseName = uuid();
     await testApiClient
       .post("/termbase")
       .field({ 
-        name: baseName,
+        name: termbaseName,
         lang: "en-US"
       })
       .set("Cookie", TEST_API_CLIENT_COOKIES);
 
-
     const { status, body } = await testApiClient
       .post("/termbase")
       .field({ 
-        name: baseName,
+        name: termbaseName,
         lang: "en-US"
       })
       .set("Cookie", TEST_API_CLIENT_COOKIES);
@@ -41,7 +41,7 @@ describe("tests PostTermbase controller", () => {
   });
 
   test("should return a response indicating an invalid body (no name field)", async () => {
-    const { status } = await testApiClient
+    const { status, body } = await testApiClient
       .post("/termbase")
       .field({ 
         lang: "en-US"
@@ -49,13 +49,15 @@ describe("tests PostTermbase controller", () => {
       .set("Cookie", TEST_API_CLIENT_COOKIES);
 
     expect(status).toBe(400);
+    expect(body.error).toBe("Body Invalid");
   });
 
   test("should return a response indicating an invalid body (no lang field)", async () => {
+    const termbaseName = uuid();
     const { status, body } = await testApiClient
       .post("/termbase")
       .field({ 
-        name: uuid(),
+        name: termbaseName,
       })
       .set("Cookie", TEST_API_CLIENT_COOKIES);
 

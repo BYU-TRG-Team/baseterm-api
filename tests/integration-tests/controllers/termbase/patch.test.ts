@@ -14,9 +14,8 @@ describe("tests PatchTermbase controller", () => {
 
   test("should return a 404 due to malformed uuid", async () => {
     const { status } = await testApiClient
-      .patch("/termbase/randommmmm")
+      .patch("/termbase/TEST")
       .field({
-        name: uuid(),
         lang: "en-US"
       })
       .set("Cookie", TEST_API_CLIENT_COOKIES);
@@ -25,10 +24,11 @@ describe("tests PatchTermbase controller", () => {
   });
 
   test("should return a 404 due to random uuid", async () => {
+    const termbaseUUID = uuid();
+
     const { status } = await testApiClient
-      .patch(`/termbase/${uuid()}`)
+      .patch(`/termbase/${termbaseUUID}`)
       .field({
-        name: uuid(),
         lang: "en-US"
       })
       .set("Cookie", TEST_API_CLIENT_COOKIES);
@@ -72,7 +72,7 @@ describe("tests PatchTermbase controller", () => {
       .patch(`/termbase/${testData.termbaseUUID}`)
       .send({
         enforceBasicDialect: false,
-        type: "Test",
+        type: "TEST",
       }) 
       .set("Cookie", TEST_API_CLIENT_COOKIES) as { 
         body: PatchTermbaseEndpointResponse 
@@ -85,14 +85,14 @@ describe("tests PatchTermbase controller", () => {
       .patch(`/termbase/${testData.termbaseUUID}`)
       .send({
         enforceBasicDialect: true,
-        type: "Test"
+        type: "TEST"
       }) 
       .set("Cookie", TEST_API_CLIENT_COOKIES) as { 
         body: PatchTermbaseEndpointResponse 
       };
 
     expect(nextPatchTermbaseResponse.enforceBasicDialect).toBe(false);
-    expect(nextPatchTermbaseResponse.type).toBe("Test");
+    expect(nextPatchTermbaseResponse.type).toBe("TEST");
   });
 
   test("should return a 409 for duplicate name", async () => {

@@ -12,8 +12,9 @@ describe("tests GetTerms controller", () => {
   });
 
   test("should return a 404 response for invalid uuid (unknown uuid)", async () => {
+    const termbaseUUID = uuid();
     const { status, body } = await testApiClient
-      .get(`/termbase/${uuid()}/terms?page=1`)
+      .get(`/termbase/${termbaseUUID}/terms?page=1`)
       .set("Cookie", TEST_API_CLIENT_COOKIES);
 
     expect(status).toBe(404);

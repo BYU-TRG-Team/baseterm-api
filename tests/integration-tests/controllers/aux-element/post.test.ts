@@ -18,7 +18,7 @@ describe("tests PostAuxElement controller", () => {
       .field({
         parentUUID: testData.term.uuid,
         parentElementType: TbxElement.Term,
-        value: "Test",
+        value: "TEST",
         elementType: TbxElement.Note,
       }) as TestAPIClientResponse<PostAuxElementEndpointResponse>;
       

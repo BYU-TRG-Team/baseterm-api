@@ -32,7 +32,7 @@ describe("tests PatchEntry controller", () => {
 
   test("should return a successful response", async () => {
     const { status, body } = await testApiClient
-      .patch(`/termbase/${testData.termbaseUUID}/entry/${testData.entry.uuid}`)
+      .patch(`/termbase/${testData.termbaseUUID}/entry/${testData.conceptEntry.uuid}`)
       .field({
         id: "TEST",
       }) 

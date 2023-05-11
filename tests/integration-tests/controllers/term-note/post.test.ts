@@ -26,8 +26,8 @@ describe("tests PostTermNote controller", () => {
       .post(`/termbase/${testData.termbaseUUID}/termNote`)
       .field({
         termUUID: testData.term.uuid,
-        value: "Test",
-        type: "Test",
+        value: "TEST",
+        type: "TEST",
         isGrp: false,
       }) 
       .set("Cookie", TEST_API_CLIENT_COOKIES) as TestAPIClientResponse<PostTermNoteEndpointResponse>;

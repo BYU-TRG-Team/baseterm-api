@@ -24,13 +24,14 @@ describe("tests PostPersonRefObject controller", () => {
   });
 
   test("should return a 400 response for user id mismatch", async () => {
+    const userId = uuid();
     const { status, body } = await testApiClient
       .post(`/termbase/${testData.termbaseUUID}/personRefObject`)
       .field({
-        name: "Test",
-        email: "Test",
-        role: "Test",
-        id: uuid()
+        name: "TEST",
+        email: "TEST",
+        role: "TEST",
+        id: userId,
       })
       .set("Cookie", TEST_API_CLIENT_COOKIES);
   
@@ -42,9 +43,9 @@ describe("tests PostPersonRefObject controller", () => {
     const { status, body } = await testApiClient
       .post(`/termbase/${testData.termbaseUUID}/personRefObject`)
       .field({
-        name: "Test",
-        email: "Test",
-        role: "Test",
+        name: "TEST",
+        email: "TEST",
+        role: "TEST",
         id: TEST_USER_ID
       })
       .set("Cookie", TEST_API_CLIENT_COOKIES) as TestAPIClientResponse<PostPersonRefObjectEndpointResponse>;

@@ -13,7 +13,7 @@ export interface TestAPIClientResponse<T> {
 }
 
 export type TestData = {
-    entry: ConceptEntryPreview,
+    conceptEntry: ConceptEntryPreview,
     langSec: LanguageSectionPreview,
     term: TermFullView,
     auxElement: AuxElement,

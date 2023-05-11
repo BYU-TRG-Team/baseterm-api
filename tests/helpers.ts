@@ -39,7 +39,7 @@ export const generateTestData = async (
 
   return {
     termbaseUUID,
-    entry: getTermResponse.conceptEntry,
+    conceptEntry: getTermResponse.conceptEntry,
     langSec: getTermResponse.languageSection,
     term: getTermResponse,
     auxElement: getTermResponse.auxElements[0],

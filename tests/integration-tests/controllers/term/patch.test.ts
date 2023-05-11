@@ -15,16 +15,16 @@ describe("tests PatchTerm controller", () => {
       .patch(`/termbase/${testData.termbaseUUID}/term/${testData.term.uuid}`)
       .set("Cookie", TEST_API_CLIENT_COOKIES)
       .field({
-        value: "Test",
-        id: "Test",
-        termSecId: "Test1",
-        order: 100,
+        value: "TEST",
+        id: "TEST",
+        termSecId: "FOO",
+        order: 0,
       }) as TestAPIClientResponse<PatchTermEndpointResponse>;
   
     expect(status).toBe(200);
-    expect(body.id).toBe("Test");
-    expect(body.value).toBe("Test");
-    expect(body.termSecId).toBe("Test1");
-    expect(body.order).toBe(100);
+    expect(body.id).toBe("TEST");
+    expect(body.value).toBe("TEST");
+    expect(body.termSecId).toBe("FOO");
+    expect(body.order).toBe(0);
   });
 });
