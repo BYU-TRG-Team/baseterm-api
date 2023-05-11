@@ -1,4 +1,4 @@
-export interface SuperAgentResponse<T> {
+export interface TestAPIClientResponse<T> {
     body: T,
     status: number,
 }

@@ -11,6 +11,7 @@ import { UUID } from "@typings";
 import EventSource from "eventsource";
 import { EXAMPLE_TBX_FILE } from "@tests/constants";
 import testApiClient, { TEST_API_CLIENT_COOKIES, TEST_API_CLIENT_ENDPOINT, TEST_AUTH_TOKEN, TEST_USER_ID } from "@tests/test-api-client";
+import { TestAPIClientResponse } from "@tests/types";
 
 export const importTBXFile = async (
   options: {
@@ -25,17 +26,15 @@ export const importTBXFile = async (
     createPersonRefObject = true
   } = options;
 
-  const { body: importResponseBody } = await testApiClient
+  const { body: importResponse } = await testApiClient
     .post("/import")
     .attach("tbxFile", filePath)
     .field({ name }) 
-    .set("Cookie", TEST_API_CLIENT_COOKIES) as { 
-      body: ImportEndpointResponse 
-    };
+    .set("Cookie", TEST_API_CLIENT_COOKIES) as TestAPIClientResponse<ImportEndpointResponse>;
 
   await new Promise((resolve, reject) => {
     const eventSource = new EventSource(
-      `${TEST_API_CLIENT_ENDPOINT}/session/${importResponseBody.sessionId}`,
+      `${TEST_API_CLIENT_ENDPOINT}/session/${importResponse.sessionId}`,
       { 
         withCredentials: true,
         headers: {
@@ -62,25 +61,23 @@ export const importTBXFile = async (
   if (createPersonRefObject) {
     await postPersonObjectRef(
       TEST_AUTH_TOKEN,
-      importResponseBody.termbaseUUID,
+      importResponse.termbaseUUID,
       testApiClient,
       TEST_USER_ID
     );
   }
 
-  return importResponseBody.termbaseUUID;
+  return importResponse.termbaseUUID;
 };
 
 export const exportTBXFile = async (termbaseUUID: UUID) => {
-  const { body: exportResponseBody } = await testApiClient
+  const { body: exportResponse } = await testApiClient
     .get(`/export/${termbaseUUID}`)
-    .set("Cookie", TEST_API_CLIENT_COOKIES) as { 
-      body: ExportEndpointResponse 
-    };
+    .set("Cookie", TEST_API_CLIENT_COOKIES) as TestAPIClientResponse<ExportEndpointResponse>;
 
   const exportedTbxFile = await new Promise<string>((resolve, reject) => {
     const eventSource = new EventSource(
-      `${TEST_API_CLIENT_ENDPOINT}/session/${exportResponseBody.sessionId}`,
+      `${TEST_API_CLIENT_ENDPOINT}/session/${exportResponse.sessionId}`,
       { 
         withCredentials: true,
         headers: {
@@ -114,9 +111,7 @@ export const postPersonObjectRef = async (
   personId: UUID,
 ) => {
   await requestClient
-    .post(
-      `/termbase/${termbaseUUID}/personRefObject`
-    )
+    .post(`/termbase/${termbaseUUID}/personRefObject`)
     .field({
       name: "Test",
       email: "Test",
@@ -130,22 +125,20 @@ export const fetchMockTermbaseData = async (
   termbaseUUID: UUID,
   requestClient: SuperAgentTest,
 ) => {
-  const { body: termbaseCreationResponse } = await requestClient
+  const { body: getTermbaseTermsResponse } = await requestClient
     .get(`/termbase/${termbaseUUID}/terms?page=1`)
-    .set("Cookie", [`TRG_AUTH_TOKEN=${TEST_AUTH_TOKEN}`]) as
-    { body: GetTermbaseTermsEndpointResponse };
+    .set("Cookie", TEST_API_CLIENT_COOKIES) as TestAPIClientResponse<GetTermbaseTermsEndpointResponse>;
 
-  for (const term of termbaseCreationResponse.terms) {
-    const { body: termResponse } = await requestClient
+  for (const term of getTermbaseTermsResponse.terms) {
+    const { body: getTermResponse } = await requestClient
       .get(`/termbase/${termbaseUUID}/term/${term.uuid}`)
-      .set("Cookie", [`TRG_AUTH_TOKEN=${TEST_AUTH_TOKEN}`]) as 
-        { body: GetTermEndpointResponse };
+      .set("Cookie", TEST_API_CLIENT_COOKIES) as TestAPIClientResponse<GetTermEndpointResponse>;
 
-    if (termResponse.synonyms.length !== 0) {
+    if (getTermResponse.synonyms.length !== 0) {
       return {
-        entryUUID: termResponse.conceptEntry.uuid,
-        langSecUUID: termResponse.languageSection.uuid,
-        termUUID: termResponse.uuid,
+        entryUUID: getTermResponse.conceptEntry.uuid,
+        langSecUUID: getTermResponse.languageSection.uuid,
+        termUUID: getTermResponse.uuid,
         termbaseUUID,
       };
     }
@@ -158,19 +151,17 @@ export const fetchMockTermNote = async (
   termbaseUUID: UUID,
   requestClient: SuperAgentTest
 ) => {
-  const { body: termbaseCreationResponse } = await requestClient
+  const { body: getTermbaseTermsResponse } = await requestClient
     .get(`/termbase/${termbaseUUID}/terms?page=1`) 
-    .set("Cookie", [`TRG_AUTH_TOKEN=${TEST_AUTH_TOKEN}`]) as 
-      { body: GetTermbaseTermsEndpointResponse };
+    .set("Cookie", TEST_API_CLIENT_COOKIES) as TestAPIClientResponse<GetTermbaseTermsEndpointResponse>;
 
-  for (const term of termbaseCreationResponse.terms) {
-    const { body: termResponse } = await requestClient
+  for (const term of getTermbaseTermsResponse.terms) {
+    const { body: getTermResponse } = await requestClient
       .get(`/termbase/${termbaseUUID}/term/${term.uuid}`)
-      .set("Cookie", [`TRG_AUTH_TOKEN=${TEST_AUTH_TOKEN}`]) as 
-        { body: GetTermEndpointResponse };
+      .set("Cookie", TEST_API_CLIENT_COOKIES) as TestAPIClientResponse<GetTermEndpointResponse>;
 
-    if (termResponse.termNotes.length !== 0) {
-      return termResponse.termNotes[0];
+    if (getTermResponse.termNotes.length !== 0) {
+      return getTermResponse.termNotes[0];
     }
   }
 
@@ -181,19 +172,17 @@ export const fetchMockAuxElement = async (
   termbaseUUID: UUID,
   requestClient: SuperAgentTest
 ) => {
-  const { body: termbaseCreationResponse } = await requestClient
+  const { body: getTermbaseTermsResponse } = await requestClient
     .get(`/termbase/${termbaseUUID}/terms?page=1`)
-    .set("Cookie", [`TRG_AUTH_TOKEN=${TEST_AUTH_TOKEN}`]) as 
-      { body: GetTermbaseTermsEndpointResponse };
+    .set("Cookie", TEST_API_CLIENT_COOKIES) as TestAPIClientResponse<GetTermbaseTermsEndpointResponse>;
 
-  for (const term of termbaseCreationResponse.terms) {
-    const { body: termReponse } = await requestClient
+  for (const term of getTermbaseTermsResponse.terms) {
+    const { body: getTermResponse } = await requestClient
       .get(`/termbase/${termbaseUUID}/term/${term.uuid}`)
-      .set("Cookie", [`TRG_AUTH_TOKEN=${TEST_AUTH_TOKEN}`]) as 
-        { body: GetTermEndpointResponse };
+      .set("Cookie", TEST_API_CLIENT_COOKIES) as TestAPIClientResponse<GetTermEndpointResponse>;
 
-    if (termReponse.auxElements.length !== 0) {
-      return termReponse.auxElements[0];
+    if (getTermResponse.auxElements.length !== 0) {
+      return getTermResponse.auxElements[0];
     }
   }
 

@@ -1,14 +1,13 @@
 import { ValidationEndpointResponse } from "@typings/responses";
 import { APP_ROOT } from "@constants";
 import testApiClient from "@tests/test-api-client";
+import { TestAPIClientResponse } from "@tests/types";
 
 describe("tests Validation controller", () => {
   test("should return a response indicating a valid tbx file", async () => {
     const { status, body } = await testApiClient
       .post("/validate")
-      .attach("tbxFile", `${APP_ROOT}/example-tbx/valid-tbx-core.tbx`) as { 
-        status: number, body: ValidationEndpointResponse 
-      };
+      .attach("tbxFile", `${APP_ROOT}/example-tbx/valid-tbx-core.tbx`) as TestAPIClientResponse<ValidationEndpointResponse>;
 
 
     expect(status).toBe(200); 

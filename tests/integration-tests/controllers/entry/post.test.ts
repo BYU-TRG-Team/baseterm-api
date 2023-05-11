@@ -3,6 +3,7 @@ import { PostEntryEndpointResponse } from "@typings/responses";
 import { VALID_LANGUAGE_CODE } from "@tests/constants";
 import { UUID } from "@typings";
 import testApiClient, { TEST_API_CLIENT_COOKIES } from "@tests/test-api-client";
+import { TestAPIClientResponse } from "@tests/types";
 
 let mockData: {
   termbaseUUID: UUID
@@ -59,9 +60,7 @@ describe("tests PostEntry controller", () => {
         initialLanguageSection: VALID_LANGUAGE_CODE,
         initialTerm: "test",
       }) 
-      .set("Cookie", TEST_API_CLIENT_COOKIES) as { 
-        body: PostEntryEndpointResponse, status: number 
-      };
+      .set("Cookie", TEST_API_CLIENT_COOKIES) as TestAPIClientResponse<PostEntryEndpointResponse>;
 
     expect(status).toBe(200);
     expect(body.uuid).toBeDefined();

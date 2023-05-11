@@ -1,6 +1,7 @@
 import { v4 as uuid } from "uuid";
 import { PostTermbaseEndpointResponse } from "@typings/responses";
 import testApiClient, { TEST_API_CLIENT_COOKIES } from "@tests/test-api-client";
+import { TestAPIClientResponse } from "@tests/types";
 
 describe("tests PostTermbase controller", () => {
   test("should return a response indicating a new base has been created", async () => {
@@ -10,9 +11,7 @@ describe("tests PostTermbase controller", () => {
         name: uuid(),
         lang: "en-US"
       })
-      .set("Cookie", TEST_API_CLIENT_COOKIES) as { 
-        status: number, body: PostTermbaseEndpointResponse 
-      }; 
+      .set("Cookie", TEST_API_CLIENT_COOKIES) as TestAPIClientResponse<PostTermbaseEndpointResponse>;
 
     expect(status).toBe(200);
     expect(body.uuid).toBeDefined();

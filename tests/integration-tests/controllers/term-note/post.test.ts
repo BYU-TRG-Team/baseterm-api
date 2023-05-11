@@ -2,7 +2,7 @@ import { PostTermNoteEndpointResponse } from "@typings/responses";
 import { fetchMockTermbaseData, importTBXFile } from "@tests/helpers";
 import { UUID } from "@typings";
 import errorMessages from "@messages/errors";
-import { SuperAgentResponse } from "@tests/types";
+import { TestAPIClientResponse } from "@tests/types";
 import testApiClient, { TEST_API_CLIENT_COOKIES } from "@tests/test-api-client";
 
 let mockData: {
@@ -45,7 +45,7 @@ describe("tests PostTermNote controller", () => {
         type: "Test",
         isGrp: false,
       }) 
-      .set("Cookie", TEST_API_CLIENT_COOKIES) as SuperAgentResponse<PostTermNoteEndpointResponse>;
+      .set("Cookie", TEST_API_CLIENT_COOKIES) as TestAPIClientResponse<PostTermNoteEndpointResponse>;
   
     expect(status).toBe(200);
     expect(body.uuid).toBeDefined();

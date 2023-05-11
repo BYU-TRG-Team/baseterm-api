@@ -2,7 +2,7 @@ import { importTBXFile } from "@tests/helpers";
 import { PostPersonRefObjectEndpointResponse } from "@typings/responses";
 import { UUID } from "@typings";
 import errorMessages from "@messages/errors";
-import { SuperAgentResponse } from "@tests/types";
+import { TestAPIClientResponse } from "@tests/types";
 import { v4 as uuid } from "uuid";
 import testApiClient, { TEST_API_CLIENT_COOKIES, TEST_USER_ID } from "@tests/test-api-client";
 
@@ -54,7 +54,7 @@ describe("tests PostPersonRefObject controller", () => {
         role: "Test",
         id: TEST_USER_ID
       })
-      .set("Cookie", TEST_API_CLIENT_COOKIES) as SuperAgentResponse<PostPersonRefObjectEndpointResponse>;
+      .set("Cookie", TEST_API_CLIENT_COOKIES) as TestAPIClientResponse<PostPersonRefObjectEndpointResponse>;
 
     expect(status).toBe(200);
     expect(body.uuid).toBeDefined();

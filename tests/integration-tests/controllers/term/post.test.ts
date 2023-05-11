@@ -2,7 +2,7 @@ import { fetchMockTermbaseData, importTBXFile } from "@tests/helpers";
 import { PostLangSecEndpointResponse } from "@typings/responses";
 import { UUID } from "@typings";
 import errorMessages from "@messages/errors";
-import { SuperAgentResponse } from "@tests/types";
+import { TestAPIClientResponse } from "@tests/types";
 import testApiClient, { TEST_API_CLIENT_COOKIES } from "@tests/test-api-client";
 
 let mockData: {
@@ -43,8 +43,7 @@ describe("tests PostTerm controller", () => {
         langSecUUID: mockData.langSecUUID,
         value: "Test"
       }) 
-      .set("Cookie", TEST_API_CLIENT_COOKIES) as 
-      SuperAgentResponse<PostLangSecEndpointResponse>;
+      .set("Cookie", TEST_API_CLIENT_COOKIES) as TestAPIClientResponse<PostLangSecEndpointResponse>;
 
     expect(status).toBe(200);
     expect(body.uuid).toBeDefined();
