@@ -1,7 +1,7 @@
 import { fetchMockAuxElement, importTBXFile } from "@tests/helpers";
 import { PatchAuxElementEndpointResponse } from "@typings/responses";
 import { AuxElement, UUID } from "@typings";
-import { SuperAgentResponse } from "@tests/types";
+import { TestAPIClientResponse } from "@tests/types";
 import testApiClient, { TEST_API_CLIENT_COOKIES } from "@tests/test-api-client";
 
 let mockData: {
@@ -31,7 +31,7 @@ describe("tests PatchAuxElement controller", () => {
         elementType: mockData.auxElement.elementType,
         id: "Test",
         order: 100,
-      }) as SuperAgentResponse<PatchAuxElementEndpointResponse>;
+      }) as TestAPIClientResponse<PatchAuxElementEndpointResponse>;
   
     expect(status).toBe(200);
     expect(body.id).toBe("Test");

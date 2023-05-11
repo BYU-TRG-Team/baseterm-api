@@ -1,7 +1,7 @@
 import { fetchMockTermbaseData, importTBXFile } from "@tests/helpers";
 import { PostAuxElementEndpointResponse } from "@typings/responses";
 import { UUID, TbxElement } from "@typings";
-import { SuperAgentResponse } from "@tests/types";
+import { TestAPIClientResponse } from "@tests/types";
 import testApiClient, { TEST_API_CLIENT_COOKIES } from "@tests/test-api-client";
 
 let mockData: {
@@ -34,7 +34,7 @@ describe("tests PostAuxElement controller", () => {
         parentElementType: TbxElement.Term,
         value: "Test",
         elementType: TbxElement.Note,
-      }) as SuperAgentResponse<PostAuxElementEndpointResponse>;
+      }) as TestAPIClientResponse<PostAuxElementEndpointResponse>;
       
     expect(status).toBe(200);
   });

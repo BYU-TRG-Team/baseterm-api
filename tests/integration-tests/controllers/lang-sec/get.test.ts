@@ -2,6 +2,7 @@ import { fetchMockTermbaseData, importTBXFile } from "@tests/helpers";
 import { GetLanguageSectionEndpointResponse } from "@typings/responses";
 import { UUID } from "@typings";
 import testApiClient, { TEST_API_CLIENT_COOKIES }  from "@tests/test-api-client";
+import { TestAPIClientResponse } from "@tests/types";
 
 let mockData: {
   termbaseUUID: UUID,
@@ -34,9 +35,7 @@ describe("tests LanguageSection controller", () => {
   test("should return a successful response", async () => {  
     const { status, body } = await testApiClient
       .get(`/termbase/${mockData.termbaseUUID}/langSec/${mockData.langSecUUID}`) 
-      .set("Cookie", TEST_API_CLIENT_COOKIES) as { 
-        body: GetLanguageSectionEndpointResponse, status: number 
-      };
+      .set("Cookie", TEST_API_CLIENT_COOKIES) as TestAPIClientResponse<GetLanguageSectionEndpointResponse>;
 
     expect(status).toBe(200);
     expect(body.uuid).toBeDefined();

@@ -3,6 +3,7 @@ import { GetTermEndpointResponse } from "@typings/responses";
 import { fetchMockTermbaseData, importTBXFile } from "@tests/helpers";
 import { UUID } from "@typings";
 import testApiClient,  { TEST_API_CLIENT_COOKIES } from "@tests/test-api-client";
+import { TestAPIClientResponse } from "@tests/types";
 
 let mockData: {
   termbaseUUID: UUID,
@@ -24,8 +25,7 @@ describe("tests GetTerm controller", () => {
     };
   });
 
-  test("should return a 404 response for invalid uuid (unknown uuid)", async () => {
-    
+  test("should return a 404 response for invalid uuid (unknown uuid)", async () => { 
     const { status, body } = await testApiClient
       .get(`/termbase/${mockData.termbaseUUID}/term/${uuid()}`)
       .set("Cookie", TEST_API_CLIENT_COOKIES);
@@ -47,8 +47,7 @@ describe("tests GetTerm controller", () => {
   test("should return a successful response", async () => {
     const termResponse = await testApiClient
       .get(`/termbase/${mockData.termbaseUUID}/term/${mockData.termUUID}`)
-      .set("Cookie", TEST_API_CLIENT_COOKIES) as
-      { status: number; body: GetTermEndpointResponse};
+      .set("Cookie", TEST_API_CLIENT_COOKIES) as TestAPIClientResponse<GetTermEndpointResponse>;
 
     expect(termResponse.status).toBe(200);
     expect(termResponse.body.uuid).toBeDefined();

@@ -3,6 +3,7 @@ import { GetTermbaseTermsEndpointResponse } from "@typings/responses";
 import { importTBXFile } from "@tests/helpers";
 import { UUID } from "@typings";
 import testApiClient, { TEST_API_CLIENT_COOKIES } from "@tests/test-api-client";
+import { TestAPIClientResponse } from "@tests/types";
 
 let mockData: {
   termbaseUUID: UUID,
@@ -29,13 +30,11 @@ describe("tests GetTerms controller", () => {
   test("should return a response with an array of 8 terms", async () => { 
     const { status, body } = await testApiClient
       .get(`/termbase/${mockData.termbaseUUID}/terms?page=1`)
-      .set("Cookie", TEST_API_CLIENT_COOKIES);
-    
-    const responseBody = body as GetTermbaseTermsEndpointResponse;
+      .set("Cookie", TEST_API_CLIENT_COOKIES) as TestAPIClientResponse<GetTermbaseTermsEndpointResponse>;
 
     expect(status).toBe(200);
-    expect(responseBody.terms.length).toBe(8);
-    expect(responseBody.pagination).toStrictEqual({
+    expect(body.terms.length).toBe(8);
+    expect(body.pagination).toStrictEqual({
       page: 1,
       pageCount: 2,
       perPage: 8,
@@ -46,13 +45,11 @@ describe("tests GetTerms controller", () => {
   test("should return a response with an array of 8 terms", async () => {
     const { status, body } = await testApiClient
       .get(`/termbase/${mockData.termbaseUUID}/terms?page=1`)
-      .set("Cookie", TEST_API_CLIENT_COOKIES);
-    
-    const responseBody = body as GetTermbaseTermsEndpointResponse;
+      .set("Cookie", TEST_API_CLIENT_COOKIES) as TestAPIClientResponse<GetTermbaseTermsEndpointResponse>;
 
     expect(status).toBe(200);
-    expect(responseBody.terms.length).toBe(8);
-    expect(responseBody.pagination).toStrictEqual({
+    expect(body.terms.length).toBe(8);
+    expect(body.pagination).toStrictEqual({
       page: 1,
       pageCount: 2,
       perPage: 8,
@@ -63,13 +60,11 @@ describe("tests GetTerms controller", () => {
   test("should return a response with an array of 1 term", async () => {
     const { status, body } = await testApiClient
       .get(`/termbase/${mockData.termbaseUUID}/terms?page=1&language=de`)
-      .set("Cookie", TEST_API_CLIENT_COOKIES);    
-
-    const responseBody = body as GetTermbaseTermsEndpointResponse;
+      .set("Cookie", TEST_API_CLIENT_COOKIES) as TestAPIClientResponse<GetTermbaseTermsEndpointResponse>;
 
     expect(status).toBe(200);
-    expect(responseBody.terms.length).toBe(1);
-    expect(responseBody.pagination).toStrictEqual({
+    expect(body.terms.length).toBe(1);
+    expect(body.pagination).toStrictEqual({
       page: 1,
       pageCount: 1,
       perPage: 8,
@@ -80,13 +75,11 @@ describe("tests GetTerms controller", () => {
   test("should return a response with an array of 1 term", async () => {
     const { status, body } = await testApiClient
       .get(`/termbase/${mockData.termbaseUUID}/terms?page=1&term=base`)
-      .set("Cookie", TEST_API_CLIENT_COOKIES);
-
-    const responseBody = body as GetTermbaseTermsEndpointResponse;
+      .set("Cookie", TEST_API_CLIENT_COOKIES) as TestAPIClientResponse<GetTermbaseTermsEndpointResponse>;
 
     expect(status).toBe(200);
-    expect(responseBody.terms.length).toBe(2);
-    expect(responseBody.pagination).toStrictEqual({
+    expect(body.terms.length).toBe(2);
+    expect(body.pagination).toStrictEqual({
       page: 1,
       pageCount: 1,
       perPage: 8,
@@ -97,13 +90,11 @@ describe("tests GetTerms controller", () => {
   test("should return a response with an array of 1 term", async () => {
     const { status, body } = await testApiClient
       .get(`/termbase/${mockData.termbaseUUID}/terms?page=1&part_of_speech=verb`)
-      .set("Cookie", TEST_API_CLIENT_COOKIES);
+      .set("Cookie", TEST_API_CLIENT_COOKIES) as TestAPIClientResponse<GetTermbaseTermsEndpointResponse>;
     
-    const responseBody = body as GetTermbaseTermsEndpointResponse;
-
     expect(status).toBe(200);
-    expect(responseBody.terms.length).toBe(1);
-    expect(responseBody.pagination).toStrictEqual({
+    expect(body.terms.length).toBe(1);
+    expect(body.pagination).toStrictEqual({
       page: 1,
       pageCount: 1,
       perPage: 8,
@@ -114,13 +105,11 @@ describe("tests GetTerms controller", () => {
   test("should return a response with an array of 1 term", async () => {
     const { status, body } = await testApiClient
       .get(`/termbase/${mockData.termbaseUUID}/terms?page=1&customer=IBM`)
-      .set("Cookie", TEST_API_CLIENT_COOKIES);
-
-    const responseBody = body as GetTermbaseTermsEndpointResponse;
+      .set("Cookie", TEST_API_CLIENT_COOKIES) as TestAPIClientResponse<GetTermbaseTermsEndpointResponse>;
 
     expect(status).toBe(200);
-    expect(responseBody.terms.length).toBe(1);
-    expect(responseBody.pagination).toStrictEqual({
+    expect(body.terms.length).toBe(1);
+    expect(body.pagination).toStrictEqual({
       page: 1,
       pageCount: 1,
       perPage: 8,
@@ -131,13 +120,11 @@ describe("tests GetTerms controller", () => {
   test("should return a response with an array of 1 term", async () => {
     const { status, body } = await testApiClient
       .get(`/termbase/${mockData.termbaseUUID}/terms?page=1&concept_id=c1`)
-      .set("Cookie", TEST_API_CLIENT_COOKIES);
-
-    const responseBody = body as GetTermbaseTermsEndpointResponse;
+      .set("Cookie", TEST_API_CLIENT_COOKIES) as TestAPIClientResponse<GetTermbaseTermsEndpointResponse>;
 
     expect(status).toBe(200);
-    expect(responseBody.terms.length).toBe(1);
-    expect(responseBody.pagination).toStrictEqual({
+    expect(body.terms.length).toBe(1);
+    expect(body.pagination).toStrictEqual({
       page: 1,
       pageCount: 1,
       perPage: 8,

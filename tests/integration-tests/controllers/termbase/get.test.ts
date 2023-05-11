@@ -3,6 +3,7 @@ import { GetTermbaseEndpointResponse } from "@typings/responses";
 import { importTBXFile } from "@tests/helpers";
 import { UUID } from "@typings";
 import testApiClient, { TEST_API_CLIENT_COOKIES } from "@tests/test-api-client";
+import { TestAPIClientResponse } from "@tests/types";
 
 let mockData: {
   termbaseUUID: UUID
@@ -29,27 +30,27 @@ describe("tests GetTermbase controller", () => {
   test("should return a response with an array of 8 terms", async () => {
     const { status, body } = await testApiClient
       .get(`/termbase/${mockData.termbaseUUID}`)
-      .set("Cookie", TEST_API_CLIENT_COOKIES);
-    const responseBody = body as GetTermbaseEndpointResponse;
+      .set("Cookie", TEST_API_CLIENT_COOKIES) as TestAPIClientResponse<GetTermbaseEndpointResponse>;
+
     expect(status).toBe(200);
-    expect(responseBody.metadata.languages).toStrictEqual([ "de", "en", "fr" ]);
-    expect(responseBody.metadata.partsOfSpeech).toStrictEqual([ "noun", "verb" ]);
-    expect(responseBody.metadata.customers).toStrictEqual([ "IBM", "SAX Manufacturing" ]);
-    expect(responseBody.metadata.subjectFields).toStrictEqual([ "manufacturing" ]);
-    expect(responseBody.metadata.conceptIds).toStrictEqual( [ "c1", "c2", "c5", "c6", "c7" ]);
-    expect(responseBody.metadata.approvalStatuses).toStrictEqual([
+    expect(body.metadata.languages).toStrictEqual([ "de", "en", "fr" ]);
+    expect(body.metadata.partsOfSpeech).toStrictEqual([ "noun", "verb" ]);
+    expect(body.metadata.customers).toStrictEqual([ "IBM", "SAX Manufacturing" ]);
+    expect(body.metadata.subjectFields).toStrictEqual([ "manufacturing" ]);
+    expect(body.metadata.conceptIds).toStrictEqual( [ "c1", "c2", "c5", "c6", "c7" ]);
+    expect(body.metadata.approvalStatuses).toStrictEqual([
       "admittedTerm-admn-sts",
       "deprecatedTerm-admn-sts",
       "preferredTerm-admn-sts",
       "supersededTerm-admn-sts"
     ]);
-    expect(responseBody.metadata.personRefs).toBeDefined();
-    expect(responseBody.termbaseUUID).toBeDefined();
-    expect(responseBody.type).toBeDefined();
-    expect(responseBody.style).toBeDefined();
-    expect(responseBody.xmlLang).toBeDefined();
-    expect(responseBody.xmlns).toBeDefined();
-    expect(responseBody.name).toBeDefined();
+    expect(body.metadata.personRefs).toBeDefined();
+    expect(body.termbaseUUID).toBeDefined();
+    expect(body.type).toBeDefined();
+    expect(body.style).toBeDefined();
+    expect(body.xmlLang).toBeDefined();
+    expect(body.xmlns).toBeDefined();
+    expect(body.name).toBeDefined();
   });
 });
 

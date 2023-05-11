@@ -1,7 +1,7 @@
 import { fetchMockTermbaseData, importTBXFile } from "@tests/helpers";
 import { PatchTermEndpointResponse } from "@typings/responses";
 import { UUID } from "@typings";
-import { SuperAgentResponse } from "@tests/types";
+import { TestAPIClientResponse } from "@tests/types";
 import testApiClient, { TEST_API_CLIENT_COOKIES } from "@tests/test-api-client";
 
 let mockData: {
@@ -33,7 +33,7 @@ describe("tests PatchTerm controller", () => {
         id: "Test",
         termSecId: "Test1",
         order: 100,
-      }) as SuperAgentResponse<PatchTermEndpointResponse>;
+      }) as TestAPIClientResponse<PatchTermEndpointResponse>;
   
     expect(status).toBe(200);
     expect(body.id).toBe("Test");

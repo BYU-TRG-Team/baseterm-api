@@ -2,6 +2,7 @@ import { v4 as uuid } from "uuid";
 import { ImportEndpointResponse } from "@typings/responses";
 import { APP_ROOT } from "@constants";
 import testApiClient, { TEST_API_CLIENT_COOKIES }  from "@tests/test-api-client";
+import { TestAPIClientResponse } from "@tests/types";
 
 describe("tests Import controller", () => {
   test("should return a response indicating a tbx file has successfully started importing", async () => {
@@ -9,9 +10,7 @@ describe("tests Import controller", () => {
       .post("/import")
       .attach("tbxFile", `${APP_ROOT}/example-tbx/valid-tbx-core.tbx`)
       .set("Cookie", TEST_API_CLIENT_COOKIES)
-      .field({ name: uuid()}) as { 
-        status: number, body: ImportEndpointResponse 
-      };
+      .field({ name: uuid()}) as TestAPIClientResponse<ImportEndpointResponse>;
 
     expect(status).toBe(202);
     expect(body.sessionId).toBeDefined();
