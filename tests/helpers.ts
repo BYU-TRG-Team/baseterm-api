@@ -49,13 +49,13 @@ export const generateTestData = async (
 
 export const importTBXFile = async (
   options: {
-    filePath?: string
+    filePath: string
     name?: string,
     createPersonRefObject?: boolean
-  } = {}
+  }
 ) => {
   const {
-    filePath = EXAMPLE_TBX_FILE,
+    filePath,
     name = uuid(),
     createPersonRefObject = true
   } = options;

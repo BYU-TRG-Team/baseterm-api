@@ -3,6 +3,7 @@ import { generateTestData, importTBXFile } from "@tests/helpers";
 import { GetTermbaseEndpointResponse, PatchTermbaseEndpointResponse } from "@typings/responses";
 import testApiClient, { TEST_API_CLIENT_COOKIES }  from "@tests/test-api-client";
 import { TestAPIClientResponse, TestData } from "@tests/types";
+import { EXAMPLE_TBX_FILE } from "@tests/constants";
 
 let testData: TestData;
 
@@ -97,6 +98,7 @@ describe("tests PatchTermbase controller", () => {
   test("should return a 409 for duplicate name", async () => {
     const termbaseName = uuid();
     await importTBXFile({
+      filePath: EXAMPLE_TBX_FILE,
       name: termbaseName
     });
 
