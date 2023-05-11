@@ -20,7 +20,7 @@ describe("tests GetEntry controller", () => {
 
   test("should return a successful response", async () => {  
     const { status, body } = await testApiClient
-      .get(`/termbase/${testData.termbaseUUID}/entry/${testData.entry.uuid}`) 
+      .get(`/termbase/${testData.termbaseUUID}/entry/${testData.conceptEntry.uuid}`) 
       .set("Cookie", TEST_API_CLIENT_COOKIES) as TestAPIClientResponse<GetEntryEndpointResponse>;
 
     expect(status).toBe(200);

@@ -22,7 +22,7 @@ describe("tests Export controller", () => {
 
   test("should return a response indicating no termbase resource (supplying malformed UUID)", async () => {
     const { status, body } = await testApiClient
-      .get("/export/randommmmmmmm")
+      .get("/export/TEST")
       .set("Cookie", TEST_API_CLIENT_COOKIES);
 
     expect(status).toBe(404);

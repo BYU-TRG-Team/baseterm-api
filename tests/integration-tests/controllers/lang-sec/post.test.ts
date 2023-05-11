@@ -1,6 +1,5 @@
 import { generateTestData } from "@tests/helpers";
 import { PostLangSecEndpointResponse } from "@typings/responses";
-import { VALID_LANGUAGE_CODE} from "@tests/constants";
 import { TestAPIClientResponse, TestData } from "@tests/types";
 import testApiClient, { TEST_API_CLIENT_COOKIES } from "@tests/test-api-client";
 
@@ -23,9 +22,9 @@ describe("tests PostLangSec controller", () => {
     const { status, body } = await testApiClient
       .post(`/termbase/${testData.termbaseUUID}/langSec`)
       .field({
-        entryUUID: testData.entry.uuid,
-        langCode: VALID_LANGUAGE_CODE,
-        initialTerm: "Test"
+        entryUUID: testData.conceptEntry.uuid,
+        langCode: "en-US",
+        initialTerm: "TEST"
       }) 
       .set("Cookie", TEST_API_CLIENT_COOKIES) as TestAPIClientResponse<PostLangSecEndpointResponse>;
   

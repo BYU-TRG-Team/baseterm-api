@@ -6,8 +6,9 @@ import { TEST_API_CLIENT_COOKIES, TEST_API_CLIENT_ENDPOINT } from "@tests/test-a
 describe("tests Session controller", () => {
   test("should return a response indicating an undefined session", async () => {
     await new Promise((resolve) => {
+      const sessionId = uuid();
       const eventSource = new EventSource(
-        `${TEST_API_CLIENT_ENDPOINT}/session/${uuid()}`,
+        `${TEST_API_CLIENT_ENDPOINT}/session/${sessionId}`,
         { 
           withCredentials: true,
           headers: {

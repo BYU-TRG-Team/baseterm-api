@@ -11,13 +11,13 @@ describe("tests DeleteEntry controller", () => {
 
   test("should return a successful response and produce a 404 when requesting the entry", async () => {
     const { status: deleteEntryStatus } = await testApiClient
-      .delete(`/termbase/${testData.termbaseUUID}/entry/${testData.entry.uuid}`)
+      .delete(`/termbase/${testData.termbaseUUID}/entry/${testData.conceptEntry.uuid}`)
       .set("Cookie", TEST_API_CLIENT_COOKIES);
 	
     expect(deleteEntryStatus).toBe(204);
 	
     const { status: getEntryStatus } = await testApiClient
-      .get(`/termbase/${testData.termbaseUUID}/entry/${testData.entry.uuid}`)
+      .get(`/termbase/${testData.termbaseUUID}/entry/${testData.conceptEntry.uuid}`)
       .set("Cookie", TEST_API_CLIENT_COOKIES);
 	
     expect(getEntryStatus).toBe(404);

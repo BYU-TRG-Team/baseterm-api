@@ -16,12 +16,12 @@ describe("tests PatchAuxElement controller", () => {
       .set("Cookie", TEST_API_CLIENT_COOKIES)
       .field({
         elementType: testData.auxElement.elementType,
-        id: "Test",
+        id: "TEST",
         order: 100,
       }) as TestAPIClientResponse<PatchAuxElementEndpointResponse>;
   
     expect(status).toBe(200);
-    expect(body.id).toBe("Test");
+    expect(body.id).toBe("TEST");
     expect(body.order).toBe(100);
   });
 });

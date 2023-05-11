@@ -1,13 +1,12 @@
 import { APP_ROOT } from "@constants";
 
-export const VALID_LANGUAGE_CODE = "en-US";
 export const EXAMPLE_TBX_FILE = `${APP_ROOT}/example-tbx/valid-tbx-core.tbx`;
 /*
-* This term and its metadata are easily testable due to the fact that the term
-* - has aux elements 
-* - has term notes 
-* - is a child of a language section with more than one term (allowing the term to be deleted)
-* - is a child of a concept entry with more than one language section (allowing the term's language section to be deleted) 
+* This term and its related language section and concept entry are easily testable due to the fact that
+* - the term has aux elements 
+* - the term has term notes 
+* - the language section has more than one term (allowing the term to be deleted)
+* - the concept entry has more than one language section (allowing the language section to be deleted) 
 */
 export const EXAMPLE_TBX_FILE_TESTABLE_TERM = "PAL";
 export const SMALL_TBX_FILES = [

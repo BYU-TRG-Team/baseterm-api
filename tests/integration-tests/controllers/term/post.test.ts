@@ -25,7 +25,7 @@ describe("tests PostTerm controller", () => {
       .post(`/termbase/${testData.termbaseUUID}/term`)
       .field({
         langSecUUID: testData.langSec.uuid,
-        value: "Test"
+        value: "TEST"
       }) 
       .set("Cookie", TEST_API_CLIENT_COOKIES) as TestAPIClientResponse<PostLangSecEndpointResponse>;
 
