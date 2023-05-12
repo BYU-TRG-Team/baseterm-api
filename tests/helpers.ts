@@ -12,6 +12,12 @@ import { PRIMARY_TEST_TBX_FILE, PRIMARY_TEST_TBX_FILE_TESTABLE_TERM } from "@tes
 import testApiClient, { TEST_API_CLIENT_COOKIES, TEST_API_CLIENT_ENDPOINT, TEST_USER_ID } from "@tests/test-api-client";
 import { TestAPIClientResponse, TestData } from "@tests/types";
 
+/**
+ * Generates TBX related data useful for testing. 
+ * 
+ * This method imports the PRIMARY_TEST_TBX_FILE using the test API client and collates test data based on the PRIMARY_TEST_TBX_FILE_TESTABLE_TERM. 
+ * See @tests/constants for more details.
+ */
 export const generateTestData = async (
   options: {
     createPersonRefObject?: boolean
@@ -47,6 +53,11 @@ export const generateTestData = async (
   };
 };
 
+/**
+ * Imports a TBX file.
+ * 
+ * This method imports a TBX file using the test API client.
+ */
 export const importTBXFile = async (
   options: {
     filePath: string
@@ -107,6 +118,11 @@ export const importTBXFile = async (
   return importResponse.termbaseUUID;
 };
 
+/**
+ * Exports a TBX file.
+ * 
+ * This method exports a TBX file using the test API client.
+ */
 export const exportTBXFile = async (termbaseUUID: UUID) => {
   const { body: exportResponse } = await testApiClient
     .get(`/export/${termbaseUUID}`)

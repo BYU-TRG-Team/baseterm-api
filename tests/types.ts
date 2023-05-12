@@ -12,7 +12,7 @@ export interface TestAPIClientResponse<T> {
     status: number,
 }
 
-export type TestData = {
+export interface TestData {
     conceptEntry: ConceptEntryPreview,
     langSec: LanguageSectionPreview,
     term: TermFullView,
