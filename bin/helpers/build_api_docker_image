@@ -39,7 +39,7 @@ done
 
 : "${TAG:?"--tag flag must be supplied"}"
 
-docker rmi "${TAG}" > /dev/null 2>&1
+docker rm --force "${TAG}" > /dev/null 2>&1
 printf "Building API docker image with tag \"%s\"\n" "${TAG}"
 docker build \
   --tag "${TAG}" \
