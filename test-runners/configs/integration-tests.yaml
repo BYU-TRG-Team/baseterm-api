@@ -8,7 +8,7 @@ services:
       POSTGRES_DB: baseterm
     hostname: baseterm-pg-instance
     networks:
-      - baseterm-e2e-tests-net
+      - baseterm-integration-tests-net
 
   pg-migrations:
     image: baseterm-api:dev
@@ -27,7 +27,7 @@ services:
       "up"
     ]
     networks:
-      - baseterm-e2e-tests-net
+      - baseterm-integration-tests-net
 
   baseterm-api:
     image: baseterm-api:dev
@@ -41,14 +41,12 @@ services:
       PORT: 4000
     hostname: baseterm-api
     networks:
-      - baseterm-e2e-tests-net
+      - baseterm-integration-tests-net
 
   test-runner:
     image: baseterm-api:dev
     depends_on:
     - baseterm-api
-    networks:
-      - baseterm-e2e-tests-net
     entrypoint: [
       "./wait-for-it/wait-for-it.sh",
       "baseterm-api:4000",
@@ -59,10 +57,12 @@ services:
       "jest",
       "--coverage",
       "--runInBand",
-      "--testMatch=**/tests/e2e-tests/**/*.test.ts"
+      "--testMatch=**/tests/integration-tests/**/*.test.ts"
     ]
+    networks:
+      - baseterm-integration-tests-net
     
 networks:
-  baseterm-e2e-tests-net:
+  baseterm-integration-tests-net:
     driver: bridge
-    name: baseterm-e2e-tests-net
+    name: baseterm-integration-tests-net
