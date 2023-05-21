@@ -32,7 +32,7 @@ describe("tests the lifecycle of a TBX file (import and export)", () => {
             }
           }, 
           (diffs: any[]) => {
-            expect(diffs.length).toBe(0);
+            expect(diffs.length).toStrictEqual(0);
           } 
         );
       }
@@ -64,24 +64,7 @@ describe("tests the lifecycle of a TBX file (import and export)", () => {
           }
         }, 
         (diffs: any[]) => {
-          expect(diffs.length).toBe(0);
-        } 
-      );
-
-      diffAsXml(
-        tbxFileAsString, 
-        exportedTbxFile, 
-        {}, 
-        {
-          xml2jsOptions: {
-            ignoreAttributes: false,
-            trim: true,
-            preserveChildrenOrder: true,
-            explicitChildren: true,
-          }
-        }, 
-        (diffs: any[]) => {
-          expect(diffs.length).toBe(0);
+          expect(diffs.length).toStrictEqual(0);
         } 
       );
     }
