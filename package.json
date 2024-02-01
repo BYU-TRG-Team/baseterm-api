@@ -1,6 +1,6 @@
 {
   "name": "baseterm-api",
-  "version": "1.5.0",
+  "version": "1.6.0",
   "description": "HTTP REST API for TermBase eXchange V3 data.",
   "main": "dist/src/index.js",
   "scripts": {
