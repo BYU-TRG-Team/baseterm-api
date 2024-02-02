@@ -1,6 +1,6 @@
 # BaseTerm API
 
-HTTP REST API and PostgreSQL schemas built for [TBX](https://www.tbxinfo.net) v3. The API currently supports the TBX-Basic dialect. The API and PostgreSQL schemas are part of the [BaseTerm](https://github.com/BYU-TRG-Team/baseterm) web application.
+HTTP REST API and PostgreSQL schemas built for [TermBase eXchange](https://www.tbxinfo.net) (TBX) v3. The API currently supports the TBX-Basic dialect. The API and PostgreSQL schemas are part of the [BaseTerm](https://github.com/BYU-TRG-Team/baseterm) web application.
 
 ## Installation
 
