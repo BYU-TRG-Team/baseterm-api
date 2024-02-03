@@ -14,10 +14,6 @@ Before installing any instance of the BaseTerm API, please reach out to the BYU 
 - Node.js 16.x
 - Python 3.9.x
 
-### Install NPM
-
-Install NPM on the host machine. Please reference the [NPM documentation](https://docs.npmjs.com) for setup.
-
 ### Setup PostgreSQL instance
 
 A PostgreSQL (postgres) instance will be needed for the BaseTerm API application. A database will also need to be created in the postgres instance. 
@@ -107,14 +103,6 @@ npm run build
 
 ```
 pip3 install -r requirements.txt
-```
-
-##### Prune extraneous dependencies
-
-If you are deploying in a production environment, node modules used for building and testing (i.e. dev dependencies) can be safely removed at this point. 
-
-```
-npm prune --production
 ```
 
 ##### Launch 
