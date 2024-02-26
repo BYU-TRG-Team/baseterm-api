@@ -28,8 +28,8 @@
   },
   "homepage": "https://github.com/BYU-TRG-Team/baseterm-api#readme",
   "dependencies": {
-    "@byu-trg/express-user-management": "^1.0.1",
-    "@byu-trg/language-code-service": "^1.1.4",
+    "@byu-trg/express-user-management": "https://github.com/BYU-TRG-Team/express-user-management/tarball/release-1.1.0",
+    "@byu-trg/language-code-service": "https://github.com/BYU-TRG-Team/language-code-service/tarball/release-1.1.10",
     "@datastructures-js/priority-queue": "^6.0.0",
     "app-root-path": "^3.1.0",
     "body-parser": "^1.19.2",
@@ -68,6 +68,7 @@
     "@types/jest": "^27.5.2",
     "@types/jsonwebtoken": "^8.5.8",
     "@types/node": "^17.0.21",
+    "@types/nodemailer": "^6.4.14",
     "@types/supertest": "^2.0.11",
     "@types/uuid": "^9.0.1",
     "@types/xml": "^1.0.8",
