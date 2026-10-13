@@ -15,7 +15,8 @@
     "prepare": "husky install"
   },
   "engines": {
-    "node": "24.x"
+    "node": "24.x",
+    "npm": "11.x"
   },
   "repository": {
     "type": "git",
