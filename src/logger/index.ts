@@ -9,7 +9,7 @@ const {
 const transports: winston.transport[] = [];
 
 // Add transports
-if (process.env.ROLLBAR_API_TOKEN !== undefined) {
+if (process.env.ROLLBAR_API_TOKEN?.trim()) {
   transports.push(
     new RollbarTransport({
       rollbarConfig: {
