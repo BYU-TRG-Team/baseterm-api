@@ -1,4 +1,3 @@
-version: "3.9"
 services:
   db:
     image: postgres:14
@@ -6,6 +5,11 @@ services:
       POSTGRES_PASSWORD: test-pw
       POSTGRES_USER: test-user
       POSTGRES_DB: baseterm
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U test-user -d baseterm"]
+      interval: 2s
+      timeout: 5s
+      retries: 15
     hostname: baseterm-pg-instance
     networks:
       - baseterm-smoke-tests-net
@@ -13,19 +17,12 @@ services:
   pg-migrations:
     image: baseterm-api:dev
     depends_on:
-    - db
+      db:
+        condition: service_healthy
     environment:
       DATABASE_URL: postgres://test-user:test-pw@baseterm-pg-instance:5432/baseterm
       APP_ENV: dev
-    entrypoint: [
-      "./wait-for-it/wait-for-it.sh",
-      "baseterm-pg-instance:5432", 
-      "--", 
-      "npm", 
-      "run", 
-      "migrate", 
-      "up"
-    ]
+    entrypoint: ["npm", "run", "migrate", "up"]
     networks:
       - baseterm-smoke-tests-net
 
@@ -39,6 +36,11 @@ services:
       APP_ENV: dev
       AUTH_SECRET: killjoy
       PORT: 4000
+    healthcheck:
+      test: ["CMD", "node", "-e", "const net=require('net');const socket=net.connect(4000,'127.0.0.1',()=>{socket.end();process.exit(0)});socket.on('error',()=>process.exit(1))"]
+      interval: 2s
+      timeout: 5s
+      retries: 15
     hostname: baseterm-api
     networks:
       - baseterm-smoke-tests-net
@@ -46,11 +48,9 @@ services:
   test-runner:
     image: baseterm-api:dev
     depends_on:
-    - baseterm-api
-    entrypoint: [
-      "./wait-for-it/wait-for-it.sh",
-      "baseterm-api:4000"
-    ]
+      baseterm-api:
+        condition: service_healthy
+    entrypoint: ["node", "-e", "process.exit(0)"]
     networks:
       - baseterm-smoke-tests-net
     
