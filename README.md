@@ -11,8 +11,8 @@ Before installing any instance of the BaseTerm API, please reach out to the BYU 
 ### Server Requirements
 
 - PostgreSQL 14.x
-- Node.js 16.x
-- Python 3.9.x
+- Node.js 24.x
+- Python 3.14.x
 
 ### Setup PostgreSQL instance
 
@@ -89,7 +89,7 @@ docker run \
 
 ##### Install Python
 
-Install Python 3.9.x on the host machine. Please reference the [Python documentation](https://www.python.org/doc) for setup.
+Install Python 3.14.x on the host machine. Please reference the [Python documentation](https://www.python.org/doc) for setup.
 
 ##### Build
 
@@ -111,7 +111,7 @@ pip3 install -r requirements.txt
 npm run start
 ```
 
-This launches a background process using [pm2](https://www.npmjs.com/package/pm2) and opens up the pm2 monitor. This monitor need not be kept open. Please reference the [pm2](https://www.npmjs.com/package/pm2) docs for interacting with the process. 
+This launches the API in the foreground, which is appropriate for Docker containers and Heroku dynos.
 
 
 ## Schemas

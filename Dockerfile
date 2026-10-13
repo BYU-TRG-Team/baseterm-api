@@ -1,22 +1,17 @@
-# Build Args
-#
-# ENV=production|development
-#
-
-FROM node:16-bullseye-slim
+FROM python:3.14-slim-bookworm AS python-base
+FROM node:24-bookworm-slim
 ARG ENV=production
+COPY --from=python-base /usr/local/ /usr/local/
 WORKDIR /usr/src/app
 COPY . .
-RUN sed -i \
-      -e 's|http://deb.debian.org/debian-security|http://archive.debian.org/debian-security|g' \
-      -e '/bullseye-updates/d' \
-      /etc/apt/sources.list \
-    && apt-get -o Acquire::Check-Valid-Until=false update \
-    && apt-get install -y --no-install-recommends python3 python3-pip git \
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends git libxml2 libxslt1.1 \
     && rm -rf /var/lib/apt/lists/* \
+    && python3 --version \
+    && pip3 --version \
     && pip3 install --no-cache-dir -r requirements.txt \
     && npm ci \
     && npm run build \
     && if [ "${ENV}" = "production" ]; then npm prune --production; fi
 ENV NODE_ENV="${ENV}"
-CMD npm run start
+CMD ["npm", "run", "start"]
