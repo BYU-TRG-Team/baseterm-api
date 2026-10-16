@@ -5,7 +5,7 @@
   "main": "dist/src/index.js",
   "scripts": {
     "build": "rm -rf dist/ && tsc && resolve-tspaths",
-    "start": "pm2 start dist/src/index.js -n baseterm-api && pm2 monit",
+    "start": "node dist/src/index.js",
     "smoke-tests": "test-runners/run_smoke_tests",
     "integration-tests": "test-runners/run_integration_tests",
     "e2e-tests": "test-runners/run_e2e_tests",
@@ -15,7 +15,8 @@
     "prepare": "husky install"
   },
   "engines": {
-    "node": "16.x"
+    "node": "24.x",
+    "npm": "11.x"
   },
   "repository": {
     "type": "git",

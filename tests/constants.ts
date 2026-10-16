@@ -15,7 +15,7 @@ export const SMALL_TEST_TBX_FILES = [
   PRIMARY_TEST_TBX_FILE,
   `${APP_ROOT}/tests/test-tbx-files/valid/test5.tbx`,
   `${APP_ROOT}/tests/test-tbx-files/valid/test6.tbx`,
-  `${APP_ROOT}/tests/test-tbx-files/valid/test8.tbx`,
+  `${APP_ROOT}/tests/test-tbx-files/valid/test8.tbx`, 
 ];
 export const LARGE_TEST_TBX_FILES = [
   `${APP_ROOT}/tests/test-tbx-files/valid/test2.tbx`,

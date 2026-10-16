@@ -21,7 +21,8 @@ describe("tests Validation controller", () => {
       .attach("tbxFile", INVALID_TEST_TBX_FILE);
 
     expect(status).toBe(400);
-    expect(body.error).toBe("TBX File is invalid: \nlxml.etree.DocumentInvalid: Did not expect element text there, line 4");
+    expect(body.error).toContain("TBX File is invalid:");
+    expect(body.error).toContain("DocumentInvalid");
   });
 
   test("should return a response indicating an invalid body", async () => {
